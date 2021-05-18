@@ -1,0 +1,106 @@
+package conn
+
+import (
+	"github.com/gorilla/websocket"
+	"log"
+	"net/http"
+	"time"
+)
+
+const (
+	writeWait = 10 * time.Second
+	pongWait = 60 * time.Second
+	maxMessageSize = 512
+)
+
+var upgrader = websocket.Upgrader{
+	ReadBufferSize: 2048,
+	WriteBufferSize: 2048,
+	CheckOrigin: func(r *http.Request) bool {
+		return true
+	},
+}
+
+type WebSocket struct {
+	Hub *Hub
+	Conn *websocket.Conn
+	Rid string
+	Out chan []byte
+	In chan []byte
+	Events map[string]EventHandler
+}
+
+func NewWebSocket(h *Hub, w http.ResponseWriter, r *http.Request, rid string) (*WebSocket, error) {
+	conn, err := upgrader.Upgrade(w, r, nil)
+	if err != nil {
+		log.Printf("An error occured while upgrading the connection: %v", err)
+		return nil, err
+	}
+
+	ws := &WebSocket{
+		Hub: h,
+		Conn: conn,
+		Rid: rid,
+		Out: make(chan []byte),
+		In: make(chan []byte),
+		Events: make(map[string]EventHandler),
+	}
+	ws.Hub.Register <- ws
+
+	go ws.Reader()
+	go ws.Writer()
+
+	return ws, nil
+}
+
+func (ws *WebSocket) Reader() {
+	defer func() {
+		ws.Hub.Unregister <- ws
+		ws.Conn.Close()
+	}()
+
+	ws.Conn.SetReadLimit(maxMessageSize)
+	ws.Conn.SetReadDeadline(time.Now().Add(pongWait))
+	ws.Conn.SetPongHandler(func(string) error { ws.Conn.SetReadDeadline(time.Now().Add(pongWait)); return nil })
+
+	for {
+		_, message, err := ws.Conn.ReadMessage()
+		if err != nil {
+			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
+				log.Printf("Message Error: %v", err)
+			}
+			break
+		}
+
+		event, err := EventSerializer(message)
+		if err != nil {
+			log.Printf("Error parsing message: %v", err)
+		}
+
+		ws.Hub.Broadcast <- event
+	}
+}
+
+func (ws *WebSocket) Writer() {
+	for {
+		select {
+			case message, ok := <- ws.Out:
+				ws.Conn.SetWriteDeadline(time.Now().Add(writeWait))
+				if !ok {
+					ws.Conn.WriteMessage(websocket.CloseMessage, make([]byte, 0))
+					return
+				}
+				w, err := ws.Conn.NextWriter(websocket.TextMessage)
+				if err != nil {
+					return
+				}
+				w.Write(message)
+				w.Close()
+		}
+	}
+}
+
+func (ws *WebSocket) On(eventType string, action EventHandler) *WebSocket {
+	ws.Events[eventType] = action
+	return ws
+}

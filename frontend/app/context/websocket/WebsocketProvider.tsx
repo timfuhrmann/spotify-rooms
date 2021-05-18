@@ -1,35 +1,62 @@
 import React, { useEffect, useState } from "react";
 import { WebsocketContext } from "./WebsocketContext";
-import { ConnectingState, Websocket } from "./Websocket";
-import { onWelcome, onRoomsUpdate } from "./Listener";
 import { Server } from "../../types/server";
+import { useWebsocket } from "./UseWebsocket";
 
 export const WebsocketProvider: React.FC = ({ children }) => {
-    const [running, setRunning] = useState<boolean>(false);
-    const [connecting, setConnecting] = useState<boolean>(true);
-    const [rooms, setRooms] = useState<Record<string, Server.Room>>(null);
+    const ws = useWebsocket();
+    const gws = useWebsocket();
     const [room, setRoom] = useState<Server.Room>(null);
+    const [rooms, setRooms] = useState<Record<string, Server.Room>>({});
     const [roomId, setRoomId] = useState<string>("");
+    const [playlist, setPlaylist] = useState<Record<string, Server.ResTrack>>({});
 
     useEffect(() => {
-        if (running) {
-            disconnect();
+        if (gws.connected) {
+            gws.disconnect();
         }
 
-        connect();
+        gws.connect(process.env.NEXT_PUBLIC_ROOMS_WEBSOCKET_URL);
     }, []);
 
     useEffect(() => {
-        Websocket.onConnecting((state: ConnectingState) => setConnecting(state.connecting));
-
-        Websocket.addMessageHandler("ON_WELCOME", payload => {
-            onWelcome(payload, setRooms);
+        gws.addMessageHandler("ON_WELCOME", payload => {
+            setRooms(payload);
         });
 
-        Websocket.addMessageHandler("ROOMS_UPDATE", payload => {
-            onRoomsUpdate(payload, setRooms);
+        gws.addMessageHandler("UPDATE_ROOMS", payload => {
+            setRooms(payload);
+        });
+
+        ws.addMessageHandler("ON_WELCOME", payload => {
+            setPlaylist(payload);
+        });
+
+        ws.addMessageHandler("NEW_TRACK", payload => {
+            if (!payload) {
+                return;
+            }
+
+            setPlaylist(prevState => {
+                return {
+                    ...prevState,
+                    payload,
+                };
+            });
         });
     }, []);
+
+    useEffect(() => {
+        if (!roomId) {
+            return;
+        }
+
+        if (ws.connected) {
+            ws.disconnect();
+        }
+
+        ws.connect(`${process.env.NEXT_PUBLIC_WEBSOCKET_URL}?rid=${roomId}`, roomId);
+    }, [roomId]);
 
     useEffect(() => {
         if (!rooms || !roomId || roomId === room?.id) {
@@ -52,33 +79,28 @@ export const WebsocketProvider: React.FC = ({ children }) => {
 
         const newRoom = rooms[room.id];
 
-        if (newRoom && newRoom.activeTrack?.id !== room.activeTrack?.id) {
+        if (newRoom && newRoom.active?.id !== room.active?.id) {
             setRoom(newRoom);
         }
     }, [rooms, room]);
 
-    const connect = () => {
-        setRunning(true);
-        Websocket.connect();
-    };
+    const addTrackToRoom = (track: Server.ResTrack) => {
+        if (!room) {
+            return;
+        }
 
-    const disconnect = () => {
-        setRunning(false);
-        Websocket.disconnect();
-    };
-
-    const leaveRoom = () => {
-        Websocket.sendAction("ROOM_LEAVE");
+        ws.sendAction("ADD_TRACK", { ...track, rid: room.id });
     };
 
     return (
         <WebsocketContext.Provider
             value={{
-                connected: running && !connecting,
+                connected: ws.connected,
                 rooms,
                 room,
+                playlist,
                 joinRoomWithId: setRoomId,
-                leaveRoom,
+                addTrackToRoom,
             }}>
             {children}
         </WebsocketContext.Provider>

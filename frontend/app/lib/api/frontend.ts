@@ -1,5 +1,6 @@
 import { db } from "./index";
 import { Api } from "../../types/api";
+import { Server } from "../../types/server";
 
 const setJsonHeaders = (authToken: string) => {
     return {
@@ -13,12 +14,25 @@ export const getSpotifyLoginUrl = async (): Promise<Api.AuthType> => {
     return await db<Api.AuthType>("/api/auth");
 };
 
-export const getTrackByString = async (authToken: string, str: string): Promise<Api.SpotifySearchResponse> => {
-    return await db(`https://api.spotify.com/v1/search?q=${str}&type=track&limit=10`, {
+export const getTrackByString = async (authToken: string, str: string): Promise<Server.ResTrack[]> => {
+    const res = await db<Api.SpotifySearchResponse>(`https://api.spotify.com/v1/search?q=${str}&type=track&limit=10`, {
         method: "GET",
         headers: {
             Authorization: `Bearer ${authToken}`,
         },
+    });
+
+    return res.tracks.items.map(track => {
+        return {
+            id: track.id,
+            name: track.name,
+            duration_ms: track.duration_ms,
+            artists: track.artists.map(artist => artist.name),
+            album: {
+                name: track.album.name,
+                images: track.album.images.map(image => image.url),
+            },
+        };
     });
 };
 

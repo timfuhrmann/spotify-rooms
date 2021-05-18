@@ -65,7 +65,7 @@ const Home: React.FC = () => {
 export const getServerSideProps: GetServerSideProps = async context => {
     const access_token = getAccessTokenFromCookies(context.req.cookies);
 
-    if (access_token) {
+    if (false) {
         return {
             redirect: {
                 destination: "/dashboard",
@@ -73,6 +73,10 @@ export const getServerSideProps: GetServerSideProps = async context => {
             },
         };
     }
+
+    return {
+        props: {},
+    };
 };
 
 export default Home;

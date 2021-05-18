@@ -12,6 +12,11 @@ const PlayerFrame = styled.div`
     width: 40rem;
 `;
 
+const PlayerInner = styled.div<{ active: boolean }>`
+    opacity: ${p => (p.active ? 1 : 0)};
+    transition: opacity 0.3s;
+`;
+
 const ActiveTitleWrapper = styled.div`
     position: absolute;
     top: 0;
@@ -36,10 +41,6 @@ const Cover = styled.img`
     user-select: none;
 `;
 
-const Info = styled.div`
-    text-align: center;
-`;
-
 interface PlayerProps {
     room: Server.Room;
 }
@@ -51,21 +52,17 @@ export const Player: React.FC<PlayerProps> = ({ room }) => {
     const [paused, setPaused] = useState<boolean>(false);
 
     useEffect(() => {
-        console.log(room);
-    }, [room]);
-
-    useEffect(() => {
         if (!authToken || !deviceId || !room) {
             return;
         }
 
-        if (!room.activeTrack) {
+        if (!room.active) {
             player.pause();
             setTrack(null);
             return;
         }
 
-        getTrackById(authToken, room.activeTrack.id).then(res => {
+        getTrackById(authToken, room.active.id).then(res => {
             setTrack(res);
         });
     }, [authToken, deviceId, room]);
@@ -75,7 +72,7 @@ export const Player: React.FC<PlayerProps> = ({ room }) => {
             return;
         }
 
-        playTrackAtTime(authToken, deviceId, track.uri, Date.now() - room.activeTrack.date).then(() => {
+        playTrackAtTime(authToken, deviceId, track.uri, Date.now() - Date.parse(room.active.date)).then(() => {
             setPaused(false);
         });
 
@@ -85,16 +82,10 @@ export const Player: React.FC<PlayerProps> = ({ room }) => {
             }
 
             if (res.track_window.current_track.id !== track.id) {
-                playTrackAtTime(authToken, deviceId, track.uri, Date.now() - room.activeTrack.date);
+                playTrackAtTime(authToken, deviceId, track.uri, Date.now() - Date.parse(room.active.date));
             }
 
-            if (res.paused && res.position !== res.duration) {
-                // it seems you're trying to pause from another device
-                setPaused(true);
-                player.togglePlay();
-            } else {
-                setPaused(false);
-            }
+            setPaused(res.paused);
         };
 
         player.addListener("player_state_changed", onStateChanged);
@@ -115,36 +106,30 @@ export const Player: React.FC<PlayerProps> = ({ room }) => {
     };
 
     const resume = async () => {
-        playTrackAtTime(authToken, deviceId, track.uri, Date.now() - room.activeTrack.date).then(() => {
+        playTrackAtTime(authToken, deviceId, track.uri, Date.now() - Date.parse(room.active.date)).then(() => {
             setPaused(false);
         });
     };
 
     return (
         <PlayerFrame>
-            {track ? (
-                <>
-                    <ActiveTitleWrapper>
-                        <ActiveTitle>{track.name}</ActiveTitle>
-                        <ArtistNameWrapper>
-                            {track.artists.map((artist, index) => (
-                                <ArtistName key={artist.name + index}>
-                                    {(index > 0 ? ", " : "") + artist.name}
-                                </ArtistName>
-                            ))}
-                        </ArtistNameWrapper>
-                    </ActiveTitleWrapper>
-                    <Cover
-                        src={track.album.images[0].url}
-                        width={track.album.images[0].width}
-                        height={track.album.images[0].height}
-                    />
-                    {paused && <button onClick={resume}>Play</button>}
-                    <Volume onClick={toggleMute} />
-                </>
-            ) : (
-                <Info>Search for your favourite music to listen to some tunes.</Info>
-            )}
+            <PlayerInner active={!!track}>
+                <ActiveTitleWrapper>
+                    <ActiveTitle>{track?.name}</ActiveTitle>
+                    <ArtistNameWrapper>
+                        {track?.artists.map((artist, index) => (
+                            <ArtistName key={artist.name + index}>{(index > 0 ? ", " : "") + artist.name}</ArtistName>
+                        ))}
+                    </ArtistNameWrapper>
+                </ActiveTitleWrapper>
+                <Cover
+                    src={track?.album.images[0].url}
+                    width={track?.album.images[0].width}
+                    height={track?.album.images[0].height}
+                />
+                {paused && <button onClick={resume}>Play</button>}
+                <Volume onClick={toggleMute} />
+            </PlayerInner>
         </PlayerFrame>
     );
 };

@@ -6,7 +6,7 @@ import { Player } from "../../app/components/player/Player";
 import { useRouter } from "next/router";
 import { getAccessTokenFromCookies } from "../../app/lib/util/api/checkCookies";
 import { Sidebar } from "../../app/components/sidebar/Sidebar";
-import { useWebsocket } from "../../app/context/websocket/WebsocketContext";
+import { useData } from "../../app/context/websocket/WebsocketContext";
 
 const RoomWrapper = styled.div`
     display: flex;
@@ -24,15 +24,16 @@ const PlayerWrapper = styled.div`
 const Room: React.FC = () => {
     const router = useRouter();
     const { id } = router.query;
-    const { room, joinRoomWithId, connected } = useWebsocket();
+    const { room, joinRoomWithId } = useData();
 
     useEffect(() => {
-        if (!id || !connected) {
+        if (!id) {
             return;
         }
 
         joinRoomWithId(id as string);
-    }, [id, connected]);
+        return () => joinRoomWithId(null);
+    }, [id]);
 
     return (
         <Template>

@@ -1,6 +1,7 @@
 import React from "react";
 import { Api } from "../../types/api";
 import styled from "styled-components";
+import { Server } from "../../types/server";
 
 const ItemWrapper = styled.button`
     display: flex;
@@ -27,7 +28,7 @@ const Cover = styled.img`
     margin-right: 2rem;
 `;
 
-interface SearchItemProps extends Api.SpotifyTrack {
+interface SearchItemProps extends Server.ResTrack {
     onClick?: () => void;
 }
 
@@ -36,8 +37,8 @@ export const SearchItem: React.FC<SearchItemProps> = ({ onClick, name, album, ar
 
     return (
         <ItemWrapper onClick={onClick} disabled={!onClick}>
-            <Cover src={albumCover.url} />
-            {artists.map((artist, index) => (index > 0 ? ", " : "") + artist.name)}
+            <Cover src={albumCover} />
+            {artists.map((artistName, index) => (index > 0 ? ", " : "") + artistName)}
             {" - "}
             {name}
         </ItemWrapper>

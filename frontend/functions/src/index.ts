@@ -5,7 +5,7 @@ admin.initializeApp();
 const db = admin.firestore();
 
 exports.checkUpcomingTracks = functions.firestore
-    .document("rooms/{roomId}/upcomingTracks/{docId}")
+    .document("action/{roomId}/upcomingTracks/{docId}")
     .onCreate(async (change, context) => {
         const roomId = context.params.roomId;
         const data = change.data();

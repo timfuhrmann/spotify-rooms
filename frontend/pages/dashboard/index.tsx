@@ -10,7 +10,7 @@ import { APP_COOKIES, getAccessTokenFromCookies } from "../../app/lib/util/api/c
 import { SecondaryHeadline } from "../../app/css/typography/headlines";
 import { Content } from "../../app/css/content";
 import { DashboardItem } from "../../app/components/dashboard/DashboardItem";
-import { useWebsocket } from "../../app/context/websocket/WebsocketContext";
+import { useData } from "../../app/context/websocket/WebsocketContext";
 
 const DashboardWrapper = styled.div`
     padding-top: 12.5rem;
@@ -20,12 +20,8 @@ const DashboardList = styled.div`
     margin-top: 1rem;
 `;
 
-const DashboardItemWrapper = styled.div`
-    margin-top: 1rem;
-`;
-
 const Dashboard: React.FC = () => {
-    const { rooms } = useWebsocket();
+    const { rooms } = useData();
 
     return (
         <Template>
@@ -35,9 +31,7 @@ const Dashboard: React.FC = () => {
                     {rooms && (
                         <DashboardList>
                             {Object.keys(rooms).map(rid => (
-                                <DashboardItemWrapper key={rid}>
-                                    <DashboardItem {...rooms[rid]} />
-                                </DashboardItemWrapper>
+                                <DashboardItem key={rid} {...rooms[rid]} />
                             ))}
                         </DashboardList>
                     )}

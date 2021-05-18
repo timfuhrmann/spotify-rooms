@@ -1,3 +1,5 @@
+import {Server} from "./server";
+
 export module Api {
     interface RTCRoom {
         id: string;
@@ -8,7 +10,7 @@ export module Api {
 
     interface SpotifySearchResponse {
         tracks: {
-            items: SpotifyTrack[];
+            items: Server.Track[];
         };
     }
 

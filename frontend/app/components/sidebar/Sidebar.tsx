@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { SidebarSearch } from "./SidebarSearch";
+import { SearchItem } from "./SearchItem";
 
 import { SecondaryHeadline } from "../../css/typography/headlines";
-import { SearchItem } from "./SearchItem";
-import { useRTC } from "../../context/rtc/RTCContext";
+import { useData } from "../../context/websocket/WebsocketContext";
+import {getSortedPlaylist} from "../../lib/util/getSortedPlaylist";
+import {Hamburger} from "./Hamburger";
 
 const SidebarWrapper = styled.div<{ active: boolean }>`
     width: 45rem;
@@ -29,21 +31,21 @@ const SidebarHead = styled.div`
 `;
 
 const SidebarList = styled.div`
-    padding: 0 2rem;
+    padding: 0 2rem 10rem;
     flex: 1;
     overflow-y: auto;
 `;
 
-const SidebarButton = styled.button`
+const HamburgerWrapper = styled.div`
     position: fixed;
     z-index: 5;
-    top: 5rem;
+    top: 4rem;
     right: 5rem;
 `;
 
 export const Sidebar: React.FC = () => {
-    const { playlist } = useRTC();
-    const [active, setActive] = useState<boolean>(true);
+    const [active, setActive] = useState<boolean>(false);
+    const { playlist } = useData();
 
     return (
         <>
@@ -53,16 +55,16 @@ export const Sidebar: React.FC = () => {
                         <SecondaryHeadline>Playlist</SecondaryHeadline>
                     </SidebarHead>
                     <SidebarList>
-                        {playlist
-                            .sort((a, b) => a.date - b.date)
-                            .map(track => (
-                                <SearchItem key={track.id} {...track} />
-                            ))}
+                        {getSortedPlaylist(Object.keys(playlist), playlist).map(trackId => (
+                            <SearchItem key={trackId} {...playlist[trackId]} />
+                        ))}
                     </SidebarList>
                     <SidebarSearch />
                 </SidebarInner>
             </SidebarWrapper>
-            <SidebarButton onClick={() => setActive(prevState => !prevState)}>X</SidebarButton>
+            <HamburgerWrapper>
+                <Hamburger onClick={() => setActive(prevState => !prevState)} />
+            </HamburgerWrapper>
         </>
     );
 };

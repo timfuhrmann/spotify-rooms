@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import styled from "styled-components";
 import { debounce } from "lodash";
-import { Api } from "../../types/api";
 import { getTrackByString } from "../../lib/api/frontend";
 import { useSpotify } from "../../context/spotify/SpotifyContext";
 import { SearchItem } from "./SearchItem";
 
 import { Input } from "../../css/input";
-import { useRTC } from "../../context/rtc/RTCContext";
-import { useRouter } from "next/router";
+import { useData } from "../../context/websocket/WebsocketContext";
+import { Server } from "../../types/server";
 
 const SidebarSearchOverlay = styled.div<{ hasResults: boolean }>`
     position: absolute;
@@ -20,6 +20,7 @@ const SidebarSearchOverlay = styled.div<{ hasResults: boolean }>`
     background-color: ${p => p.theme.body};
     opacity: ${p => (p.hasResults ? 0.85 : 0)};
     transition: opacity 0.3s;
+    pointer-events: none;
 `;
 
 const SidebarSearchWrapper = styled.div`
@@ -32,7 +33,10 @@ const SidebarSearchWrapper = styled.div`
 `;
 
 const SidebarInputWrapper = styled.div<{ hasResults: boolean }>`
-    padding: 2rem;
+    display: flex;
+    align-items: center;
+    height: 10rem;
+    padding: 0 2rem;
     border-top: ${p => p.hasResults && `0.1rem solid ${p.theme.borderColor}`};
     border-bottom: ${p => p.hasResults && `0.1rem solid ${p.theme.borderColor}`};
 `;
@@ -51,9 +55,9 @@ export const SidebarSearch: React.FC = () => {
     const router = useRouter();
     const { id } = router.query;
     const { authToken } = useSpotify();
-    const { addTrackToPlaylist } = useRTC();
+    const { addTrackToRoom } = useData();
     const [search, setSearch] = useState<string>("");
-    const [searchResults, setSearchResults] = useState<Api.SpotifyTrack[]>([]);
+    const [searchResults, setSearchResults] = useState<Server.ResTrack[]>([]);
 
     useEffect(() => {
         searchByString(search);
@@ -65,19 +69,16 @@ export const SidebarSearch: React.FC = () => {
             return;
         }
 
-        getTrackByString(authToken, str).then(res => {
-            setSearchResults(res.tracks.items);
-        });
+        getTrackByString(authToken, str).then(setSearchResults);
     }, 80);
 
-    const addToPlaylist = (track: Api.SpotifyTrack) => {
+    const addToPlaylist = (track: Server.ResTrack) => {
         if (!id) {
             return;
         }
 
-        addTrackToPlaylist(id as string, track)
-            .then(() => setSearch(""))
-            .catch(console.error);
+        addTrackToRoom(track);
+        setSearch("");
     };
 
     return (

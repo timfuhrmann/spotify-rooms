@@ -7,13 +7,19 @@ import { Server } from "../../types/server";
 const Item = styled.button`
     display: flex;
     align-items: center;
-    justify-content: space-between;
     width: 100%;
+    height: 7rem;
+    border-top: .1rem solid rgba(255, 255, 255, 0.5);
+`;
+
+const ItemName = styled.div`
+    width: 50%
 `;
 
 const ActiveTrack = styled.div`
     display: flex;
     align-items: center;
+    width: 50%;
 `;
 
 const Cover = styled.img`
@@ -22,19 +28,19 @@ const Cover = styled.img`
     margin-right: 2rem;
 `;
 
-export const DashboardItem: React.FC<Server.Room> = ({ id, name, activeTrack }) => {
-    const albumCover = activeTrack && activeTrack.album.images[Math.max(0, activeTrack.album.images.length - 2)];
+export const DashboardItem: React.FC<Server.Room> = ({ id, name, active }) => {
+    const albumCover = active && active.album.images[Math.max(0, active.album.images.length - 2)];
 
     return (
         <Link href={`/room/${id}`}>
             <Item>
-                <span>{name}</span>
-                {activeTrack && (
+                <ItemName>{name}</ItemName>
+                {active && (
                     <ActiveTrack>
-                        <Cover src={albumCover.url} />
-                        {activeTrack.artists.map((artist, index) => (index > 0 ? ", " : "") + artist.name)}
+                        <Cover src={albumCover} />
+                        {active.artists.map((name, index) => (index > 0 ? ", " : "") + name)}
                         {" - "}
-                        {activeTrack.name}
+                        {active.name}
                     </ActiveTrack>
                 )}
             </Item>

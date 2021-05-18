@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import dynamic from "next/dynamic";
 import { SpotifyContext } from "./SpotifyContext";
-import { useRTC } from "../rtc/RTCContext";
-import { useWebsocket } from "../websocket/WebsocketContext";
+import { useData } from "../websocket/WebsocketContext";
 
 const Spotify = dynamic(() => import("./SpotifyInit").then(mod => mod.SpotifyInit), {
     ssr: false,
@@ -13,7 +12,7 @@ interface SpotifyProviderProps {
 }
 
 export const SpotifyProvider: React.FC<SpotifyProviderProps> = ({ children, authToken }) => {
-    const { room } = useWebsocket();
+    const { room } = useData();
     const [player, setPlayer] = useState<Spotify.Player>(null);
     const [deviceId, setDeviceId] = useState<string>("");
 
