@@ -41,6 +41,7 @@ func initWebSocket(h *conn.Hub, w http.ResponseWriter, r *http.Request, rid stri
 		tracks, err := action.GetTracksByRoom(Db, rid)
 		if err != nil {
 			log.Printf("Error trying to get playlist: %v", err)
+			return
 		}
 
 		ws.Out <- (&conn.Event{
@@ -51,19 +52,21 @@ func initWebSocket(h *conn.Hub, w http.ResponseWriter, r *http.Request, rid stri
 	})
 
 	ws.On("ADD_TRACK", func(event *conn.Event) {
-		resultId, err := action.AddTrackToPlaylist(Db, event.Payload)
+		_, err := action.AddTrackToPlaylist(Db, event.Payload)
 		if err != nil {
 			log.Printf("Error trying to add track to playlist: %v", err)
+			return
 		}
 
-		track, err := action.GetTrackById(Db, resultId)
+		tracks, err := action.GetTracksByRoom(Db, rid)
 		if err != nil {
-			log.Printf("Error trying to find track within playlist: %v", err)
+			log.Printf("Error trying to get playlist: %v", err)
+			return
 		}
 
 		ws.Out <- (&conn.Event{
-			Type: "NEW_TRACK",
-			Payload: track,
+			Type: "UPDATE_PLAYLIST",
+			Payload: tracks,
 			Rid: rid,
 		}).Raw()
 	})
@@ -71,6 +74,14 @@ func initWebSocket(h *conn.Hub, w http.ResponseWriter, r *http.Request, rid stri
 	ws.On("UPDATE_ROOMS", func(event *conn.Event) {
 		ws.Out <- (&conn.Event{
 			Type: "UPDATE_ROOMS",
+			Payload: event.Payload,
+			Rid: rid,
+		}).Raw()
+	})
+
+	ws.On("UPDATE_PLAYLIST", func(event *conn.Event) {
+		ws.Out <- (&conn.Event{
+			Type: "UPDATE_PLAYLIST",
 			Payload: event.Payload,
 			Rid: rid,
 		}).Raw()

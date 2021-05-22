@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Logo } from "../../icons/Logo";
+import Link from "next/link";
 
 const NavigationWrapper = styled.div`
     position: fixed;
@@ -17,7 +18,9 @@ const LogoIcon = styled(Logo)`
 export const Navigation: React.FC = () => {
     return (
         <NavigationWrapper>
-            <LogoIcon />
+            <Link href="/dashboard">
+                <LogoIcon />
+            </Link>
         </NavigationWrapper>
     );
 };

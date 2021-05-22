@@ -5,8 +5,8 @@ import { SearchItem } from "./SearchItem";
 
 import { SecondaryHeadline } from "../../css/typography/headlines";
 import { useData } from "../../context/websocket/WebsocketContext";
-import {getSortedPlaylist} from "../../lib/util/getSortedPlaylist";
-import {Hamburger} from "./Hamburger";
+import { getSortedPlaylist } from "../../lib/util/getSortedPlaylist";
+import { Hamburger } from "./Hamburger";
 
 const SidebarWrapper = styled.div<{ active: boolean }>`
     width: 45rem;
@@ -44,7 +44,7 @@ const HamburgerWrapper = styled.div`
 `;
 
 export const Sidebar: React.FC = () => {
-    const [active, setActive] = useState<boolean>(false);
+    const [active, setActive] = useState<boolean>(true);
     const { playlist } = useData();
 
     return (

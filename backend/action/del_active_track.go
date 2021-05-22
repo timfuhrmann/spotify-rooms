@@ -8,14 +8,12 @@ import (
 	"time"
 )
 
-func SetActiveTrack(db *mongo.Database, roid *primitive.ObjectID, track map[string]interface{}) error {
+func DelActiveTrack(db *mongo.Database, roid *primitive.ObjectID) error {
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	roomsCollection := db.Collection("rooms")
 
-	track["date"] = time.Now()
-
 	_, err := roomsCollection.UpdateOne(ctx, bson.M{"_id": roid}, bson.D{
-		{"$set", bson.D{{"active", track}}},
+		{"$unset", bson.M{"active": ""}},
 	})
 	if err != nil {
 		return err

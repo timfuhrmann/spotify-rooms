@@ -47,6 +47,9 @@ func main() {
 	go ghub.RunGlobally()
 	go cache.InitRooms(Db, ghub)
 
+	c := newCounter(hub)
+	go c.run(Db)
+
 	r := mux.NewRouter()
 	r.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		initGlobalWebSocket(ghub, w, r)

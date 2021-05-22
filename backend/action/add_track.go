@@ -17,7 +17,6 @@ func AddTrackToPlaylist(db *mongo.Database, p interface{}) (*primitive.ObjectID,
 	if !ok {
 		return nil, errors.New("couldn't create map from interface")
 	}
-	m["date"] = time.Now()
 
 	roid := GetActiveTrack(db, m["rid"].(string))
 

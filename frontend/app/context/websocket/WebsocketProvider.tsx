@@ -32,17 +32,12 @@ export const WebsocketProvider: React.FC = ({ children }) => {
             setPlaylist(payload);
         });
 
-        ws.addMessageHandler("NEW_TRACK", payload => {
+        ws.addMessageHandler("UPDATE_PLAYLIST", payload => {
             if (!payload) {
                 return;
             }
 
-            setPlaylist(prevState => {
-                return {
-                    ...prevState,
-                    payload,
-                };
-            });
+            setPlaylist(payload);
         });
     }, []);
 
