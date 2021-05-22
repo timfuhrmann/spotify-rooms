@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
 	"github.com/timfuhrmann/spotify-rooms/backend/cache"
 	"github.com/timfuhrmann/spotify-rooms/backend/conn"
@@ -46,22 +47,16 @@ func main() {
 	go ghub.RunGlobally()
 	go cache.InitRooms(Db, ghub)
 
-	http.HandleFunc("/gws", func(w http.ResponseWriter, r *http.Request) {
+	r := mux.NewRouter()
+	r.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		initGlobalWebSocket(ghub, w, r)
 	})
-
-	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
-		rids, ok := r.URL.Query()["rid"]
-
-		if !ok || len(rids) < 1 {
-			log.Println("Url Param is missing")
-			return
-		}
-
-		rid := rids[0]
-
+	r.HandleFunc("/ws/{rid}", func(w http.ResponseWriter, r *http.Request) {
+		vars := mux.Vars(r)
+		rid := vars["rid"]
 		initWebSocket(hub, w, r, rid)
 	})
+	http.Handle("/", r)
 
 	log.Println("Server successfully started")
 	log.Fatal(http.ListenAndServe(":8080", nil))

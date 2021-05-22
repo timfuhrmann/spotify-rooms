@@ -4,7 +4,7 @@ type MessageHandler = (payload?: any) => void;
 
 interface UseWebsocketData {
     connected: boolean;
-    connect: (url: string, rid?: string) => void;
+    connect: (rid: string) => void;
     disconnect: () => void;
     sendAction: (action: string, data?: object) => void;
     onMessage: (event: MessageEvent) => void;
@@ -15,7 +15,6 @@ export const useWebsocket = (): UseWebsocketData => {
     const [websocket, setWebsocket] = useState<WebSocket>(null);
     const [connecting, setConnecting] = useState<boolean>(false);
     const [active, setActive] = useState<boolean>(false);
-    const [url, setUrl] = useState<string>("");
     const [roomId, setRoomId] = useState<string>("");
     const [messageHandler, setMessageHandler] = useState<Record<string, MessageHandler>>({});
     const reconnectTimeout = useRef<number>(null);
@@ -38,20 +37,16 @@ export const useWebsocket = (): UseWebsocketData => {
         websocket.onclose = reconnect;
     }, [websocket]);
 
-    const connect = (url: string, rid?: string) => {
+    const connect = (rid: string) => {
         if (null !== websocket && websocket.OPEN) {
             websocket.close();
         }
 
         setConnecting(true);
         setActive(true);
-        setUrl(url);
+        setRoomId(rid);
 
-        if (rid) {
-            setRoomId(rid);
-        }
-
-        const ws = new WebSocket(url);
+        const ws = new WebSocket(process.env.NEXT_PUBLIC_WEBSOCKET_URL + (rid ? "/" + rid : ""));
         setWebsocket(ws);
     };
 
@@ -72,7 +67,7 @@ export const useWebsocket = (): UseWebsocketData => {
     };
 
     const reconnect = () => {
-        if (!active || !url) {
+        if (!active) {
             setConnecting(false);
             return;
         }
@@ -83,7 +78,7 @@ export const useWebsocket = (): UseWebsocketData => {
         }
 
         reconnectTimeout.current = window.setTimeout(() => {
-            connect(url);
+            connect(roomId);
         }, 2000);
     };
 

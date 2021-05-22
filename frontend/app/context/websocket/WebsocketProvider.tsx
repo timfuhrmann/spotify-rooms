@@ -16,7 +16,7 @@ export const WebsocketProvider: React.FC = ({ children }) => {
             gws.disconnect();
         }
 
-        gws.connect(process.env.NEXT_PUBLIC_ROOMS_WEBSOCKET_URL);
+        gws.connect("");
     }, []);
 
     useEffect(() => {
@@ -55,7 +55,7 @@ export const WebsocketProvider: React.FC = ({ children }) => {
             ws.disconnect();
         }
 
-        ws.connect(`${process.env.NEXT_PUBLIC_WEBSOCKET_URL}?rid=${roomId}`, roomId);
+        ws.connect(roomId);
     }, [roomId]);
 
     useEffect(() => {
