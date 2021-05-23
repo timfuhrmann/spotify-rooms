@@ -8,7 +8,6 @@
     "start": "next start"
   },
   "dependencies": {
-    "firebase": "^8.6.1",
     "lodash": "^4.17.21",
     "lottie-web": "^5.7.8",
     "next": "10.2.0",
