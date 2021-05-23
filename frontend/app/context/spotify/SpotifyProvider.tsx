@@ -12,7 +12,6 @@ interface SpotifyProviderProps {
 }
 
 export const SpotifyProvider: React.FC<SpotifyProviderProps> = ({ children, token }) => {
-    const { room } = useData();
     const [authToken, setAuthToken] = useState<string>(token);
     const [player, setPlayer] = useState<Spotify.Player>(null);
     const [deviceId, setDeviceId] = useState<string>("");
@@ -32,7 +31,7 @@ export const SpotifyProvider: React.FC<SpotifyProviderProps> = ({ children, toke
                 setPlayer,
             }}>
             {children}
-            {room && authToken && <Spotify authToken={authToken} />}
+            {authToken && <Spotify authToken={authToken} />}
         </SpotifyContext.Provider>
     );
 };

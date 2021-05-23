@@ -6,7 +6,7 @@ interface WebsocketContextData {
     playlist: Record<string, Server.ResTrack>;
     rooms: Record<string, Server.Room>;
     room: Server.Room;
-    joinRoomWithId: (rid: string) => void;
+    setRoomId: (rid: string) => void;
     addTrackToRoom: (track: Server.ResTrack) => void;
 }
 

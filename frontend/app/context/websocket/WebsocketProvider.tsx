@@ -43,6 +43,7 @@ export const WebsocketProvider: React.FC = ({ children }) => {
 
     useEffect(() => {
         if (!roomId) {
+            setRoom(null);
             return;
         }
 
@@ -54,30 +55,16 @@ export const WebsocketProvider: React.FC = ({ children }) => {
     }, [roomId]);
 
     useEffect(() => {
-        if (!rooms || !roomId || roomId === room?.id) {
+        if (!rooms || !roomId) {
             return;
         }
 
-        const newRoom = rooms[roomId];
+        const r = rooms[roomId];
 
-        if (!newRoom) {
-            return;
+        if (!room || r.active?.id !== room.active?.id) {
+            setRoom(r);
         }
-
-        setRoom(newRoom);
     }, [rooms, roomId]);
-
-    useEffect(() => {
-        if (!rooms || !room) {
-            return;
-        }
-
-        const newRoom = rooms[room.id];
-
-        if (newRoom && newRoom.active?.id !== room.active?.id) {
-            setRoom(newRoom);
-        }
-    }, [rooms, room]);
 
     const addTrackToRoom = (track: Server.ResTrack) => {
         if (!room) {
@@ -94,7 +81,7 @@ export const WebsocketProvider: React.FC = ({ children }) => {
                 rooms,
                 room,
                 playlist,
-                joinRoomWithId: setRoomId,
+                setRoomId,
                 addTrackToRoom,
             }}>
             {children}

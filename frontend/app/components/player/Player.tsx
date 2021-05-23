@@ -32,12 +32,28 @@ const ArtistName = styled(ActiveTitle)`
     font-size: 2rem;
 `;
 
+const CoverWrapper = styled.div`
+    position: relative;
+`;
+
 const Cover = styled.img`
     display: block;
     width: inherit;
     height: 40rem;
     pointer-events: none;
     user-select: none;
+`;
+
+const PlayButton = styled.button`
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
 `;
 
 interface PlayerProps {
@@ -121,12 +137,14 @@ export const Player: React.FC<PlayerProps> = ({ room }) => {
                         ))}
                     </ArtistNameWrapper>
                 </ActiveTitleWrapper>
-                <Cover
-                    src={track?.album.images[0].url}
-                    width={track?.album.images[0].width}
-                    height={track?.album.images[0].height}
-                />
-                {paused && <button onClick={play}>Play</button>}
+                <CoverWrapper>
+                    <Cover
+                        src={track?.album.images[0].url}
+                        width={track?.album.images[0].width}
+                        height={track?.album.images[0].height}
+                    />
+                    {paused && <PlayButton onClick={play}>Play</PlayButton>}
+                </CoverWrapper>
                 <Volume onClick={toggleMute} />
             </PlayerInner>
         </PlayerFrame>

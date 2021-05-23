@@ -5,10 +5,13 @@ import Link from "next/link";
 
 const NavigationWrapper = styled.div`
     position: fixed;
+    z-index: 1;
     top: 0;
     left: 0;
     padding: 3rem 4rem;
 `;
+
+const LogoWrapper = styled.button``;
 
 const LogoIcon = styled(Logo)`
     color: ${p => p.theme.logo};
@@ -19,7 +22,9 @@ export const Navigation: React.FC = () => {
     return (
         <NavigationWrapper>
             <Link href="/dashboard">
-                <LogoIcon />
+                <LogoWrapper>
+                    <LogoIcon />
+                </LogoWrapper>
             </Link>
         </NavigationWrapper>
     );
