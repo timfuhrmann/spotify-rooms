@@ -10,7 +10,7 @@ import { WebsocketProvider } from "../app/context/websocket/WebsocketProvider";
 const App: React.FC<AppProps> = ({ Component, pageProps }) => {
     return (
         <WebsocketProvider>
-            <SpotifyProvider authToken={pageProps.authToken}>
+            <SpotifyProvider token={pageProps.authToken}>
                 <ThemeProvider theme={dark}>
                     <GlobalStyle />
                     <Navigation />

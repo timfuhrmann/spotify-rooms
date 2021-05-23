@@ -4,7 +4,6 @@ import styled from "styled-components";
 import { useSpotify } from "../../context/spotify/SpotifyContext";
 import { getTrackById, playTrackAtTime, setVolumeForCurrentTrack } from "../../lib/api/frontend";
 import { Volume } from "./controls/Volume";
-import { Api } from "../../types/api";
 import { Server } from "../../types/server";
 
 const PlayerFrame = styled.div`
@@ -46,8 +45,8 @@ interface PlayerProps {
 }
 
 export const Player: React.FC<PlayerProps> = ({ room }) => {
-    const { authToken, deviceId, player } = useSpotify();
-    const [track, setTrack] = useState<Api.SpotifyTrack>(null);
+    const { authToken, setAuthToken, deviceId, player } = useSpotify();
+    const [track, setTrack] = useState<Spotify.Track>(null);
     const [muted, setMuted] = useState<boolean>(false);
     const [paused, setPaused] = useState<boolean>(false);
 
@@ -62,9 +61,7 @@ export const Player: React.FC<PlayerProps> = ({ room }) => {
             return;
         }
 
-        getTrackById(authToken, room.active.id).then(res => {
-            setTrack(res);
-        });
+        initNewTrack();
     }, [authToken, deviceId, room]);
 
     useEffect(() => {
@@ -72,20 +69,18 @@ export const Player: React.FC<PlayerProps> = ({ room }) => {
             return;
         }
 
-        playTrackAtTime(authToken, deviceId, track.uri, Date.now() - Date.parse(room.active.date)).then(() => {
-            setPaused(false);
-        });
+        play();
 
         const onStateChanged = (res: Spotify.PlaybackState) => {
             if (!res) {
                 return;
             }
 
-            if (res.track_window.current_track.id !== track.id) {
-                playTrackAtTime(authToken, deviceId, track.uri, Date.now() - Date.parse(room.active.date));
-            }
-
             setPaused(res.paused);
+
+            if (res.track_window.current_track.id !== track.id) {
+                play();
+            }
         };
 
         player.addListener("player_state_changed", onStateChanged);
@@ -95,20 +90,24 @@ export const Player: React.FC<PlayerProps> = ({ room }) => {
         };
     }, [track]);
 
-    const toggleMute = async () => {
-        if (muted) {
-            await setVolumeForCurrentTrack(authToken, deviceId, 100);
-            setMuted(false);
-        } else {
-            await setVolumeForCurrentTrack(authToken, deviceId, 0);
-            setMuted(true);
-        }
+    const initNewTrack = async (): Promise<void> => {
+        const res = await getTrackById(authToken, room.active.id, setAuthToken);
+        setTrack(res);
     };
 
-    const resume = async () => {
-        playTrackAtTime(authToken, deviceId, track.uri, Date.now() - Date.parse(room.active.date)).then(() => {
-            setPaused(false);
-        });
+    const play = async (): Promise<void> => {
+        await playTrackAtTime(authToken, deviceId, track.uri, Date.now() - Date.parse(room.active.date), setAuthToken);
+        setPaused(false);
+    };
+
+    const toggleMute = async () => {
+        if (muted) {
+            await setVolumeForCurrentTrack(authToken, deviceId, 100, setAuthToken);
+            setMuted(false);
+        } else {
+            await setVolumeForCurrentTrack(authToken, deviceId, 0, setAuthToken);
+            setMuted(true);
+        }
     };
 
     return (
@@ -127,7 +126,7 @@ export const Player: React.FC<PlayerProps> = ({ room }) => {
                     width={track?.album.images[0].width}
                     height={track?.album.images[0].height}
                 />
-                {paused && <button onClick={resume}>Play</button>}
+                {paused && <button onClick={play}>Play</button>}
                 <Volume onClick={toggleMute} />
             </PlayerInner>
         </PlayerFrame>

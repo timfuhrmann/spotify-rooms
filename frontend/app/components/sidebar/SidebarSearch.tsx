@@ -54,7 +54,7 @@ const SearchResultList = styled.div<{ hasResults: boolean }>`
 export const SidebarSearch: React.FC = () => {
     const router = useRouter();
     const { id } = router.query;
-    const { authToken } = useSpotify();
+    const { authToken, setAuthToken } = useSpotify();
     const { addTrackToRoom } = useData();
     const [search, setSearch] = useState<string>("");
     const [searchResults, setSearchResults] = useState<Server.ResTrack[]>([]);
@@ -63,14 +63,18 @@ export const SidebarSearch: React.FC = () => {
         searchByString(search);
     }, [search]);
 
-    const searchByString = debounce((str: string) => {
-        if (!str) {
-            setSearchResults([]);
-            return;
-        }
+    const searchByString = debounce(
+        (str: string) => {
+            if (!str) {
+                setSearchResults([]);
+                return;
+            }
 
-        getTrackByString(authToken, str).then(setSearchResults);
-    }, 80);
+            getTrackByString(authToken, str, setAuthToken).then(setSearchResults);
+        },
+        100,
+        { leading: true }
+    );
 
     const addToPlaylist = (track: Server.ResTrack) => {
         if (!id) {

@@ -2,6 +2,7 @@ import { createContext, useContext } from "react";
 
 interface SpotifyContextData {
     authToken: string;
+    setAuthToken: (token: string) => void;
     deviceId: string;
     setDeviceId: (deviceId: string) => void;
     player: Spotify.Player;

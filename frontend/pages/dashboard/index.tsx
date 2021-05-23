@@ -2,7 +2,7 @@ import React from "react";
 import { GetServerSideProps } from "next";
 import styled from "styled-components";
 import { Template } from "../../app/template/Template";
-import { getSpotifyAccessToken } from "../../app/lib/api/backend";
+import { getSpotifyAccessToken } from "../../app/lib/api/auth";
 import { setCookie } from "nookies";
 import { getCookieDate } from "../../app/lib/util/api/getCookieDate";
 import { APP_COOKIES, getAccessTokenFromCookies } from "../../app/lib/util/api/checkCookies";

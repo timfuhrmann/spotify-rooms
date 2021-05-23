@@ -10,17 +10,25 @@ const setJsonHeaders = (authToken: string) => {
     };
 };
 
-export const getSpotifyLoginUrl = async (): Promise<Api.AuthType> => {
-    return await db<Api.AuthType>("/api/auth");
-};
-
-export const getTrackByString = async (authToken: string, str: string): Promise<Server.ResTrack[]> => {
-    const res = await db<Api.SpotifySearchResponse>(`https://api.spotify.com/v1/search?q=${str}&type=track&limit=10`, {
-        method: "GET",
-        headers: {
-            Authorization: `Bearer ${authToken}`,
+export const getTrackByString = async (
+    authToken: string,
+    str: string,
+    setAuthToken: (token: string) => void
+): Promise<Server.ResTrack[]> => {
+    const res = await db<Api.SpotifySearchResponse>(
+        `https://api.spotify.com/v1/search?q=${str}&type=track&limit=10`,
+        {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${authToken}`,
+            },
         },
-    });
+        setAuthToken
+    );
+
+    if (!res.tracks) {
+        return [];
+    }
 
     return res.tracks.items.map(track => {
         return {
@@ -36,29 +44,56 @@ export const getTrackByString = async (authToken: string, str: string): Promise<
     });
 };
 
-export const getTrackById = async (authToken: string, id: string): Promise<Api.SpotifyTrack> => {
-    return await db(`https://api.spotify.com/v1/tracks/${id}`, {
-        method: "GET",
-        headers: {
-            Authorization: `Bearer ${authToken}`,
+export const getTrackById = async (
+    authToken: string,
+    id: string,
+    setAuthToken: (token: string) => void
+): Promise<Spotify.Track> => {
+    return await db(
+        `https://api.spotify.com/v1/tracks/${id}`,
+        {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${authToken}`,
+            },
         },
-    });
+        setAuthToken
+    );
 };
 
-export const playTrackAtTime = async (authToken: string, deviceId: string, track: string, time: number) => {
-    return await db(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
-        method: "PUT",
-        body: JSON.stringify({
-            uris: [track],
-            position_ms: time,
-        }),
-        headers: setJsonHeaders(authToken),
-    });
+export const playTrackAtTime = async (
+    authToken: string,
+    deviceId: string,
+    track: string,
+    time: number,
+    setAuthToken: (token: string) => void
+) => {
+    return await db(
+        `https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`,
+        {
+            method: "PUT",
+            body: JSON.stringify({
+                uris: [track],
+                position_ms: time,
+            }),
+            headers: setJsonHeaders(authToken),
+        },
+        setAuthToken
+    );
 };
 
-export const setVolumeForCurrentTrack = async (authToken: string, deviceId: string, volume: number) => {
-    return await db(`https://api.spotify.com/v1/me/player/volume?volume_percent=${volume}&device_id=${deviceId}`, {
-        method: "PUT",
-        headers: setJsonHeaders(authToken),
-    });
+export const setVolumeForCurrentTrack = async (
+    authToken: string,
+    deviceId: string,
+    volume: number,
+    setAuthToken: (token: string) => void
+) => {
+    return await db(
+        `https://api.spotify.com/v1/me/player/volume?volume_percent=${volume}&device_id=${deviceId}`,
+        {
+            method: "PUT",
+            headers: setJsonHeaders(authToken),
+        },
+        setAuthToken
+    );
 };

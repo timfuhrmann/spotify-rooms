@@ -1,13 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 import { Template } from "../app/template/Template";
-import { getSpotifyLoginUrl } from "../app/lib/api/frontend";
-
 import { Headline, TertiaryHeadline } from "../app/css/typography/headlines";
 import { ButtonSpotify } from "../app/css/buttons/spotify";
 import { LogoIcon } from "../app/icons/LogoIcon";
 import { GetServerSideProps } from "next";
 import { getAccessTokenFromCookies } from "../app/lib/util/api/checkCookies";
+import { requestSpotifyLoginUrl } from "../app/lib/api/auth";
 
 const HomeWrapper = styled.div`
     display: flex;
@@ -35,7 +34,7 @@ const TextWrapper = styled.div`
 
 const Home: React.FC = () => {
     const initAuth = async () => {
-        const { status, data } = await getSpotifyLoginUrl();
+        const { status, data } = await requestSpotifyLoginUrl();
 
         if (200 === status && data) {
             window.location.href = data.url;
@@ -65,7 +64,7 @@ const Home: React.FC = () => {
 export const getServerSideProps: GetServerSideProps = async context => {
     const access_token = getAccessTokenFromCookies(context.req.cookies);
 
-    if (false) {
+    if (access_token) {
         return {
             redirect: {
                 destination: "/dashboard",
