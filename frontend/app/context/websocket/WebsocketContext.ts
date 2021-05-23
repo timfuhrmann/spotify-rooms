@@ -6,8 +6,9 @@ interface WebsocketContextData {
     playlist: Record<string, Server.ResTrack>;
     rooms: Record<string, Server.Room>;
     room: Server.Room;
-    setRoomId: (rid: string) => void;
     addTrackToRoom: (track: Server.ResTrack) => void;
+    joinRoom: (rid: string) => void;
+    leaveRoom: () => void;
 }
 
 export const WebsocketContext = createContext<WebsocketContextData>({} as WebsocketContextData);

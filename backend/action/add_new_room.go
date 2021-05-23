@@ -4,20 +4,23 @@ import (
 	"context"
 	"github.com/go-redis/redis/v8"
 	"github.com/timfuhrmann/spotify-rooms/backend/entity"
+	"strconv"
 	"time"
 )
 
-func SetActiveTrack(rdb *redis.Client, track *entity.Track, room *entity.Room) error  {
+func AddNewRoom(rdb *redis.Client, room entity.Room) error {
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 
-	room.Active = track
+	size := rdb.HLen(ctx, entity.RoomsKey)
+	id := strconv.FormatInt(size.Val() + 1, 10)
+	room.Id = id
 
 	r, err := room.MarshalRoom()
 	if err != nil {
 		return err
 	}
 
-	if err = rdb.HSet(ctx, entity.RoomsKey, room.Id, r).Err(); err != nil {
+	if err = rdb.HSet(ctx, entity.RoomsKey, id, r).Err(); err != nil {
 		return err
 	}
 

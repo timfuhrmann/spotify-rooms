@@ -24,16 +24,18 @@ const PlayerWrapper = styled.div`
 const Room: React.FC = () => {
     const router = useRouter();
     const { id } = router.query;
-    const { room, setRoomId } = useData();
+    const { connected, room, joinRoom, leaveRoom } = useData();
 
     useEffect(() => {
-        if (!id) {
+        if (!id || !connected) {
             return;
         }
 
-        setRoomId(id as string);
-        return () => setRoomId(null);
-    }, [id]);
+        joinRoom(id as string);
+        return () => {
+            leaveRoom();
+        };
+    }, [id, connected]);
 
     return (
         <Template>

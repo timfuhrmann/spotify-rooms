@@ -2,31 +2,26 @@ package action
 
 import (
 	"context"
-	"github.com/timfuhrmann/spotify-rooms/backend/model"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
+	"github.com/go-redis/redis/v8"
+	"github.com/timfuhrmann/spotify-rooms/backend/entity"
 	"time"
 )
 
-type Rooms map[string]model.Room
-
-func GetAllRooms (db *mongo.Database) (Rooms, error) {
+func GetAllRooms(rdb *redis.Client) (entity.Rooms, error)  {
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
-	roomsCollection := db.Collection("rooms")
 
-	cursor, err := roomsCollection.Find(ctx, bson.M{})
+	res, err := rdb.HGetAll(ctx, entity.RoomsKey).Result()
 	if err != nil {
 		return nil, err
 	}
-	defer cursor.Close(ctx)
 
-	var rooms = make(map[string]model.Room)
-	for cursor.Next(ctx) {
-		var room model.Room
-		if err = cursor.Decode(&room); err != nil {
+	var rooms = make(entity.Rooms)
+	for key, room := range res {
+		var r entity.Room
+		if err = r.UnmarshalRoom([]byte(room)); err != nil {
 			return nil, err
 		}
-		rooms[room.Id] = room
+		rooms[key] = r
 	}
 
 	return rooms, nil

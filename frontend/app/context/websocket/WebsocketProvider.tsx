@@ -5,30 +5,30 @@ import { useWebsocket } from "./UseWebsocket";
 
 export const WebsocketProvider: React.FC = ({ children }) => {
     const ws = useWebsocket();
-    const gws = useWebsocket();
     const [room, setRoom] = useState<Server.Room>(null);
     const [rooms, setRooms] = useState<Record<string, Server.Room>>({});
     const [roomId, setRoomId] = useState<string>("");
     const [playlist, setPlaylist] = useState<Record<string, Server.ResTrack>>({});
 
     useEffect(() => {
-        if (gws.connected) {
-            gws.disconnect();
+        if (ws.connected) {
+            ws.disconnect();
         }
 
-        gws.connect("");
+        ws.connect();
     }, []);
 
     useEffect(() => {
-        gws.addMessageHandler("ON_WELCOME", payload => {
-            setRooms(payload);
-        });
-
-        gws.addMessageHandler("UPDATE_ROOMS", payload => {
-            setRooms(payload);
-        });
-
         ws.addMessageHandler("ON_WELCOME", payload => {
+            setRooms(payload);
+            console.log(payload);
+        });
+
+        ws.addMessageHandler("UPDATE_ROOMS", payload => {
+            setRooms(payload);
+        });
+
+        ws.addMessageHandler("JOIN_ROOM", payload => {
             setPlaylist(payload);
         });
 
@@ -44,14 +44,7 @@ export const WebsocketProvider: React.FC = ({ children }) => {
     useEffect(() => {
         if (!roomId) {
             setRoom(null);
-            return;
         }
-
-        if (ws.connected) {
-            ws.disconnect();
-        }
-
-        ws.connect(roomId);
     }, [roomId]);
 
     useEffect(() => {
@@ -71,7 +64,21 @@ export const WebsocketProvider: React.FC = ({ children }) => {
             return;
         }
 
-        ws.sendAction("ADD_TRACK", { ...track, rid: room.id });
+        ws.sendAction("ADD_TRACK", { track });
+    };
+
+    const joinRoom = (rid: string) => {
+        if (!rid) {
+            return;
+        }
+
+        setRoomId(rid);
+        ws.sendAction("JOIN_ROOM", { rid });
+    };
+
+    const leaveRoom = () => {
+        setRoomId(null);
+        ws.sendAction("LEAVE_ROOM");
     };
 
     return (
@@ -81,8 +88,9 @@ export const WebsocketProvider: React.FC = ({ children }) => {
                 rooms,
                 room,
                 playlist,
-                setRoomId,
                 addTrackToRoom,
+                joinRoom,
+                leaveRoom,
             }}>
             {children}
         </WebsocketContext.Provider>

@@ -2,6 +2,7 @@ package conn
 
 import (
 	"github.com/gorilla/websocket"
+	"github.com/timfuhrmann/spotify-rooms/backend/entity"
 	"log"
 	"net/http"
 	"time"
@@ -22,15 +23,15 @@ var upgrader = websocket.Upgrader{
 }
 
 type WebSocket struct {
-	Hub *Hub
-	Conn *websocket.Conn
-	Rid string
-	Out chan []byte
-	In chan []byte
-	Events map[string]EventHandler
+	Hub 	*Hub
+	Conn 	*websocket.Conn
+	Out 	chan []byte
+	In 		chan []byte
+	Rid 	string
+	Events 	map[string]entity.EventHandler
 }
 
-func NewWebSocket(h *Hub, w http.ResponseWriter, r *http.Request, rid string) (*WebSocket, error) {
+func NewWebSocket(h *Hub, w http.ResponseWriter, r *http.Request) (*WebSocket, error) {
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Printf("An error occured while upgrading the connection: %v", err)
@@ -40,10 +41,9 @@ func NewWebSocket(h *Hub, w http.ResponseWriter, r *http.Request, rid string) (*
 	ws := &WebSocket{
 		Hub: h,
 		Conn: conn,
-		Rid: rid,
 		Out: make(chan []byte),
 		In: make(chan []byte),
-		Events: make(map[string]EventHandler),
+		Events: make(map[string]entity.EventHandler),
 	}
 	ws.Hub.Register <- ws
 
@@ -72,12 +72,17 @@ func (ws *WebSocket) Reader() {
 			break
 		}
 
-		event, err := EventSerializer(message)
+		event, err := entity.EventSerializer(message)
 		if err != nil {
 			log.Printf("Error parsing message: %v", err)
 		}
 
-		ws.Hub.Broadcast <- event
+		answer := Answer{
+			Message: event,
+			Client: ws,
+		}
+
+		ws.Hub.Answer <- &answer
 	}
 }
 
@@ -100,7 +105,7 @@ func (ws *WebSocket) Writer() {
 	}
 }
 
-func (ws *WebSocket) On(eventType string, action EventHandler) *WebSocket {
+func (ws *WebSocket) On(eventType string, action entity.EventHandler) *WebSocket {
 	ws.Events[eventType] = action
 	return ws
 }
