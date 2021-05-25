@@ -7,11 +7,10 @@ import (
 	"time"
 )
 
-func SetActiveTrack(rdb *redis.Client, track *entity.Track, room *entity.Room) error  {
+func DelActiveTrackFromRoom(rdb *redis.Client, room *entity.Room) error {
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 
-	track.Date = time.Now()
-	room.Active = track
+	room.Active = nil
 	room.Live = true
 
 	r, err := room.MarshalRoom()

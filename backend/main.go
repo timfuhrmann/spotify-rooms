@@ -24,7 +24,7 @@ func init() {
 func main() {
 	defer Rdb.Close()
 
-	h := conn.NewHub()
+	h := conn.NewHub(Rdb)
 	go h.RunRooms()
 
 	r := mux.NewRouter()

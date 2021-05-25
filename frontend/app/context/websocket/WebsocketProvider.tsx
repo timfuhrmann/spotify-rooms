@@ -21,7 +21,6 @@ export const WebsocketProvider: React.FC = ({ children }) => {
     useEffect(() => {
         ws.addMessageHandler("ON_WELCOME", payload => {
             setRooms(payload);
-            console.log(payload);
         });
 
         ws.addMessageHandler("UPDATE_ROOMS", payload => {

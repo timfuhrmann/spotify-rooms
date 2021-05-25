@@ -31,7 +31,6 @@ func AddTrack(rdb *redis.Client, ws *conn.WebSocket, event *entity.Event) {
 			log.Printf("Error trying to retrieve playlist: %v", err)
 			return
 		}
-		log.Println(tracks)
 
 		ws.Hub.RoomBroadcast(&entity.Event{
 			Type: EventUpdatePlaylist,

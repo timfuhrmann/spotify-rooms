@@ -88,14 +88,8 @@ export const Player: React.FC<PlayerProps> = ({ room }) => {
         play();
 
         const onStateChanged = (res: Spotify.PlaybackState) => {
-            if (!res) {
-                return;
-            }
-
-            setPaused(res.paused);
-
-            if (res.track_window.current_track.id !== track.id) {
-                play();
+            if (res) {
+                setPaused(res.paused);
             }
         };
 

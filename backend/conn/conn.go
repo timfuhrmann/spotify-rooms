@@ -11,6 +11,7 @@ import (
 const (
 	writeWait = 10 * time.Second
 	pongWait = 60 * time.Second
+	pingPeriod = (pongWait * 9) / 10
 	maxMessageSize = 512
 )
 
@@ -65,6 +66,7 @@ func (ws *WebSocket) Reader() {
 
 	for {
 		_, message, err := ws.Conn.ReadMessage()
+		ws.Conn.SetWriteDeadline(time.Now().Add(writeWait))
 		if err != nil {
 			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
 				log.Printf("Message Error: %v", err)
@@ -87,6 +89,11 @@ func (ws *WebSocket) Reader() {
 }
 
 func (ws *WebSocket) Writer() {
+	ticker := time.NewTicker(pingPeriod)
+	defer func() {
+		ticker.Stop()
+	}()
+
 	for {
 		select {
 			case message, ok := <- ws.Out:
@@ -101,6 +108,11 @@ func (ws *WebSocket) Writer() {
 				}
 				w.Write(message)
 				w.Close()
+		case <- ticker.C:
+			ws.Conn.SetWriteDeadline(time.Now().Add(writeWait))
+			if err := ws.Conn.WriteMessage(websocket.PingMessage, nil); err != nil {
+				return
+			}
 		}
 	}
 }

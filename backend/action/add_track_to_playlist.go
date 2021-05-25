@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/go-redis/redis/v8"
 	"github.com/timfuhrmann/spotify-rooms/backend/entity"
-	"strconv"
 	"time"
 )
 
@@ -28,6 +27,8 @@ func AddTrackToPlaylist(rdb *redis.Client, p interface{}, rid string) (string, e
 		return "", err
 	}
 
+	track.Date = time.Now()
+
 	if room.Active == nil {
 		if err = SetActiveTrack(rdb, track, room); err != nil {
 			return "", err
@@ -35,15 +36,12 @@ func AddTrackToPlaylist(rdb *redis.Client, p interface{}, rid string) (string, e
 		return ToActive, nil
 	}
 
-	size := rdb.HLen(ctx, playlistKey)
-	id := strconv.FormatInt(size.Val() + 1, 10)
-
 	t, err := track.MarshalTrack()
 	if err != nil {
 		return "", err
 	}
 
-	if err = rdb.HSet(ctx, playlistKey, id, t).Err(); err != nil {
+	if err = rdb.HSet(ctx, playlistKey, track.Id, t).Err(); err != nil {
 		return "", err
 	}
 

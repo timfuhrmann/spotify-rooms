@@ -1,20 +1,20 @@
 package action
-//
-//import (
-//	"context"
-//	"go.mongodb.org/mongo-driver/bson"
-//	"go.mongodb.org/mongo-driver/mongo"
-//	"time"
-//)
-//
-//func DelTrackFromPlaylist(db *mongo.Database, id string) error  {
-//	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
-//	playlistCollection := db.Collection("playlist")
-//
-//	_, err := playlistCollection.DeleteOne(ctx, bson.M{"id": id})
-//	if err != nil {
-//		return err
-//	}
-//
-//	return nil
-//}
+
+import (
+	"context"
+	"fmt"
+	"github.com/go-redis/redis/v8"
+	"github.com/timfuhrmann/spotify-rooms/backend/entity"
+	"time"
+)
+
+func DelTrackFromPlaylist(rdb *redis.Client, rid string, trackId string) error {
+	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+	playlistKey := fmt.Sprintf(entity.RoomPlaylist, rid)
+
+	if err := rdb.HDel(ctx, playlistKey, trackId).Err(); err != nil {
+		return err
+	}
+
+	return nil
+}

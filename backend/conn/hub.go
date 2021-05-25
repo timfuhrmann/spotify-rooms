@@ -1,6 +1,7 @@
 package conn
 
 import (
+	"github.com/go-redis/redis/v8"
 	"github.com/timfuhrmann/spotify-rooms/backend/entity"
 )
 
@@ -15,15 +16,21 @@ type Hub struct {
 	Unregister chan *WebSocket
 	Rooms map[string]map[*WebSocket]bool
 	Clients map[*WebSocket]bool
+	Counter *Counter
 }
 
-func NewHub() *Hub {
+func NewHub(rdb *redis.Client) *Hub {
 	return &Hub{
 		Answer: make(chan *Answer),
 		Register: make(chan *WebSocket),
 		Unregister: make(chan *WebSocket),
 		Rooms: make(map[string]map[*WebSocket]bool),
 		Clients: make(map[*WebSocket]bool),
+		Counter: &Counter{
+			Rdb: rdb,
+			Quit: make(chan bool),
+			Active: false,
+		},
 	}
 }
 
@@ -42,6 +49,10 @@ func (h *Hub) RunRooms() {
 
 func (h *Hub) clientRegister(client *WebSocket) {
 	h.Clients[client] = true
+
+	if h.Counter.Active != true {
+		go h.runCounter()
+	}
 }
 
 func (h *Hub) clientUnregister(client *WebSocket) {
@@ -51,6 +62,10 @@ func (h *Hub) clientUnregister(client *WebSocket) {
 		}
 		delete(h.Clients, client)
 		close(client.Out)
+	}
+
+	if len(h.Clients) == 0 {
+		h.Counter.Quit <- true
 	}
 }
 
