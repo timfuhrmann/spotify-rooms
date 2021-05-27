@@ -5,7 +5,7 @@ import { SearchItem } from "./SearchItem";
 
 import { SecondaryHeadline } from "../../css/typography/headlines";
 import { useData } from "../../context/websocket/WebsocketContext";
-import { getSortedPlaylist } from "../../lib/util/getSortedPlaylist";
+import { getSortedPlaylist } from "../../lib/util/SortedPlaylist";
 import { Hamburger } from "./Hamburger";
 
 const SidebarWrapper = styled.div<{ active: boolean }>`

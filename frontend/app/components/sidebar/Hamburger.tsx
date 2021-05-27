@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import styled from "styled-components";
-import {useLottie} from "../../lib/util/useLottie";
+import { useLottie } from "../../lib/util/Lottie";
 
 const ButtonFrame = styled.button`
     display: block;

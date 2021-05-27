@@ -9,7 +9,7 @@ export const useLottie = (
     ref: React.RefObject<HTMLElement>,
     name: string,
     path: string,
-    options: Partial<AnimationConfig> = {},
+    options: Partial<AnimationConfig> = {}
 ): UseLottieData => {
     const [animation, setAnimation] = useState<AnimationItem>(null);
     const [direction, setDirection] = useState<AnimationDirection>(1);
@@ -36,8 +36,6 @@ export const useLottie = (
         if (!animation) {
             return;
         }
-
-        console.log(animation.totalFrames)
 
         animation.setDirection(direction);
         animation.play(name);
