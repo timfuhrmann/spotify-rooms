@@ -43,12 +43,6 @@ export const SpotifyInit: React.FC<SpotifyInitProps> = ({ authToken }) => {
             console.error(message);
         });
 
-        player.addListener("player_state_changed", state => {
-            if (state?.track_window) {
-                setCurrentTrackName(state.track_window.current_track.name);
-            }
-        });
-
         player.addListener("ready", ({ device_id }) => {
             console.log("Ready with Device ID", device_id);
             setDeviceId(device_id);
@@ -64,7 +58,6 @@ export const SpotifyInit: React.FC<SpotifyInitProps> = ({ authToken }) => {
             player.removeListener("initialization_error");
             player.removeListener("authentication_error");
             player.removeListener("account_error");
-            player.removeListener("player_state_changed");
             player.removeListener("ready");
             player.disconnect();
         };

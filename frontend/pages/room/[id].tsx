@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import { getAccessTokenFromCookies } from "../../app/lib/util/api/checkCookies";
 import { Sidebar } from "../../app/components/sidebar/Sidebar";
 import { useData } from "../../app/context/websocket/WebsocketContext";
+import { getTitleFromActiveRoom } from "../../app/lib/util/titleFromActiveRoom";
 
 const RoomWrapper = styled.div`
     display: flex;
@@ -38,7 +39,7 @@ const Room: React.FC = () => {
     }, [id, connected]);
 
     return (
-        <Template>
+        <Template title={getTitleFromActiveRoom(room?.active)}>
             <RoomWrapper>
                 <PlayerWrapper>{room && <Player room={room} />}</PlayerWrapper>
                 <Sidebar />

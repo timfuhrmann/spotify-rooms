@@ -6,7 +6,6 @@ import { getSpotifyAccessToken } from "../../app/lib/api/auth";
 import { setCookie } from "nookies";
 import { getCookieDate } from "../../app/lib/util/api/getCookieDate";
 import { APP_COOKIES, getAccessTokenFromCookies } from "../../app/lib/util/api/checkCookies";
-
 import { SecondaryHeadline } from "../../app/css/typography/headlines";
 import { Content } from "../../app/css/content";
 import { DashboardItem } from "../../app/components/dashboard/DashboardItem";
@@ -24,7 +23,7 @@ const Dashboard: React.FC = () => {
     const { rooms } = useData();
 
     return (
-        <Template>
+        <Template title="Dashboard - Spotify Rooms">
             <DashboardWrapper>
                 <Content>
                     <SecondaryHeadline>Rooms</SecondaryHeadline>

@@ -56,6 +56,18 @@ const PlayButton = styled.button`
     background-color: rgba(0, 0, 0, 0.5);
 `;
 
+const PlayerInfo = styled.div<{ visible: boolean }>`
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    text-align: center;
+    opacity: ${p => (p.visible ? 1 : 0)};
+    transition: opacity 0.3s;
+    pointer-events: none;
+`;
+
 interface PlayerProps {
     room: Server.Room;
 }
@@ -65,6 +77,7 @@ export const Player: React.FC<PlayerProps> = ({ room }) => {
     const [track, setTrack] = useState<Spotify.Track>(null);
     const [muted, setMuted] = useState<boolean>(false);
     const [paused, setPaused] = useState<boolean>(false);
+    const [inactive, setInactive] = useState<boolean>(false);
 
     useEffect(() => {
         if (!authToken || !deviceId || !room) {
@@ -100,6 +113,23 @@ export const Player: React.FC<PlayerProps> = ({ room }) => {
         };
     }, [track]);
 
+    useEffect(() => {
+        let timeout;
+
+        if (!track) {
+            timeout = setTimeout(() => {
+                setInactive(true);
+            }, 2000);
+        } else {
+            setInactive(false);
+        }
+
+        return () => {
+            clearTimeout(timeout);
+            setInactive(false);
+        };
+    }, [track]);
+
     const initNewTrack = async (): Promise<void> => {
         const res = await getTrackById(authToken, room.active.id, setAuthToken);
         setTrack(res);
@@ -122,6 +152,9 @@ export const Player: React.FC<PlayerProps> = ({ room }) => {
 
     return (
         <PlayerFrame>
+            <PlayerInfo visible={inactive}>
+                It seems there is no music to play. Go a ahead and choose you favourite song!
+            </PlayerInfo>
             <PlayerInner active={!!track}>
                 <ActiveTitleWrapper>
                     <ActiveTitle>{track?.name}</ActiveTitle>

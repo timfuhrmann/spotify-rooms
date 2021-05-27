@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import Head from "next/head";
 
 const Site = styled.div`
     position: absolute;
@@ -13,9 +14,18 @@ const Stage = styled.div`
     overflow-y: scroll;
 `;
 
-export const Template: React.FC = ({ children }) => {
+interface TemplateProps {
+    title?: string;
+}
+
+export const Template: React.FC<TemplateProps> = ({ title, children }) => {
     return (
         <Site>
+            {title && (
+                <Head>
+                    <title>{title}</title>
+                </Head>
+            )}
             <Stage>{children}</Stage>
         </Site>
     );
