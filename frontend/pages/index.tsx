@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { Template } from "../app/template/Template";
-import { Headline, TertiaryHeadline } from "../app/css/typography/headlines";
-import { ButtonSpotify } from "../app/css/buttons/spotify";
+import { Headline, TertiaryHeadline } from "../app/css/typography";
+import { ButtonSpotify } from "../app/css/buttons";
 import { LogoIcon } from "../app/icons/LogoIcon";
 import { GetServerSideProps } from "next";
 import { getAccessTokenFromCookies } from "../app/lib/util/api/checkCookies";

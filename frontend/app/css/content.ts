@@ -16,8 +16,3 @@ export const Content = styled.div<{ breakOnMobile?: boolean }>`
 `;
 
 type ColumnsRange = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
-
-export const Columns = styled.div<{ columns: ColumnsRange }>`
-    flex: 1 1 ${p => 100 / p.columns}%;
-    max-width: ${p => 100 / p.columns}%;
-`;

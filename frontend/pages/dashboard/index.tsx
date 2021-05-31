@@ -6,7 +6,7 @@ import { getSpotifyAccessToken } from "../../app/lib/api/auth";
 import { setCookie } from "nookies";
 import { getCookieDate } from "../../app/lib/util/api/getCookieDate";
 import { APP_COOKIES, getAccessTokenFromCookies } from "../../app/lib/util/api/checkCookies";
-import { SecondaryHeadline } from "../../app/css/typography/headlines";
+import { SecondaryHeadline } from "../../app/css/typography";
 import { Content } from "../../app/css/content";
 import { DashboardItem } from "../../app/components/dashboard/DashboardItem";
 import { useData } from "../../app/context/websocket/WebsocketContext";

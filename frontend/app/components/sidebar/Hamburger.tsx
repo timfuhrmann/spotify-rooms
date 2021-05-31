@@ -1,31 +1,27 @@
-import React, { useRef } from "react";
+import React from "react";
 import styled from "styled-components";
-import { useLottie } from "../../lib/util/Lottie";
+import { Close } from "../../icons/Close";
+import { Menu } from "../../icons/Menu";
 
 const ButtonFrame = styled.button`
     display: block;
-    width: 4rem;
-    height: 4rem;
+`;
+
+const CloseIcon = styled(Close)`
+    width: 2.4rem;
+    height: 2.4rem;
+`;
+
+const ListIcon = styled(Menu)`
+    width: 2.4rem;
+    height: 2.4rem;
 `;
 
 interface VolumeProps {
+    active: boolean;
     onClick: () => void;
 }
 
-export const Hamburger: React.FC<VolumeProps> = ({ onClick }) => {
-    const buttonRef = useRef<HTMLButtonElement>(null);
-    const { play } = useLottie(buttonRef, "hamburger", "/controls/x.json", {
-        autoplay: false,
-        loop: false,
-    });
-
-    return (
-        <ButtonFrame
-            ref={buttonRef}
-            onClick={() => {
-                play();
-                onClick();
-            }}
-        />
-    );
+export const Hamburger: React.FC<VolumeProps> = ({ active, onClick }) => {
+    return <ButtonFrame onClick={onClick}>{active ? <CloseIcon /> : <ListIcon />}</ButtonFrame>;
 };

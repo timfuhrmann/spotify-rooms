@@ -1,21 +1,18 @@
 import React from "react";
 import { AppProps } from "next/app";
 import { SpotifyProvider } from "../app/context/spotify/SpotifyProvider";
-import { ThemeProvider } from "styled-components";
-import { light, dark } from "../app/css/theme";
-import { GlobalStyle } from "../app/css/GlobalStyle";
 import { Navigation } from "../app/components/navigation/Navigation";
 import { WebsocketProvider } from "../app/context/websocket/WebsocketProvider";
+import { CustomThemeProvider } from "../app/context/theme/CustomThemeProvider";
 
 const App: React.FC<AppProps> = ({ Component, pageProps }) => {
     return (
         <WebsocketProvider>
             <SpotifyProvider token={pageProps.authToken}>
-                <ThemeProvider theme={dark}>
-                    <GlobalStyle />
+                <CustomThemeProvider>
                     <Navigation />
                     <Component {...pageProps} />
-                </ThemeProvider>
+                </CustomThemeProvider>
             </SpotifyProvider>
         </WebsocketProvider>
     );

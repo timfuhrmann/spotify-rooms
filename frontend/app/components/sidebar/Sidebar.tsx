@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { SidebarSearch } from "./SidebarSearch";
 import { SearchItem } from "./SearchItem";
 
-import { SecondaryHeadline } from "../../css/typography/headlines";
+import { SecondaryHeadline } from "../../css/typography";
 import { useData } from "../../context/websocket/WebsocketContext";
 import { getSortedPlaylist } from "../../lib/util/SortedPlaylist";
 import { Hamburger } from "./Hamburger";
@@ -63,7 +63,7 @@ export const Sidebar: React.FC = () => {
                 </SidebarInner>
             </SidebarWrapper>
             <HamburgerWrapper>
-                <Hamburger onClick={() => setActive(prevState => !prevState)} />
+                <Hamburger active={active} onClick={() => setActive(prevState => !prevState)} />
             </HamburgerWrapper>
         </>
     );

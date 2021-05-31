@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ActiveTitle } from "../../css/typography/headlines";
+import { ActiveTitle } from "../../css/typography";
 import styled from "styled-components";
 import { useSpotify } from "../../context/spotify/SpotifyContext";
 import { getTrackById, playTrackAtTime, setVolumeForCurrentTrack } from "../../lib/api/frontend";
