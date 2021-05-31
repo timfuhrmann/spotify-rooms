@@ -14,24 +14,31 @@ type Theme = "dark" | "light";
 const STORAGE_THEME = "spotify-rooms-theme";
 
 export const CustomThemeProvider: React.FC = ({ children }) => {
-    const [theme, setTheme] = useState<Theme>("dark");
+    const [theme, setTheme] = useState<Theme | null>(null);
 
     useEffect(() => {
-        const val = localStorage.getItem(STORAGE_THEME) as Theme;
-        setTheme(val);
+        const val = localStorage.getItem(STORAGE_THEME);
+
+        if ("light" === val || "dark" === val) {
+            setTheme(val);
+        }
     }, []);
 
     useEffect(() => {
+        if (!theme) {
+            return;
+        }
+
         localStorage.setItem(STORAGE_THEME, theme);
     }, [theme]);
 
     const toggleTheme = () => {
-        setTheme(prevState => ("dark" === prevState ? "light" : "dark"));
+        setTheme(prevState => ("light" === prevState ? "dark" : "light"));
     };
 
     return (
         <CustomThemeContext.Provider value={{ toggleTheme }}>
-            <ThemeProvider theme={"dark" === theme ? dark : light}>
+            <ThemeProvider theme={"light" === theme ? light : dark}>
                 <GlobalStyle />
                 {children}
             </ThemeProvider>
