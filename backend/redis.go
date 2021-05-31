@@ -10,19 +10,16 @@ import (
 )
 
 func newRedisClient() *redis.Client {
-	addr := os.Getenv("REDIS_ADDR")
-	if addr == "" {
-		log.Fatalln("No redis address specified")
+	url := os.Getenv("REDIS_URL")
+	if url == "" {
+		log.Fatalln("No redis url specified")
 	}
 
-	client := redis.NewClient(&redis.Options{
-		Addr: addr,
-		Password: "",
-		DB: 0,
-	})
+	opt, err := redis.ParseURL(url)
+	client := redis.NewClient(opt)
 
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
-	_, err := client.Ping(ctx).Result()
+	_, err = client.Ping(ctx).Result()
 	if err != nil {
 		log.Fatalf("Error trying to ping redis: %v", err)
 	}

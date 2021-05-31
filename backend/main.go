@@ -13,10 +13,12 @@ import (
 var Rdb *redis.Client
 
 func init() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatalf("Error trying to load .env: %v", err)
-	}
+    if os.Getenv("APP_ENV") != "production" {
+        err := godotenv.Load()
+        if err != nil {
+            log.Fatalf("Error trying to load .env: %v", err)
+        }
+    }
 
 	Rdb = newRedisClient()
 }
