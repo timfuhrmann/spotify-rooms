@@ -4,12 +4,20 @@ export const Headline = styled.h1`
     font-weight: 900;
     font-size: 12.5rem;
     letter-spacing: -0.2rem;
+
+    @media ${p => p.theme.bp.l} {
+        font-size: 7.5rem;
+    }
 `;
 
 export const SecondaryHeadline = styled.h2`
     font-weight: bold;
     font-size: 5.5rem;
     letter-spacing: -0.2rem;
+
+    @media ${p => p.theme.bp.l} {
+        font-size: 4.5rem;
+    }
 `;
 
 export const TertiaryHeadline = styled.h3`
