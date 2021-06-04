@@ -2,8 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import { Logo } from "../../icons/Logo";
 import Link from "next/link";
-import { ThemeSwitch } from "./ThemeSwitch";
-import { Hamburger } from "./Hamburger";
+import { ThemeSwitch } from "./controls/ThemeSwitch";
+import { Hamburger } from "./controls/Hamburger";
 import { useSpotify } from "../../context/spotify/SpotifyContext";
 
 const NavigationWrapper = styled.div`

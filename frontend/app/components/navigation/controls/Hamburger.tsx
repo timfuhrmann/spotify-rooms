@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import { Close } from "../../icons/Close";
-import { Menu } from "../../icons/Menu";
+import { Close } from "../../../icons/Close";
+import { Menu } from "../../../icons/Menu";
 
 const ButtonFrame = styled.button`
     display: block;

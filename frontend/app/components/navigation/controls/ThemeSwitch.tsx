@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import { useCustomTheme } from "../../context/theme/CustomThemeProvider";
-import { Moon } from "../../icons/Moon";
-import { Sun } from "../../icons/Sun";
+import { useCustomTheme } from "../../../context/theme/CustomThemeProvider";
+import { Moon } from "../../../icons/Moon";
+import { Sun } from "../../../icons/Sun";
 
 const SwitchButton = styled.button``;
 
