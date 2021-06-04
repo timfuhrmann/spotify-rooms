@@ -6,12 +6,18 @@ import { Skip } from "./Skip";
 import { Volume } from "./Volume";
 import { Server } from "../../../types/server";
 import styled from "styled-components";
+import { Open } from "./Open";
 
 const ControlsWrapper = styled.div`
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
     margin-top: 1rem;
+`;
+
+const ControlsGroup = styled.div`
+    display: flex;
+    align-items: center;
 `;
 
 const VolumeWrapper = styled.div`
@@ -55,10 +61,13 @@ export const PlayerControls: React.FC<PlayerControlsProps> = ({ room }) => {
 
     return (
         <ControlsWrapper>
-            <VolumeWrapper>
-                <Volume muted={muted} onClick={toggleMute} />
-            </VolumeWrapper>
-            <Skip active={!!voted} overlineValue={votes} onClick={voteForSkip} />
+            <Open track={room.active} />
+            <ControlsGroup>
+                <VolumeWrapper>
+                    <Volume muted={muted} onClick={toggleMute} />
+                </VolumeWrapper>
+                <Skip active={!!voted} overlineValue={votes} onClick={voteForSkip} />
+            </ControlsGroup>
         </ControlsWrapper>
     );
 };

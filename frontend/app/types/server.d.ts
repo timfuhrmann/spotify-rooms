@@ -7,6 +7,9 @@ export namespace Server {
 
     interface Track extends Spotify.Track {
         duration_ms: number;
+        external_urls: {
+            spotify?: string;
+        };
     }
 
     interface ResTrack {
@@ -15,6 +18,7 @@ export namespace Server {
         duration_ms: number;
         artists: string[];
         album: ResAlbum;
+        url?: string;
         date?: string;
         rid?: string;
     }

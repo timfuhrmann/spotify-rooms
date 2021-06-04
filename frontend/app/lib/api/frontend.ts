@@ -36,6 +36,7 @@ export const getTrackByString = async (
             name: track.name,
             duration_ms: track.duration_ms,
             artists: track.artists.map(artist => artist.name),
+            url: track.external_urls.spotify,
             album: {
                 name: track.album.name,
                 images: track.album.images.map(image => image.url),

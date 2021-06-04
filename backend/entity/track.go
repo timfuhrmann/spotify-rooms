@@ -12,6 +12,7 @@ type Track struct {
 	Album 		Album		`json:"album"`
 	Artists 	[]string	`json:"artists"`
 	Date 		time.Time	`json:"date"`
+	Url 		string		`json:"url"`
 }
 
 type Album struct {

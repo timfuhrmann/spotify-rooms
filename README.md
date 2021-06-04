@@ -21,6 +21,7 @@
 
 ## How (roughly explained)
 1. Frontend: User authorizes using Spotify
+2. Frontend: Spotify Web Playback SDK initialized 
 2. Frontend: User joins room
 3. Backend: Allocates user to respective room
 4. Frontend: User adds song to playlist
