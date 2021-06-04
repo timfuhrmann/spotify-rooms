@@ -3,18 +3,19 @@ import { ThemeProvider } from "styled-components";
 import { dark, light } from "../../css/theme";
 import { GlobalStyle } from "../../css/GlobalStyle";
 
+type Theme = "dark" | "light" | null;
+
 interface CustomThemeContextData {
+    theme: Theme;
     toggleTheme: () => void;
 }
 
 const CustomThemeContext = createContext<CustomThemeContextData>({} as CustomThemeContextData);
 
-type Theme = "dark" | "light";
-
 const STORAGE_THEME = "spotify-rooms-theme";
 
 export const CustomThemeProvider: React.FC = ({ children }) => {
-    const [theme, setTheme] = useState<Theme | null>(null);
+    const [theme, setTheme] = useState<Theme>(null);
 
     useEffect(() => {
         const val = localStorage.getItem(STORAGE_THEME);
@@ -37,7 +38,7 @@ export const CustomThemeProvider: React.FC = ({ children }) => {
     };
 
     return (
-        <CustomThemeContext.Provider value={{ toggleTheme }}>
+        <CustomThemeContext.Provider value={{ theme, toggleTheme }}>
             <ThemeProvider theme={"light" === theme ? light : dark}>
                 <GlobalStyle />
                 {children}

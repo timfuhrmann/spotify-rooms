@@ -36,38 +36,14 @@ func (h *Hub) runCounter() {
 					date := time.Now().UnixNano() / int64(time.Millisecond)
 
 					if date >= ms {
-						if err = action.RoomToIdle(h.Counter.Rdb, &room); err != nil {
-							log.Printf("Error trying to set track to idle: %v", err)
-							break
-						}
-
-						track, err := action.GetNextTrack(h.Counter.Rdb, rid)
+						result, err := action.InitNextTrack(h.Counter.Rdb, &room, rid)
 						if err != nil {
-							log.Printf("Error trying to get next track: %v", err)
+							log.Printf("Error trying to change active track, %v", err)
 							break
-						} else if track == nil {
-							if err = action.DelActiveTrackFromRoom(h.Counter.Rdb, &room); err != nil {
-								log.Printf("Error trying to get delete active track: %v", err)
+						} else if result == 1 {
+							if err = h.UpdateRoom(rid); err != nil {
+								log.Printf("Error trying to update rooms, %v", err)
 							}
-							if err = h.updateRoom(rid); err != nil {
-								log.Printf("Error trying update room: %v", err)
-							}
-							break
-						}
-
-						if err = action.SetActiveTrack(h.Counter.Rdb, track, &room); err != nil {
-							log.Printf("Error trying to set next active track: %v", err)
-							break
-						}
-
-						if err = action.DelTrackFromPlaylist(h.Counter.Rdb, rid, track.Id); err != nil {
-							log.Printf("Error trying to del track from playlist: %v", err)
-							break
-						}
-
-						if err = h.updateRoom(rid); err != nil {
-							log.Printf("Error trying update room: %v", err)
-							break
 						}
 					}
 				}
@@ -76,7 +52,7 @@ func (h *Hub) runCounter() {
 	}
 }
 
-func (h *Hub) updateRoom(rid string) error {
+func (h *Hub) UpdateRoom(rid string) error {
 	playlist, err := action.GetPlaylistByRoom(h.Counter.Rdb, rid)
 	if err != nil {
 		return err
@@ -94,6 +70,16 @@ func (h *Hub) updateRoom(rid string) error {
 	h.RoomsBroadcast(&entity.Event{
 		Type: "UPDATE_ROOMS",
 		Payload: rooms,
+	})
+
+
+	if err = action.ClearVotes(h.Counter.Rdb, rid); err != nil {
+		return err
+	}
+	h.RoomBroadcast(&entity.Event{
+		Type: "UPDATE_VOTES",
+		Payload: 0,
+		Rid: rid,
 	})
 
 	return nil

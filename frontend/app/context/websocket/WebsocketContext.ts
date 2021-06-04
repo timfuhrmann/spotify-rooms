@@ -8,6 +8,8 @@ interface WebsocketContextData {
     room: Server.Room;
     addTrackToRoom: (track: Server.ResTrack) => void;
     joinRoom: (rid: string) => void;
+    votes: number;
+    voteSkip: (rid: string) => void;
     leaveRoom: () => void;
 }
 

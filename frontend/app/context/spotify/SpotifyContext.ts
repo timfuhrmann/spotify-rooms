@@ -1,6 +1,10 @@
 import { createContext, useContext } from "react";
 
 interface SpotifyContextData {
+    searchActive: boolean;
+    activateSearch: () => void;
+    deactivateSearch: () => void;
+    toggleSearchActive: () => void;
     authToken: string;
     setAuthToken: (token: string) => void;
     deviceId: string;

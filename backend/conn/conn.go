@@ -1,6 +1,7 @@
 package conn
 
 import (
+	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 	"github.com/timfuhrmann/spotify-rooms/backend/entity"
 	"log"
@@ -24,6 +25,7 @@ var upgrader = websocket.Upgrader{
 }
 
 type WebSocket struct {
+	Uuid 	string
 	Hub 	*Hub
 	Conn 	*websocket.Conn
 	Out 	chan []byte
@@ -40,6 +42,7 @@ func NewWebSocket(h *Hub, w http.ResponseWriter, r *http.Request) (*WebSocket, e
 	}
 
 	ws := &WebSocket{
+		Uuid: uuid.New().String(),
 		Hub: h,
 		Conn: conn,
 		Out: make(chan []byte),

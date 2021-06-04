@@ -2,6 +2,7 @@ package conn
 
 import (
 	"github.com/go-redis/redis/v8"
+	"github.com/timfuhrmann/spotify-rooms/backend/action"
 	"github.com/timfuhrmann/spotify-rooms/backend/entity"
 )
 
@@ -93,6 +94,7 @@ func (h *Hub) ClientLeaveRoom(client *WebSocket) {
 		connections := h.Rooms[client.Rid]
 		if connections != nil {
 			if _, ok := connections[client]; ok {
+				h.checkVote(client)
 				delete(connections, client)
 				if len(connections) == 0 {
 					delete(h.Rooms, client.Rid)
@@ -100,6 +102,17 @@ func (h *Hub) ClientLeaveRoom(client *WebSocket) {
 				client.Rid = ""
 			}
 		}
+	}
+}
+
+func (h *Hub) checkVote(client *WebSocket) {
+	length, _ := action.DelVote(h.Counter.Rdb, client.Rid, client.Uuid)
+	if length != nil {
+		h.RoomBroadcast(&entity.Event{
+			Type: "UPDATE_VOTES",
+			Payload: length,
+			Rid: client.Rid,
+		})
 	}
 }
 

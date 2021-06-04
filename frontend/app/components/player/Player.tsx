@@ -5,6 +5,9 @@ import { useSpotify } from "../../context/spotify/SpotifyContext";
 import { getTrackById, playTrackAtTime, setVolumeForCurrentTrack } from "../../lib/api/frontend";
 import { Volume } from "./controls/Volume";
 import { Server } from "../../types/server";
+import { useData } from "../../context/websocket/WebsocketContext";
+import { Skip } from "./controls/Skip";
+import { PlayerControls } from "./controls/PlayerControls";
 
 const PlayerFrame = styled.div`
     position: relative;
@@ -75,7 +78,6 @@ interface PlayerProps {
 export const Player: React.FC<PlayerProps> = ({ room }) => {
     const { authToken, setAuthToken, deviceId, player } = useSpotify();
     const [track, setTrack] = useState<Spotify.Track>(null);
-    const [muted, setMuted] = useState<boolean>(false);
     const [paused, setPaused] = useState<boolean>(false);
     const [inactive, setInactive] = useState<boolean>(false);
 
@@ -140,16 +142,6 @@ export const Player: React.FC<PlayerProps> = ({ room }) => {
         setPaused(false);
     };
 
-    const toggleMute = async () => {
-        if (muted) {
-            await setVolumeForCurrentTrack(authToken, deviceId, 100, setAuthToken);
-            setMuted(false);
-        } else {
-            await setVolumeForCurrentTrack(authToken, deviceId, 0, setAuthToken);
-            setMuted(true);
-        }
-    };
-
     return (
         <PlayerFrame>
             <PlayerInfo visible={inactive}>
@@ -172,7 +164,7 @@ export const Player: React.FC<PlayerProps> = ({ room }) => {
                     />
                     {paused && <PlayButton onClick={play}>Play</PlayButton>}
                 </CoverWrapper>
-                <Volume onClick={toggleMute} />
+                <PlayerControls room={room} />
             </PlayerInner>
         </PlayerFrame>
     );

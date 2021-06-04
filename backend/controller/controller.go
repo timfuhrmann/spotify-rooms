@@ -12,7 +12,9 @@ const (
 	EventLeaveRoom		= "LEAVE_ROOM"
 	EventUpdateRooms 	= "UPDATE_ROOMS"
 	EventUpdatePlaylist	= "UPDATE_PLAYLIST"
+	EventUpdateVotes	= "UPDATE_VOTES"
 	EventAddTrack		= "ADD_TRACK"
+	EventVoteSkip		= "VOTE_SKIP"
 )
 
 func CRE(rdb *redis.Client, ws *conn.WebSocket, fn func(rdb *redis.Client, ws *conn.WebSocket, event *entity.Event)) func(event *entity.Event) {

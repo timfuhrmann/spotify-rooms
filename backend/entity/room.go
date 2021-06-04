@@ -3,8 +3,9 @@ package entity
 import "encoding/json"
 
 const (
-	RoomsKey     = "rooms"
-	RoomPlaylist = "room:%s:playlist"
+	RoomsKey     	= "rooms"
+	RoomPlaylist 	= "room:%s:playlist"
+	RoomSkip 		= "room:%s:skip"
 )
 
 type Room struct {

@@ -9,6 +9,7 @@ export const WebsocketProvider: React.FC = ({ children }) => {
     const [rooms, setRooms] = useState<Record<string, Server.Room>>({});
     const [roomId, setRoomId] = useState<string>("");
     const [playlist, setPlaylist] = useState<Record<string, Server.ResTrack>>({});
+    const [votes, setVotes] = useState<number>(0);
 
     useEffect(() => {
         if (ws.connected) {
@@ -29,6 +30,10 @@ export const WebsocketProvider: React.FC = ({ children }) => {
 
         ws.addMessageHandler("JOIN_ROOM", payload => {
             setPlaylist(payload);
+        });
+
+        ws.addMessageHandler("UPDATE_VOTES", payload => {
+            setVotes(payload);
         });
 
         ws.addMessageHandler("UPDATE_PLAYLIST", payload => {
@@ -75,6 +80,14 @@ export const WebsocketProvider: React.FC = ({ children }) => {
         ws.sendAction("JOIN_ROOM", { rid });
     };
 
+    const voteSkip = (rid: string) => {
+        if (!rid) {
+            return;
+        }
+
+        ws.sendAction("VOTE_SKIP", { rid });
+    };
+
     const leaveRoom = () => {
         setRoomId(null);
         ws.sendAction("LEAVE_ROOM");
@@ -88,6 +101,8 @@ export const WebsocketProvider: React.FC = ({ children }) => {
                 room,
                 playlist,
                 addTrackToRoom,
+                votes,
+                voteSkip,
                 joinRoom,
                 leaveRoom,
             }}>

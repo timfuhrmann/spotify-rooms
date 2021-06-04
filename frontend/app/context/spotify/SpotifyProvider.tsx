@@ -12,6 +12,7 @@ interface SpotifyProviderProps {
 }
 
 export const SpotifyProvider: React.FC<SpotifyProviderProps> = ({ children, token }) => {
+    const [searchActive, setSearchActive] = useState<boolean | null>(null);
     const [authToken, setAuthToken] = useState<string>(token);
     const [player, setPlayer] = useState<Spotify.Player>(null);
     const [deviceId, setDeviceId] = useState<string>("");
@@ -23,6 +24,10 @@ export const SpotifyProvider: React.FC<SpotifyProviderProps> = ({ children, toke
     return (
         <SpotifyContext.Provider
             value={{
+                searchActive,
+                activateSearch: () => setSearchActive(true),
+                deactivateSearch: () => setSearchActive(null),
+                toggleSearchActive: () => setSearchActive(prevState => !prevState),
                 authToken,
                 setAuthToken,
                 deviceId,

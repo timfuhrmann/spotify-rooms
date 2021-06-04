@@ -1,22 +1,23 @@
-import React, { useRef } from "react";
+import React from "react";
 import styled from "styled-components";
 import { useCustomTheme } from "../../context/theme/CustomThemeProvider";
+import { Moon } from "../../icons/Moon";
+import { Sun } from "../../icons/Sun";
 
-const Switch = styled.button`
-    width: 8rem;
-    height: 8rem;
+const SwitchButton = styled.button``;
+
+const MoonIcon = styled(Moon)`
+    width: 2.4rem;
+    height: 2.4rem;
+`;
+
+const SunIcon = styled(Sun)`
+    width: 2.4rem;
+    height: 2.4rem;
 `;
 
 export const ThemeSwitch: React.FC = () => {
-    const { toggleTheme } = useCustomTheme();
-    const buttonRef = useRef<HTMLButtonElement>(null);
+    const { theme, toggleTheme } = useCustomTheme();
 
-    return (
-        <Switch
-            ref={buttonRef}
-            onClick={() => {
-                toggleTheme();
-            }}
-        />
-    );
+    return <SwitchButton onClick={toggleTheme}>{"light" === theme ? <SunIcon /> : <MoonIcon />}</SwitchButton>;
 };

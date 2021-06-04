@@ -8,6 +8,7 @@ import { getAccessTokenFromCookies } from "../../app/lib/util/api/checkCookies";
 import { Sidebar } from "../../app/components/sidebar/Sidebar";
 import { useData } from "../../app/context/websocket/WebsocketContext";
 import { getTitleFromActiveRoom } from "../../app/lib/util/TitleFromActiveRoom";
+import { useSpotify } from "../../app/context/spotify/SpotifyContext";
 
 const RoomWrapper = styled.div`
     display: flex;
@@ -25,6 +26,7 @@ const PlayerWrapper = styled.div`
 const Room: React.FC = () => {
     const router = useRouter();
     const { id } = router.query;
+    const { activateSearch, deactivateSearch } = useSpotify();
     const { connected, room, joinRoom, leaveRoom } = useData();
 
     useEffect(() => {
@@ -32,8 +34,11 @@ const Room: React.FC = () => {
             return;
         }
 
+        activateSearch();
         joinRoom(id as string);
+
         return () => {
+            deactivateSearch();
             leaveRoom();
         };
     }, [id, connected]);

@@ -2,11 +2,10 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { SidebarSearch } from "./SidebarSearch";
 import { SearchItem } from "./SearchItem";
-
 import { SecondaryHeadline } from "../../css/typography";
 import { useData } from "../../context/websocket/WebsocketContext";
 import { getSortedPlaylist } from "../../lib/util/SortedPlaylist";
-import { Hamburger } from "./Hamburger";
+import { useSpotify } from "../../context/spotify/SpotifyContext";
 
 const SidebarWrapper = styled.div<{ active: boolean }>`
     width: 45rem;
@@ -36,35 +35,23 @@ const SidebarList = styled.div`
     overflow-y: auto;
 `;
 
-const HamburgerWrapper = styled.div`
-    position: fixed;
-    z-index: 5;
-    top: 4rem;
-    right: 5rem;
-`;
-
 export const Sidebar: React.FC = () => {
-    const [active, setActive] = useState<boolean>(true);
+    const { searchActive } = useSpotify();
     const { playlist } = useData();
 
     return (
-        <>
-            <SidebarWrapper active={active}>
-                <SidebarInner>
-                    <SidebarHead>
-                        <SecondaryHeadline>Playlist</SecondaryHeadline>
-                    </SidebarHead>
-                    <SidebarList>
-                        {getSortedPlaylist(Object.keys(playlist), playlist).map(trackId => (
-                            <SearchItem key={trackId} {...playlist[trackId]} />
-                        ))}
-                    </SidebarList>
-                    <SidebarSearch />
-                </SidebarInner>
-            </SidebarWrapper>
-            <HamburgerWrapper>
-                <Hamburger active={active} onClick={() => setActive(prevState => !prevState)} />
-            </HamburgerWrapper>
-        </>
+        <SidebarWrapper active={searchActive}>
+            <SidebarInner>
+                <SidebarHead>
+                    <SecondaryHeadline>Playlist</SecondaryHeadline>
+                </SidebarHead>
+                <SidebarList>
+                    {getSortedPlaylist(Object.keys(playlist), playlist).map(trackId => (
+                        <SearchItem key={trackId} {...playlist[trackId]} />
+                    ))}
+                </SidebarList>
+                <SidebarSearch />
+            </SidebarInner>
+        </SidebarWrapper>
     );
 };
