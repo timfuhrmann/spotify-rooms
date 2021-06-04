@@ -8,11 +8,11 @@ import (
 	"time"
 )
 
-func DelTrackFromPlaylist(rdb *redis.Client, rid string, trackId string) error {
+func DelTrackFromPlaylist(rdb *redis.Client, rid string, trackUid string) error {
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	playlistKey := fmt.Sprintf(entity.RoomPlaylist, rid)
 
-	if err := rdb.HDel(ctx, playlistKey, trackId).Err(); err != nil {
+	if err := rdb.HDel(ctx, playlistKey, trackUid).Err(); err != nil {
 		return err
 	}
 

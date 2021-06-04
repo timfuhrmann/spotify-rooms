@@ -35,7 +35,7 @@ export const PlayerControls: React.FC<PlayerControlsProps> = ({ room }) => {
     const [voted, setVoted] = useState<string | null>(null);
 
     useEffect(() => {
-        if (room.active && room.active.id !== voted) {
+        if (room.active && room.active.uid !== voted) {
             setVoted(null);
         }
     }, [room]);
@@ -56,7 +56,7 @@ export const PlayerControls: React.FC<PlayerControlsProps> = ({ room }) => {
         }
 
         voteSkip(room.id);
-        setVoted(room.active.id);
+        setVoted(room.active.uid);
     };
 
     return (

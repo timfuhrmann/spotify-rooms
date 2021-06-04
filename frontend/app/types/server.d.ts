@@ -13,6 +13,7 @@ export namespace Server {
     }
 
     interface ResTrack {
+        uid: string;
         id: string;
         name: string;
         duration_ms: number;

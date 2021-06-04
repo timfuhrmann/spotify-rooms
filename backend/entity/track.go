@@ -6,6 +6,7 @@ import (
 )
 
 type Track struct {
+	Uid 		string		`json:"uid"`
 	Id 			string		`json:"id"`
 	Name 		string		`json:"name"`
 	Duration 	int64		`json:"duration_ms"`

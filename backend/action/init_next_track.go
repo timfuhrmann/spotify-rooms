@@ -25,7 +25,7 @@ func InitNextTrack(rdb *redis.Client, room *entity.Room, rid string) (int, error
 		return 0, err
 	}
 
-	if err = DelTrackFromPlaylist(rdb, rid, track.Id); err != nil {
+	if err = DelTrackFromPlaylist(rdb, rid, track.Uid); err != nil {
 		return 0, err
 	}
 

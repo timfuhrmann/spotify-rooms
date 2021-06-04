@@ -42,7 +42,7 @@ const Home: React.FC = () => {
     };
 
     return (
-        <Template>
+        <Template title="Spotify Rooms">
             <HomeWrapper>
                 <Headline>Spotify, but in rooms.</Headline>
                 <TextWrapper>

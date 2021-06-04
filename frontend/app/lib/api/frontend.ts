@@ -32,6 +32,7 @@ export const getTrackByString = async (
 
     return res.tracks.items.map(track => {
         return {
+            uid: track.id, // fallback, will be overwritten by backend
             id: track.id,
             name: track.name,
             duration_ms: track.duration_ms,

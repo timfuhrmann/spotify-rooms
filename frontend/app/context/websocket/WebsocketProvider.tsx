@@ -58,7 +58,7 @@ export const WebsocketProvider: React.FC = ({ children }) => {
 
         const r = rooms[roomId];
 
-        if (!room || r.active?.id !== room.active?.id) {
+        if (!room || r.active?.uid !== room.active?.uid) {
             setRoom(r);
         }
     }, [rooms, roomId]);

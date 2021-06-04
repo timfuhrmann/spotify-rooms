@@ -1,6 +1,6 @@
 import { Server } from "./server";
 
-export module Api {
+export namespace Api {
     interface SpotifySearchResponse {
         tracks: {
             items: Server.Track[];
