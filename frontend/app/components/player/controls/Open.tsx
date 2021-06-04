@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { Link } from "../../../icons/Link";
 
 const OpenButton = styled.button`
-    display: block;
+    display: flex;
 `;
 
 const OpenIcon = styled(Link)`

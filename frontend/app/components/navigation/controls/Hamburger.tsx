@@ -4,7 +4,7 @@ import { Close } from "../../../icons/Close";
 import { Menu } from "../../../icons/Menu";
 
 const ButtonFrame = styled.button`
-    display: block;
+    display: flex;
 `;
 
 const CloseIcon = styled(Close)`

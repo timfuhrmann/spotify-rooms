@@ -4,7 +4,9 @@ import { LogOut } from "../../../icons/LogOut";
 import { useRouter } from "next/router";
 import { useSpotify } from "../../../context/spotify/SpotifyContext";
 
-const LogoutButton = styled.button``;
+const LogoutButton = styled.button`
+    display: flex;
+`;
 
 const LogoutIcon = styled(LogOut)`
     width: 2.4rem;

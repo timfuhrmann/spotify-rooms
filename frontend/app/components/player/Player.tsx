@@ -8,6 +8,7 @@ import { Server } from "../../types/server";
 import { useData } from "../../context/websocket/WebsocketContext";
 import { Skip } from "./controls/Skip";
 import { PlayerControls } from "./controls/PlayerControls";
+import { Play } from "./controls/Play";
 
 const PlayerFrame = styled.div`
     position: relative;
@@ -45,18 +46,6 @@ const Cover = styled.img`
     height: 40rem;
     pointer-events: none;
     user-select: none;
-`;
-
-const PlayButton = styled.button`
-    position: absolute;
-    top: 0;
-    left: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
 `;
 
 const PlayerInfo = styled.div<{ visible: boolean }>`
@@ -162,7 +151,7 @@ export const Player: React.FC<PlayerProps> = ({ room }) => {
                         width={track?.album.images[0].width}
                         height={track?.album.images[0].height}
                     />
-                    {paused && <PlayButton onClick={play}>Play</PlayButton>}
+                    {paused && <Play onClick={play} />}
                 </CoverWrapper>
                 <PlayerControls room={room} />
             </PlayerInner>

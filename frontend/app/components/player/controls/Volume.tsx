@@ -6,7 +6,7 @@ import { Mute } from "../../../icons/Mute";
 import { Sound } from "../../../icons/Sound";
 
 const VolumeButton = styled.button`
-    display: block;
+    display: flex;
 `;
 
 const MuteIcon = styled(Mute)`
