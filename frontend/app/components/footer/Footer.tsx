@@ -9,10 +9,6 @@ const FooterWrapper = styled.div`
     left: 0;
     width: 100%;
     padding: 2rem;
-
-    @media ${p => p.theme.bp.l} {
-        padding: 4rem;
-    }
 `;
 
 export const Footer: React.FC = () => {

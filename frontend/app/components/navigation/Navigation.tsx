@@ -15,7 +15,7 @@ const NavigationWrapper = styled.div`
     padding: 2rem;
 
     @media ${p => p.theme.bp.l} {
-        padding: 4rem;
+        padding: 4rem 2rem;
     }
 `;
 

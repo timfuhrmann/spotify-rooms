@@ -9,6 +9,7 @@ import { SearchItem } from "./SearchItem";
 import { Input } from "../../css/input";
 import { useData } from "../../context/websocket/WebsocketContext";
 import { Server } from "../../types/server";
+import { Close } from "../../icons/Close";
 
 const SidebarSearchOverlay = styled.div<{ hasResults: boolean }>`
     position: absolute;
@@ -33,6 +34,7 @@ const SidebarSearchWrapper = styled.div`
 `;
 
 const SidebarInputWrapper = styled.div<{ hasResults: boolean }>`
+    position: relative;
     display: flex;
     align-items: center;
     height: 10rem;
@@ -54,6 +56,19 @@ const SearchResultList = styled.div<{ hasResults: boolean }>`
     @media ${p => p.theme.bp.l} {
         padding: 0;
     }
+`;
+
+const SearchCloseButton = styled.button`
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    right: 2rem;
+    transform: translateY(-50%);
+`;
+
+const SearchCloseIcon = styled(Close)`
+    width: 2rem;
+    height: 2rem;
 `;
 
 export const SidebarSearch: React.FC = () => {
@@ -101,6 +116,11 @@ export const SidebarSearch: React.FC = () => {
                         value={search}
                         onInput={e => setSearch((e.target as HTMLInputElement).value)}
                     />
+                    {"" !== search && (
+                        <SearchCloseButton onClick={() => setSearch("")}>
+                            <SearchCloseIcon />
+                        </SearchCloseButton>
+                    )}
                 </SidebarInputWrapper>
                 <SearchResultList hasResults={searchResults.length > 0}>
                     {searchResults.map(track => (
