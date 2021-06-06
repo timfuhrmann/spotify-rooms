@@ -6,7 +6,7 @@ export const Headline = styled.h1`
     letter-spacing: -0.2rem;
 
     @media ${p => p.theme.bp.l} {
-        font-size: 12.5rem;
+        font-size: 8rem;
     }
 `;
 
