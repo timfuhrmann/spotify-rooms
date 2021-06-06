@@ -11,7 +11,7 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
         <WebsocketProvider>
             <SpotifyProvider token={pageProps.authToken}>
                 <CustomThemeProvider>
-                    <Navigation />
+                    {!pageProps.hideNav && <Navigation />}
                     <Component {...pageProps} />
                     <Footer />
                 </CustomThemeProvider>

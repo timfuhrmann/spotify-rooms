@@ -10,6 +10,7 @@ import { SecondaryHeadline } from "../../app/css/typography";
 import { Content } from "../../app/css/content";
 import { DashboardItem } from "../../app/components/dashboard/DashboardItem";
 import { useData } from "../../app/context/websocket/WebsocketContext";
+import { validateBrowser } from "../../app/lib/util/Browser";
 
 const DashboardWrapper = styled.div`
     padding-top: 12.5rem;
@@ -64,11 +65,9 @@ export const getServerSideProps: GetServerSideProps = async context => {
         const access_token = getAccessTokenFromCookies(context.req.cookies);
 
         if (access_token) {
-            return {
-                props: {
-                    authToken: access_token,
-                },
-            };
+            return validateBrowser(context, {
+                authToken: access_token,
+            });
         } else {
             return {
                 redirect: {

@@ -8,6 +8,7 @@ import { GetServerSideProps } from "next";
 import { getAccessTokenFromCookies } from "../app/lib/util/api/checkCookies";
 import { requestSpotifyLoginUrl } from "../app/lib/api/auth";
 import { Content } from "../app/css/content";
+import { validateBrowser } from "../app/lib/util/Browser";
 
 const HomeWrapper = styled.div`
     width: 100%;
@@ -79,9 +80,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
         };
     }
 
-    return {
-        props: {},
-    };
+    return validateBrowser(context);
 };
 
 export default Home;

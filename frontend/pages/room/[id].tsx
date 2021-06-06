@@ -10,6 +10,7 @@ import { useData } from "../../app/context/websocket/WebsocketContext";
 import { getTitleFromActiveRoom } from "../../app/lib/util/TitleFromActiveRoom";
 import { useSpotify } from "../../app/context/spotify/SpotifyContext";
 import { Content } from "../../app/css/content";
+import { validateBrowser } from "../../app/lib/util/Browser";
 
 const RoomWrapper = styled.div`
     display: flex;
@@ -59,11 +60,9 @@ export const getServerSideProps: GetServerSideProps = async context => {
     const access_token = getAccessTokenFromCookies(context.req.cookies);
 
     if (access_token) {
-        return {
-            props: {
-                authToken: access_token,
-            },
-        };
+        return validateBrowser(context, {
+            authToken: access_token,
+        });
     } else {
         return {
             redirect: {
