@@ -5,21 +5,36 @@ import styled from "styled-components";
 import { Server } from "../../types/server";
 
 const Item = styled.button`
-    display: flex;
-    align-items: center;
     width: 100%;
-    height: 7rem;
-    border-top: .1rem solid rgba(255, 255, 255, 0.5);
+    padding: 1.5rem 0;
+    border-top: 0.1rem solid rgba(255, 255, 255, 0.5);
+
+    @media ${p => p.theme.bp.m} {
+        display: flex;
+        align-items: center;
+        height: 7rem;
+        padding: 0;
+    }
 `;
 
 const ItemName = styled.div`
-    width: 50%
+    width: 100%;
+
+    @media ${p => p.theme.bp.m} {
+        width: 50%;
+    }
 `;
 
 const ActiveTrack = styled.div`
     display: flex;
     align-items: center;
-    width: 50%;
+    width: 100%;
+    margin-top: 0.5rem;
+
+    @media ${p => p.theme.bp.m} {
+        width: 50%;
+        margin-top: 0rem;
+    }
 `;
 
 const Cover = styled.img`

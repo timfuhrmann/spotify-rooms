@@ -8,12 +8,26 @@ import { getSortedPlaylist } from "../../lib/util/SortedPlaylist";
 import { useSpotify } from "../../context/spotify/SpotifyContext";
 
 const SidebarWrapper = styled.div<{ active: boolean }>`
-    width: 45rem;
-    max-width: ${p => (p.active ? "45rem" : 0)};
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    left: 100%;
+    width: calc(100% + 0.1rem);
     height: 100%;
+    max-width: 45rem;
+    transform: ${p => (!p.active ? "translate3d(-100%, 0, 0)" : "translate3d(0, 0, 0)")};
     overflow: hidden;
-    transition: max-width 0.4s;
-    will-change: max-width;
+    background-color: ${p => p.theme.body};
+    transition: max-width 0.4s, transform 0.4s;
+    will-change: max-width, transform;
+
+    @media ${p => p.theme.bp.l} {
+        position: relative;
+        left: auto;
+        transform: translate3d(0, 0, 0);
+        width: 45rem;
+        max-width: ${p => (p.active ? "45rem" : 0)};
+    }
 `;
 
 const SidebarInner = styled.div`
@@ -27,6 +41,11 @@ const SidebarInner = styled.div`
 
 const SidebarHead = styled.div`
     padding: 2rem;
+    opacity: 0;
+
+    @media ${p => p.theme.bp.m} {
+        opacity: 1;
+    }
 `;
 
 const SidebarList = styled.div`

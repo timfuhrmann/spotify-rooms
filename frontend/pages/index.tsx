@@ -7,14 +7,20 @@ import { LogoIcon } from "../app/icons/LogoIcon";
 import { GetServerSideProps } from "next";
 import { getAccessTokenFromCookies } from "../app/lib/util/api/checkCookies";
 import { requestSpotifyLoginUrl } from "../app/lib/api/auth";
+import { Content } from "../app/css/content";
 
 const HomeWrapper = styled.div`
+    width: 100%;
+    height: 100%;
+`;
+
+const HomeContent = styled(Content)`
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 100%;
     height: 100%;
+    text-align: center;
 `;
 
 const HomeButton = styled.div`
@@ -27,9 +33,7 @@ const ButtonIcon = styled(LogoIcon)`
 `;
 
 const TextWrapper = styled.div`
-    max-width: 80rem;
     margin: 2rem 0 1rem;
-    text-align: center;
 `;
 
 const Home: React.FC = () => {
@@ -44,18 +48,20 @@ const Home: React.FC = () => {
     return (
         <Template title="Spotify Rooms">
             <HomeWrapper>
-                <Headline>Spotify, but in rooms.</Headline>
-                <TextWrapper>
-                    <TertiaryHeadline>
-                        Share your favourite music in realtime with strangers from all around the world.
-                    </TertiaryHeadline>
-                </TextWrapper>
-                <HomeButton>
-                    <ButtonSpotify onClick={initAuth}>
-                        <ButtonIcon />
-                        Let's gooo
-                    </ButtonSpotify>
-                </HomeButton>
+                <HomeContent>
+                    <Headline>Spotify, but in rooms.</Headline>
+                    <TextWrapper>
+                        <TertiaryHeadline>
+                            Share your favourite music in realtime with strangers from all around the world.
+                        </TertiaryHeadline>
+                    </TextWrapper>
+                    <HomeButton>
+                        <ButtonSpotify onClick={initAuth}>
+                            <ButtonIcon />
+                            Let's gooo
+                        </ButtonSpotify>
+                    </HomeButton>
+                </HomeContent>
             </HomeWrapper>
         </Template>
     );

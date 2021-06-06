@@ -8,11 +8,15 @@ import { useSpotify } from "../../context/spotify/SpotifyContext";
 
 const NavigationWrapper = styled.div`
     position: fixed;
-    z-index: 1;
+    z-index: 3;
     top: 0;
     left: 0;
     width: 100%;
-    padding: 3rem 4rem;
+    padding: 2rem;
+
+    @media ${p => p.theme.bp.l} {
+        padding: 4rem;
+    }
 `;
 
 const NavigationInner = styled.div`
@@ -23,8 +27,8 @@ const NavigationInner = styled.div`
 
 const LogoWrapper = styled.button``;
 
-const ThemeWrapper = styled.div`
-    margin-right: 2rem;
+const HamburgerWrapper = styled.div`
+    margin-left: 2rem;
 `;
 
 const ControlsWrapper = styled.div`
@@ -49,10 +53,12 @@ export const Navigation: React.FC = () => {
                     </LogoWrapper>
                 </Link>
                 <ControlsWrapper>
-                    <ThemeWrapper>
-                        <ThemeSwitch />
-                    </ThemeWrapper>
-                    {searchActive !== null && <Hamburger active={searchActive} onClick={toggleSearchActive} />}
+                    <ThemeSwitch />
+                    {searchActive !== null && (
+                        <HamburgerWrapper>
+                            <Hamburger active={searchActive} onClick={toggleSearchActive} />
+                        </HamburgerWrapper>
+                    )}
                 </ControlsWrapper>
             </NavigationInner>
         </NavigationWrapper>

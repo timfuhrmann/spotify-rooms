@@ -42,12 +42,17 @@ const SidebarInputWrapper = styled.div<{ hasResults: boolean }>`
 `;
 
 const SearchResultList = styled.div<{ hasResults: boolean }>`
+    padding: 0 2rem;
     max-height: ${p => (p.hasResults ? "50vh" : "0")};
     overflow-y: scroll;
     transition: max-height 0.3s;
 
     ::-webkit-scrollbar {
         display: none;
+    }
+
+    @media ${p => p.theme.bp.l} {
+        padding: 0;
     }
 `;
 

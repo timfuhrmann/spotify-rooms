@@ -9,6 +9,7 @@ import { Sidebar } from "../../app/components/sidebar/Sidebar";
 import { useData } from "../../app/context/websocket/WebsocketContext";
 import { getTitleFromActiveRoom } from "../../app/lib/util/TitleFromActiveRoom";
 import { useSpotify } from "../../app/context/spotify/SpotifyContext";
+import { Content } from "../../app/css/content";
 
 const RoomWrapper = styled.div`
     display: flex;
@@ -16,10 +17,11 @@ const RoomWrapper = styled.div`
     height: 100%;
 `;
 
-const PlayerWrapper = styled.div`
+const PlayerWrapper = styled(Content)`
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 100%;
     flex: 1;
 `;
 

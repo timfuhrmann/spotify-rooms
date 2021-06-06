@@ -1,5 +1,4 @@
 import React from "react";
-import { Api } from "../../types/api";
 import styled from "styled-components";
 import { Server } from "../../types/server";
 
@@ -7,7 +6,7 @@ const ItemWrapper = styled.button`
     display: flex;
     width: 100%;
     align-items: center;
-    padding: 2rem;
+    padding: 1.5rem 0;
     transition: background-color 0.1s;
 
     @media (hover: hover) {
@@ -19,6 +18,10 @@ const ItemWrapper = styled.button`
     &:disabled {
         border-bottom: 0.1rem solid ${p => p.theme.borderColor};
         pointer-events: none;
+    }
+
+    @media ${p => p.theme.bp.l} {
+        padding: 2rem;
     }
 `;
 

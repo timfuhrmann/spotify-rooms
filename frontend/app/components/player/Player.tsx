@@ -2,17 +2,21 @@ import React, { useEffect, useState } from "react";
 import { ActiveTitle } from "../../css/typography";
 import styled from "styled-components";
 import { useSpotify } from "../../context/spotify/SpotifyContext";
-import { getTrackById, playTrackAtTime, setVolumeForCurrentTrack } from "../../lib/api/frontend";
-import { Volume } from "./controls/Volume";
+import { getTrackById, playTrackAtTime } from "../../lib/api/frontend";
 import { Server } from "../../types/server";
-import { useData } from "../../context/websocket/WebsocketContext";
-import { Skip } from "./controls/Skip";
 import { PlayerControls } from "./controls/PlayerControls";
 import { Play } from "./controls/Play";
+import { aspectRatio } from "../../css/content";
 
 const PlayerFrame = styled.div`
     position: relative;
-    width: 40rem;
+    width: 100%;
+    margin: 0 auto;
+    max-width: 40rem;
+
+    @media ${p => p.theme.bp.l} {
+        width: 40rem;
+    }
 `;
 
 const PlayerInner = styled.div<{ active: boolean }>`
@@ -21,10 +25,15 @@ const PlayerInner = styled.div<{ active: boolean }>`
 `;
 
 const ActiveTitleWrapper = styled.div`
-    position: absolute;
-    top: 0;
-    left: 0;
-    transform: translateY(calc(-100% - 0.5rem));
+    margin-bottom: 0.5rem;
+
+    @media ${p => p.theme.bp.l} {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform: translateY(calc(-100% - 0.5rem));
+        margin-bottom: 0;
+    }
 `;
 
 const ArtistNameWrapper = styled.div`
@@ -38,12 +47,16 @@ const ArtistName = styled(ActiveTitle)`
 
 const CoverWrapper = styled.div`
     position: relative;
+    ${aspectRatio(1)};
 `;
 
 const Cover = styled.img`
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     display: block;
-    width: inherit;
-    height: 40rem;
     pointer-events: none;
     user-select: none;
 `;
