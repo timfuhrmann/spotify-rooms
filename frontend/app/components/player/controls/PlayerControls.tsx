@@ -13,7 +13,6 @@ const ControlsWrapper = styled.div`
     justify-content: space-between;
     align-items: center;
     margin-top: 1rem;
-    overflow: hidden;
 `;
 
 const ControlsGroup = styled.div`

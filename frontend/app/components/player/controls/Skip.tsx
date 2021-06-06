@@ -4,10 +4,11 @@ import { SkipForward } from "../../../icons/SkipForward";
 
 const Info = styled.div`
     position: absolute;
-    z-index: 1;
+    z-index: 3;
     bottom: 50%;
     right: 0;
     transform: translate(calc(100% + 2rem), 50%);
+    display: none;
     padding: 2rem;
     width: 30rem;
     background-color: ${p => p.theme.white};
@@ -16,6 +17,10 @@ const Info = styled.div`
     opacity: 0;
     transition: opacity 0.1s;
     will-change: opacity;
+
+    @media ${p => p.theme.bp.l} {
+        display: block;
+    }
 `;
 
 const SkipButton = styled.button<{ active: boolean }>`

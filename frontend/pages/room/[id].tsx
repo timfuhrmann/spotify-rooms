@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { Template } from "../../app/template/Template";
 import { Player } from "../../app/components/player/Player";
 import { useRouter } from "next/router";
-import { checkAccessToken, getAccessTokenFromCookies } from "../../app/lib/util/api/Cookies";
+import { checkAccessToken } from "../../app/lib/util/api/Cookies";
 import { Sidebar } from "../../app/components/sidebar/Sidebar";
 import { useData } from "../../app/context/websocket/WebsocketContext";
 import { getTitleFromActiveRoom } from "../../app/lib/util/TitleFromActiveRoom";
