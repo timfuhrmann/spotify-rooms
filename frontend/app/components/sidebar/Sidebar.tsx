@@ -40,7 +40,7 @@ const SidebarInner = styled.div`
 `;
 
 const SidebarHead = styled.div`
-    padding: 2rem;
+    padding: 1rem 2rem;
     opacity: 0;
 
     @media ${p => p.theme.bp.m} {

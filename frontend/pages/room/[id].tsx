@@ -4,13 +4,12 @@ import styled from "styled-components";
 import { Template } from "../../app/template/Template";
 import { Player } from "../../app/components/player/Player";
 import { useRouter } from "next/router";
-import { getAccessTokenFromCookies } from "../../app/lib/util/api/checkCookies";
+import { checkAccessToken, getAccessTokenFromCookies } from "../../app/lib/util/api/Cookies";
 import { Sidebar } from "../../app/components/sidebar/Sidebar";
 import { useData } from "../../app/context/websocket/WebsocketContext";
 import { getTitleFromActiveRoom } from "../../app/lib/util/TitleFromActiveRoom";
 import { useSpotify } from "../../app/context/spotify/SpotifyContext";
 import { Content } from "../../app/css/content";
-import { validateBrowser } from "../../app/lib/util/Browser";
 
 const RoomWrapper = styled.div`
     display: flex;
@@ -57,20 +56,7 @@ const Room: React.FC = () => {
 };
 
 export const getServerSideProps: GetServerSideProps = async context => {
-    const access_token = getAccessTokenFromCookies(context.req.cookies);
-
-    if (access_token) {
-        return validateBrowser(context, {
-            authToken: access_token,
-        });
-    } else {
-        return {
-            redirect: {
-                destination: "/",
-                permanent: false,
-            },
-        };
-    }
+    return checkAccessToken(context);
 };
 
 export default Room;

@@ -1,8 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { APP_COOKIES } from "../../app/lib/util/api/checkCookies";
+import { APP_COOKIES, getCookieDate } from "../../app/lib/util/api/Cookies";
 import { refreshAccessToken } from "../../app/lib/api/auth";
 import { setCookie } from "nookies";
-import { getCookieDate } from "../../app/lib/util/api/getCookieDate";
 import { Api } from "../../app/types/api";
 
 export default async (req: NextApiRequest, res: NextApiResponse<Api.RefreshType>) => {

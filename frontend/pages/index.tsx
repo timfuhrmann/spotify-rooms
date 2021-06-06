@@ -5,7 +5,7 @@ import { Headline, TertiaryHeadline } from "../app/css/typography";
 import { ButtonSpotify } from "../app/css/buttons";
 import { LogoIcon } from "../app/icons/LogoIcon";
 import { GetServerSideProps } from "next";
-import { getAccessTokenFromCookies } from "../app/lib/util/api/checkCookies";
+import { getAccessTokenFromCookies } from "../app/lib/util/api/Cookies";
 import { requestSpotifyLoginUrl } from "../app/lib/api/auth";
 import { Content } from "../app/css/content";
 import { validateBrowser } from "../app/lib/util/Browser";

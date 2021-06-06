@@ -4,13 +4,11 @@ import styled from "styled-components";
 import { Template } from "../../app/template/Template";
 import { getSpotifyAccessToken } from "../../app/lib/api/auth";
 import { setCookie } from "nookies";
-import { getCookieDate } from "../../app/lib/util/api/getCookieDate";
-import { APP_COOKIES, getAccessTokenFromCookies } from "../../app/lib/util/api/checkCookies";
+import { APP_COOKIES, checkAccessToken, getCookieDate } from "../../app/lib/util/api/Cookies";
 import { SecondaryHeadline } from "../../app/css/typography";
 import { Content } from "../../app/css/content";
 import { DashboardItem } from "../../app/components/dashboard/DashboardItem";
 import { useData } from "../../app/context/websocket/WebsocketContext";
-import { validateBrowser } from "../../app/lib/util/Browser";
 
 const DashboardWrapper = styled.div`
     padding-top: 12.5rem;
@@ -48,7 +46,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
         const res = await getSpotifyAccessToken(code as string);
 
         if (res.access_token) {
-            setCookie(context, APP_COOKIES, JSON.stringify({ ...res, date: new Date() }), {
+            setCookie(context, APP_COOKIES, JSON.stringify(res), {
                 httpOnly: true,
                 path: "/",
                 expires: getCookieDate(),
@@ -62,20 +60,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
             };
         }
     } else {
-        const access_token = getAccessTokenFromCookies(context.req.cookies);
-
-        if (access_token) {
-            return validateBrowser(context, {
-                authToken: access_token,
-            });
-        } else {
-            return {
-                redirect: {
-                    destination: "/",
-                    permanent: false,
-                },
-            };
-        }
+        return checkAccessToken(context);
     }
 
     return {

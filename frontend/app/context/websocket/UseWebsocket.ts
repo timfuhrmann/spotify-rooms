@@ -88,7 +88,11 @@ export const useWebsocket = (): UseWebsocketData => {
 
         const handler = messageHandler[data.e];
 
-        handler ? handler(data.p) : console.error(`No event handler vor event ${data.e}`);
+        if (handler) {
+            handler(data.p);
+        } else {
+            console.error(`No event handler for event ${data.e}`);
+        }
     };
 
     const sendAction = (action: string, data?: object) => {
