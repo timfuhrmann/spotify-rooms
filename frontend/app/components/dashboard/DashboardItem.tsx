@@ -33,7 +33,7 @@ const ActiveTrack = styled.div`
 
     @media ${p => p.theme.bp.m} {
         width: 50%;
-        margin-top: 0rem;
+        margin-top: 0;
     }
 `;
 

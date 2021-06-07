@@ -13,6 +13,7 @@ const PlayButton = styled.button`
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
+    color: ${p => p.theme.white};
 `;
 
 const PlayButtonIcon = styled(PlayIcon)`

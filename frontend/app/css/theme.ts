@@ -22,9 +22,10 @@ const theme = {
 
 export const light = {
     ...theme,
-    body: "#ff4632",
-    text: "#fff",
-    logo: "#191414",
+    body: "#d5e7e1",
+    text: "#26745c",
+    logo: "#26745c",
+    primary: "#a1c3d1",
     type: "light",
 };
 
@@ -33,6 +34,7 @@ export const dark = {
     body: "#191414",
     text: "#fff",
     logo: "#fff",
+    primary: "#1db954",
     type: "dark",
 };
 
