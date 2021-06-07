@@ -94,18 +94,19 @@ func (h *Hub) ClientJoinRoom(client *WebSocket, rid string) {
 
 func (h *Hub) ClientLeaveRoom(client *WebSocket) {
 	if client.Rid != "" {
-		r := h.Rooms[client.Rid]
-		connections := r.Conns
-		if connections != nil {
-			if _, ok := connections[client]; ok {
-				h.checkVote(client)
-				delete(connections, client)
-				if len(connections) == 0 {
-					r.Counter.Quit <- true
+		if h.Rooms[client.Rid] != nil {
+			connections := h.Rooms[client.Rid].Conns
+			if connections != nil {
+				if _, ok := connections[client]; ok {
+					h.checkVote(client)
+					delete(connections, client)
+					if len(connections) == 0 {
+						h.Rooms[client.Rid].Counter.Quit <- true
+					}
 				}
-				client.Rid = ""
 			}
 		}
+		client.Rid = ""
 	}
 }
 
