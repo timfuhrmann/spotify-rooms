@@ -5,6 +5,7 @@ import (
 	"github.com/timfuhrmann/spotify-rooms/backend/db"
 	"github.com/timfuhrmann/spotify-rooms/backend/entity"
 	"log"
+	"math"
 	"time"
 )
 
@@ -34,19 +35,23 @@ func (h *HubRoom) runCounter() {
 				return
 			}
 
+			n := float64(len(h.Conns)) / 2
+			length := action.GetVotesLength(db.Rdb, h.Rid)
+			if float64(length) >= math.Round(n) {
+				if err = h.nextTrack(room); err != nil {
+					log.Printf("Error trying to change track after vote, %v", err)
+				}
+				break
+			}
+
 			if room.Active != nil && room.Live == true {
 				ms := (room.Active.Date.UnixNano() / int64(time.Millisecond)) + room.Active.Duration
 				date := time.Now().UnixNano() / int64(time.Millisecond)
 
 				if date >= ms {
-					result, err := action.InitNextTrack(db.Rdb, room, h.Rid)
-					if err != nil {
-						log.Printf("Error trying to change active track, %v", err)
+					if err = h.nextTrack(room); err != nil {
+						log.Printf("Error trying to change track after track finished, %v", err)
 						break
-					} else if result == 1 {
-						if err = h.Hub.UpdateRoom(h.Rid); err != nil {
-							log.Printf("Error trying to update rooms, %v", err)
-						}
 					}
 				}
 			}
@@ -54,7 +59,20 @@ func (h *HubRoom) runCounter() {
 	}
 }
 
-func (h *Hub) UpdateRoom(rid string) error {
+func (h *HubRoom) nextTrack(room *entity.Room) error {
+	result, err := action.InitNextTrack(db.Rdb, room, h.Rid)
+	if err != nil {
+		return err
+	} else if result == 1 {
+		if err = h.Hub.updateRoom(h.Rid); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (h *Hub) updateRoom(rid string) error {
 	playlist, err := action.GetPlaylistByRoom(db.Rdb, rid)
 	if err != nil {
 		return err
