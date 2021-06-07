@@ -104,21 +104,26 @@ export const Player: React.FC<PlayerProps> = ({ room }) => {
 
         play();
 
+        let timeout: NodeJS.Timeout;
         const onStateChanged = (res: Spotify.PlaybackState) => {
             if (res) {
-                setPaused(res.paused);
+                clearTimeout(timeout);
+                timeout = setTimeout(() => {
+                    setPaused(res.paused);
+                }, 1000);
             }
         };
 
         player.addListener("player_state_changed", onStateChanged);
         return () => {
+            clearTimeout(timeout);
             player.removeListener("player_state_changed", onStateChanged);
             player.pause();
         };
     }, [track]);
 
     useEffect(() => {
-        let timeout;
+        let timeout: NodeJS.Timeout;
 
         if (!track) {
             timeout = setTimeout(() => {
