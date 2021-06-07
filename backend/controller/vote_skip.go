@@ -17,7 +17,7 @@ func VoteSkip(rdb *redis.Client, ws *conn.WebSocket) {
 
 	length := action.GetVotesLength(rdb, ws.Rid)
 
-	n := float64(len(ws.Hub.Rooms[ws.Rid])) / 2
+	n := float64(len(ws.Hub.Rooms[ws.Rid].Conns)) / 2
 	if float64(length) >= math.Round(n) {
 		room, err := action.GetRoomById(rdb, ws.Rid)
 		if err != nil {

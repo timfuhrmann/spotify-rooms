@@ -1,4 +1,4 @@
-package main
+package db
 
 import (
 	"context"
@@ -8,6 +8,12 @@ import (
 	"os"
 	"time"
 )
+
+var Rdb *redis.Client
+
+func Init() {
+	Rdb = newRedisClient()
+}
 
 func newRedisClient() *redis.Client {
 	url := os.Getenv("REDIS_URL")

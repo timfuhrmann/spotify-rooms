@@ -1,16 +1,14 @@
 package main
 
 import (
-	"github.com/go-redis/redis/v8"
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
 	"github.com/timfuhrmann/spotify-rooms/backend/conn"
+	"github.com/timfuhrmann/spotify-rooms/backend/db"
 	"log"
 	"net/http"
 	"os"
 )
-
-var Rdb *redis.Client
 
 func init() {
     if os.Getenv("APP_ENV") != "production" {
@@ -20,13 +18,13 @@ func init() {
         }
     }
 
-	Rdb = newRedisClient()
+	db.Init()
 }
 
 func main() {
-	defer Rdb.Close()
+	defer db.Rdb.Close()
 
-	h := conn.NewHub(Rdb)
+	h := conn.NewHub()
 	go h.RunRooms()
 
 	r := mux.NewRouter()

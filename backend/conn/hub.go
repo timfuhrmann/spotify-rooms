@@ -1,8 +1,8 @@
 package conn
 
 import (
-	"github.com/go-redis/redis/v8"
 	"github.com/timfuhrmann/spotify-rooms/backend/action"
+	"github.com/timfuhrmann/spotify-rooms/backend/db"
 	"github.com/timfuhrmann/spotify-rooms/backend/entity"
 )
 
@@ -11,27 +11,28 @@ type Answer struct {
 	Message *entity.Event
 }
 
+type HubRoom struct {
+	Counter *Counter
+	Conns map[*WebSocket]bool
+	Hub *Hub
+	Rid string
+}
+
 type Hub struct {
 	Answer chan *Answer
 	Register chan *WebSocket
 	Unregister chan *WebSocket
-	Rooms map[string]map[*WebSocket]bool
+	Rooms map[string]*HubRoom
 	Clients map[*WebSocket]bool
-	Counter *Counter
 }
 
-func NewHub(rdb *redis.Client) *Hub {
+func NewHub() *Hub {
 	return &Hub{
 		Answer: make(chan *Answer),
 		Register: make(chan *WebSocket),
 		Unregister: make(chan *WebSocket),
-		Rooms: make(map[string]map[*WebSocket]bool),
+		Rooms: make(map[string]*HubRoom),
 		Clients: make(map[*WebSocket]bool),
-		Counter: &Counter{
-			Rdb: rdb,
-			Quit: make(chan bool),
-			Active: false,
-		},
 	}
 }
 
@@ -50,10 +51,6 @@ func (h *Hub) RunRooms() {
 
 func (h *Hub) clientRegister(client *WebSocket) {
 	h.Clients[client] = true
-
-	if h.Counter.Active != true {
-		go h.runCounter()
-	}
 }
 
 func (h *Hub) clientUnregister(client *WebSocket) {
@@ -64,15 +61,11 @@ func (h *Hub) clientUnregister(client *WebSocket) {
 		delete(h.Clients, client)
 		close(client.Out)
 	}
-
-	if len(h.Clients) == 0 {
-		h.Counter.Quit <- true
-	}
 }
 
 func (h *Hub) clientAnswer(client *WebSocket, message *entity.Event) {
-	if action, ok := client.Events[message.Type]; ok {
-		action(message)
+	if handler, ok := client.Events[message.Type]; ok {
+		handler(message)
 	} else {
 		close(client.Out)
 		delete(h.Clients, client)
@@ -80,24 +73,35 @@ func (h *Hub) clientAnswer(client *WebSocket, message *entity.Event) {
 }
 
 func (h *Hub) ClientJoinRoom(client *WebSocket, rid string) {
-	connections := h.Rooms[rid]
-	if connections == nil {
-		connections = make(map[*WebSocket]bool)
-		h.Rooms[rid] = connections
+	if h.Rooms[rid] == nil {
+		h.Rooms[rid] = &HubRoom {
+			Conns: make(map[*WebSocket]bool),
+			Hub: h,
+			Rid: rid,
+		}
 	}
-	h.Rooms[rid][client] = true
+	h.Rooms[rid].Conns[client] = true
 	client.Rid = rid
+
+	if h.Rooms[rid].Counter == nil {
+		h.Rooms[rid].Counter = &Counter {
+			Quit: make(chan bool),
+			Active: false,
+		}
+		go h.Rooms[rid].runCounter()
+	}
 }
 
 func (h *Hub) ClientLeaveRoom(client *WebSocket) {
 	if client.Rid != "" {
-		connections := h.Rooms[client.Rid]
+		r := h.Rooms[client.Rid]
+		connections := r.Conns
 		if connections != nil {
 			if _, ok := connections[client]; ok {
 				h.checkVote(client)
 				delete(connections, client)
 				if len(connections) == 0 {
-					delete(h.Rooms, client.Rid)
+					r.Counter.Quit <- true
 				}
 				client.Rid = ""
 			}
@@ -106,7 +110,7 @@ func (h *Hub) ClientLeaveRoom(client *WebSocket) {
 }
 
 func (h *Hub) checkVote(client *WebSocket) {
-	length, _ := action.DelVote(h.Counter.Rdb, client.Rid, client.Uuid)
+	length, _ := action.DelVote(db.Rdb, client.Rid, client.Uuid)
 	if length != nil {
 		h.RoomBroadcast(&entity.Event{
 			Type: "UPDATE_VOTES",
@@ -118,8 +122,8 @@ func (h *Hub) checkVote(client *WebSocket) {
 
 func (h *Hub) RoomsBroadcast(message *entity.Event) {
 	for client := range h.Clients {
-		if action, ok := client.Events[message.Type]; ok {
-			action(message)
+		if handler, ok := client.Events[message.Type]; ok {
+			handler(message)
 		} else {
 			close(client.Out)
 			delete(h.Clients, client)
@@ -128,15 +132,19 @@ func (h *Hub) RoomsBroadcast(message *entity.Event) {
 }
 
 func (h *Hub) RoomBroadcast(message *entity.Event) {
-	connections := h.Rooms[message.Rid]
-	for client := range connections {
-		if action, ok := client.Events[message.Type]; ok {
-			action(message)
-		} else {
-			close(client.Out)
-			delete(connections, client)
-			if len(connections) == 0 {
-				delete(h.Rooms, client.Rid)
+	r := h.Rooms[message.Rid]
+	if r != nil {
+		connections := r.Conns
+		for client := range connections {
+			if handler, ok := client.Events[message.Type]; ok {
+				handler(message)
+			} else {
+				close(client.Out)
+				delete(connections, client)
+				if len(connections) == 0 {
+					h.Rooms[message.Rid].Counter.Quit <- true
+					delete(h.Rooms, client.Rid)
+				}
 			}
 		}
 	}

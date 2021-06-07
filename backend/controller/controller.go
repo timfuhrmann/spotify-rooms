@@ -3,6 +3,7 @@ package controller
 import (
 	"github.com/go-redis/redis/v8"
 	"github.com/timfuhrmann/spotify-rooms/backend/conn"
+	"github.com/timfuhrmann/spotify-rooms/backend/db"
 	"github.com/timfuhrmann/spotify-rooms/backend/entity"
 )
 
@@ -17,15 +18,15 @@ const (
 	EventVoteSkip		= "VOTE_SKIP"
 )
 
-func CRE(rdb *redis.Client, ws *conn.WebSocket, fn func(rdb *redis.Client, ws *conn.WebSocket, event *entity.Event)) func(event *entity.Event) {
+func CRE(ws *conn.WebSocket, fn func(rdb *redis.Client, ws *conn.WebSocket, event *entity.Event)) func(event *entity.Event) {
 	return func(event *entity.Event) {
-		fn(rdb, ws, event)
+		fn(db.Rdb, ws, event)
 	}
 }
 
-func CR(rdb *redis.Client, ws *conn.WebSocket, fn func(rdb *redis.Client, ws *conn.WebSocket)) func(event *entity.Event) {
+func CR(ws *conn.WebSocket, fn func(rdb *redis.Client, ws *conn.WebSocket)) func(event *entity.Event) {
 	return func(event *entity.Event) {
-		fn(rdb, ws)
+		fn(db.Rdb, ws)
 	}
 }
 
