@@ -9,6 +9,7 @@ import { SecondaryHeadline } from "../../app/css/typography";
 import { Content } from "../../app/css/content";
 import { DashboardItem } from "../../app/components/dashboard/DashboardItem";
 import { useData } from "../../app/context/websocket/WebsocketContext";
+import { Loading } from "../../app/components/loading/Loading";
 
 const DashboardWrapper = styled.div`
     padding-top: 12.5rem;
@@ -26,13 +27,13 @@ const Dashboard: React.FC = () => {
             <DashboardWrapper>
                 <Content>
                     <SecondaryHeadline>Rooms</SecondaryHeadline>
-                    {rooms && (
+                    <Loading condition={rooms && Object.keys(rooms).length > 0}>
                         <DashboardList>
                             {Object.keys(rooms).map(rid => (
                                 <DashboardItem key={rid} {...rooms[rid]} />
                             ))}
                         </DashboardList>
-                    )}
+                    </Loading>
                 </Content>
             </DashboardWrapper>
         </Template>
