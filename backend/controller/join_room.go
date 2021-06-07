@@ -34,6 +34,7 @@ func JoinRoom(rdb *redis.Client, ws *conn.WebSocket, event *entity.Event) {
 	ws.Out <- (&entity.Event{
 		Type: "JOIN_ROOM",
 		Payload: tracks,
+		Rid: rid,
 	}).Raw()
 
 	playlistKey := fmt.Sprintf(entity.RoomSkip, rid)
@@ -43,6 +44,16 @@ func JoinRoom(rdb *redis.Client, ws *conn.WebSocket, event *entity.Event) {
 		ws.Out <- (&entity.Event{
 			Type: "UPDATE_VOTES",
 			Payload: length,
+			Rid: rid,
+		}).Raw()
+	}
+
+	r := ws.Hub.Rooms[rid]
+	if r != nil && r.Conns != nil {
+		ws.Out <- (&entity.Event{
+			Type: "UPDATE_VIEWERS",
+			Payload: len(r.Conns),
+			Rid: rid,
 		}).Raw()
 	}
 }

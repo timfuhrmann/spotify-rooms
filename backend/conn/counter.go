@@ -17,6 +17,7 @@ type Counter struct {
 func (h *HubRoom) runCounter() {
 	Ticker := time.NewTicker(1 * time.Second)
 	h.Counter.Active = true
+	viewers := 0
 
 	for {
 		select {
@@ -35,13 +36,24 @@ func (h *HubRoom) runCounter() {
 				return
 			}
 
-			n := float64(len(h.Conns)) / 2
-			length := action.GetVotesLength(db.Rdb, h.Rid)
-			if float64(length) >= math.Round(n) {
-				if err = h.nextTrack(room); err != nil {
-					log.Printf("Error trying to change track after vote, %v", err)
+			if len(h.Conns) > 0 {
+				n := float64(len(h.Conns)) / 2
+				length := action.GetVotesLength(db.Rdb, h.Rid)
+				if float64(length) >= math.Round(n) {
+					if err = h.nextTrack(room); err != nil {
+						log.Printf("Error trying to change track after vote, %v", err)
+					}
+					break
 				}
-				break
+			}
+
+			if len(h.Conns) != viewers {
+				viewers = len(h.Conns)
+				h.Hub.RoomBroadcast(&entity.Event{
+					Type: "UPDATE_VIEWERS",
+					Payload: len(h.Conns),
+					Rid: h.Rid,
+				})
 			}
 
 			if room.Active != nil && room.Live == true {

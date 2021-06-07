@@ -27,5 +27,6 @@ func RoomsWebSocketHandler(w http.ResponseWriter, r *http.Request, h *conn.Hub) 
 	ws.On(controller.EventAddTrack, controller.CRE(ws, controller.AddTrack))
 	ws.On(controller.EventUpdateRooms, controller.CE(ws, controller.UpdateRooms))
 	ws.On(controller.EventUpdateVotes, controller.CE(ws, controller.UpdateVotes))
+	ws.On(controller.EventUpdateViewers, controller.CE(ws, controller.UpdateViewers))
 	ws.On(controller.EventUpdatePlaylist, controller.CE(ws, controller.UpdatePlaylist))
 }

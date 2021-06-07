@@ -14,6 +14,7 @@ const (
 	EventUpdateRooms 	= "UPDATE_ROOMS"
 	EventUpdatePlaylist	= "UPDATE_PLAYLIST"
 	EventUpdateVotes	= "UPDATE_VOTES"
+	EventUpdateViewers	= "UPDATE_VIEWERS"
 	EventAddTrack		= "ADD_TRACK"
 	EventVoteSkip		= "VOTE_SKIP"
 )

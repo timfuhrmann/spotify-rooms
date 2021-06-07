@@ -9,6 +9,7 @@ interface WebsocketContextData {
     addTrackToRoom: (track: Server.ResTrack) => void;
     joinRoom: (rid: string) => void;
     votes: number;
+    viewers: number;
     voteSkip: (rid: string) => void;
     leaveRoom: () => void;
 }
