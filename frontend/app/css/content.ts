@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export const Content = styled.div<{ breakOnMobile?: boolean }>`
     margin: 0 2rem;
@@ -16,5 +16,17 @@ export const aspectRatio = (value: number) => `
         content: "";
         display: block;
         padding-bottom: ${100 * value}%;
+    }
+`;
+
+export const transition = css`
+    opacity: 0;
+    animation: opener 2s ease 0.3s forwards;
+    will-change: opacity;
+
+    @keyframes opener {
+        100% {
+            opacity: 1;
+        }
     }
 `;

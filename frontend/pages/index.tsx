@@ -7,10 +7,11 @@ import { LogoIcon } from "../app/icons/LogoIcon";
 import { GetServerSideProps } from "next";
 import { getAccessTokenFromCookies } from "../app/lib/util/api/Cookies";
 import { requestSpotifyLoginUrl } from "../app/lib/api/auth";
-import { Content } from "../app/css/content";
+import { Content, transition } from "../app/css/content";
 import { validateBrowser } from "../app/lib/util/Browser";
 
 const HomeWrapper = styled.div`
+    ${transition};
     width: 100%;
     height: 100%;
 `;
