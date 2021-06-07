@@ -2,7 +2,6 @@ const theme = {
     //region Color
     black: "#191414",
     white: "#fff",
-    green: "#1db954",
     //endregion Color
 
     //region Border

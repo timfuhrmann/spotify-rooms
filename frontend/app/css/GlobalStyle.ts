@@ -15,6 +15,6 @@ export const GlobalStyle = createGlobalStyle`
     }
 
     ::selection {
-      background: ${p => p.theme.green};
+      background: ${p => p.theme.primary};
     }
 `;

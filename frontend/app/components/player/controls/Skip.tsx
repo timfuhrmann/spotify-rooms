@@ -26,7 +26,7 @@ const Info = styled.div`
 const SkipButton = styled.button<{ active: boolean }>`
     position: relative;
     display: flex;
-    color: ${p => p.active && p.theme.green};
+    color: ${p => p.active && p.theme.primary};
 
     @media (hover: hover) {
         &:hover {

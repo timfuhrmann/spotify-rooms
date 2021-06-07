@@ -11,7 +11,7 @@ const ItemWrapper = styled.button`
 
     @media (hover: hover) {
         &:hover {
-            background-color: ${p => p.theme.green};
+            background-color: ${p => p.theme.primary};
         }
     }
 

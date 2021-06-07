@@ -21,5 +21,5 @@ const SunIcon = styled(Sun)`
 export const ThemeSwitch: React.FC = () => {
     const { theme, toggleTheme } = useCustomTheme();
 
-    return <SwitchButton onClick={toggleTheme}>{"light" === theme ? <SunIcon /> : <MoonIcon />}</SwitchButton>;
+    return <SwitchButton onClick={toggleTheme}>{"dark" === theme ? <MoonIcon /> : <SunIcon />}</SwitchButton>;
 };

@@ -34,12 +34,12 @@ export const CustomThemeProvider: React.FC = ({ children }) => {
     }, [theme]);
 
     const toggleTheme = () => {
-        setTheme(prevState => ("light" === prevState ? "dark" : "light"));
+        setTheme(prevState => ("dark" === prevState ? "light" : "dark"));
     };
 
     return (
         <CustomThemeContext.Provider value={{ theme, toggleTheme }}>
-            <ThemeProvider theme={"light" === theme ? light : dark}>
+            <ThemeProvider theme={"dark" === theme ? dark : light}>
                 <GlobalStyle />
                 {children}
             </ThemeProvider>
