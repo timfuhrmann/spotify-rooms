@@ -8,5 +8,5 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         path: "/",
     });
 
-    res.status(200).send("Successfully logged out.");
+    res.send("Successfully logged out.");
 };

@@ -10,6 +10,7 @@ import { Content } from "../../app/css/content";
 import { DashboardItem } from "../../app/components/dashboard/DashboardItem";
 import { useData } from "../../app/context/websocket/WebsocketContext";
 import { Loading } from "../../app/components/loading/Loading";
+import { Footer } from "../../app/components/footer/Footer";
 
 const DashboardWrapper = styled.div`
     padding-top: 12.5rem;
@@ -36,6 +37,7 @@ const Dashboard: React.FC = () => {
                     </Loading>
                 </Content>
             </DashboardWrapper>
+            <Footer />
         </Template>
     );
 };

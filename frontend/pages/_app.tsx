@@ -13,7 +13,6 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
                 <CustomThemeProvider>
                     {!pageProps.hideNav && <Navigation />}
                     <Component {...pageProps} />
-                    <Footer />
                 </CustomThemeProvider>
             </SpotifyProvider>
         </WebsocketProvider>
