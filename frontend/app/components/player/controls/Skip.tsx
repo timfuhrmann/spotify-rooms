@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import { SkipForward } from "../../../icons/SkipForward";
 
-const Info = styled.div`
+const Info = styled.div<{ visible: boolean }>`
     position: fixed;
     z-index: 3;
     bottom: 3rem;
@@ -13,7 +13,7 @@ const Info = styled.div`
     background-color: ${p => p.theme.white};
     color: ${p => p.theme.black};
     pointer-events: none;
-    opacity: 0;
+    opacity: ${p => (p.visible ? 1 : 0)};
     transition: opacity 0.1s;
     will-change: opacity;
 
@@ -32,10 +32,6 @@ const SkipButton = styled.button<{ active: boolean }>`
     @media (hover: hover) {
         &:hover {
             opacity: 1;
-
-            ${Info} {
-                opacity: 1;
-            }
         }
     }
 `;
@@ -57,15 +53,31 @@ interface SkipProps {
 }
 
 export const Skip: React.FC<SkipProps> = ({ overlineValue, active, onClick }) => {
+    const timeout = useRef<NodeJS.Timeout | null>(null);
+    const [infoVisible, setInfoVisible] = useState<boolean>(false);
+
     return (
-        <SkipButton onClick={onClick} active={active}>
-            <SkipIcon />
-            <Info>
+        <React.Fragment>
+            <SkipButton
+                onClick={onClick}
+                active={active}
+                onMouseEnter={() => {
+                    clearTimeout(timeout.current);
+                    setInfoVisible(true);
+                }}
+                onMouseLeave={() => {
+                    timeout.current = setTimeout(() => {
+                        setInfoVisible(false);
+                    }, 500);
+                }}>
+                <SkipIcon />
+            </SkipButton>
+            <Info visible={infoVisible}>
                 You don't like what you're hearing? Vote to skip!
                 <SkipValue>
                     {overlineValue} {overlineValue !== 1 ? "votes" : "vote"} received
                 </SkipValue>
             </Info>
-        </SkipButton>
+        </React.Fragment>
     );
 };
