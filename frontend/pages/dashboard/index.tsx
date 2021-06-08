@@ -24,7 +24,7 @@ const Dashboard: React.FC = () => {
     const { rooms } = useData();
 
     return (
-        <Template title="Dashboard - Spotify Rooms">
+        <Template title="Dashboard - Live Music for Spotify">
             <DashboardWrapper>
                 <Content>
                     <SecondaryHeadline>Rooms</SecondaryHeadline>

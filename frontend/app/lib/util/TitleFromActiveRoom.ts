@@ -4,6 +4,6 @@ export const getTitleFromActiveRoom = (track: Server.ResTrack): string => {
     if (track) {
         return track.name + " - " + track.artists.map(artist => artist);
     } else {
-        return "Choose your favourite song! - Spotify Rooms";
+        return "Choose your favourite song! - Live Music for Spotify";
     }
 };

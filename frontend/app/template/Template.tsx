@@ -29,6 +29,13 @@ export const Template: React.FC<TemplateProps> = ({ title, children }) => {
             {title && (
                 <Head>
                     <title>{title}</title>
+                    <meta name="title" content={title} />
+                    <meta name="description" content={process.env.NEXT_PUBLIC_META_TAGS_DESC} />
+
+                    <meta property="og:type" content="website" />
+                    <meta property="og:url" content={process.env.NEXT_PUBLIC_META_TAGS_URL} />
+                    <meta property="og:title" content={process.env.NEXT_PUBLIC_META_TAGS_TITLE} />
+                    <meta property="og:description" content={process.env.NEXT_PUBLIC_META_TAGS_DESC} />
                 </Head>
             )}
             <Stage>{children}</Stage>

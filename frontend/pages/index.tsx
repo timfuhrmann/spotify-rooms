@@ -48,7 +48,7 @@ const Home: React.FC = () => {
     };
 
     return (
-        <Template title="Spotify Rooms">
+        <Template title="Live Music for Spotify">
             <HomeWrapper>
                 <HomeContent>
                     <Headline>Spotify, but in rooms.</Headline>
