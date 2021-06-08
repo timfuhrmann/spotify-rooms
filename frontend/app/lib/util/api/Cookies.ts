@@ -21,6 +21,12 @@ export const getCookieDate = () => {
     return result;
 };
 
+export const getExpiredCookieDate = () => {
+    const result = new Date();
+    result.setDate(result.getDate() - 10);
+    return result;
+};
+
 export const checkAccessToken = (context: GetServerSidePropsContext) => {
     const access_token = getAccessTokenFromCookies(context.req.cookies);
 
