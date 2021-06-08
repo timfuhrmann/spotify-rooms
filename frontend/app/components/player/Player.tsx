@@ -30,16 +30,18 @@ const ActiveTitleWrapper = styled.div`
         position: absolute;
         top: 0;
         left: 0;
+        width: 100%;
         transform: translateY(calc(-100% - 0.5rem));
         margin-bottom: 0;
     }
 `;
 
 const ArtistNameWrapper = styled.div`
-    display: flex;
-`;
-
-const ArtistName = styled(ActiveTitle)`
+    display: block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 100%;
     opacity: 0.6;
     font-size: 2rem;
 `;
@@ -147,12 +149,14 @@ export const Player: React.FC<PlayerProps> = ({ room }) => {
             </PlayerInfo>
             <PlayerInner active={!!track}>
                 <ActiveTitleWrapper>
-                    <ActiveTitle>{track?.name}</ActiveTitle>
-                    <ArtistNameWrapper>
-                        {track?.artists.map((artist, index) => (
-                            <ArtistName key={artist + index}>{(index > 0 ? ", " : "") + artist}</ArtistName>
-                        ))}
-                    </ArtistNameWrapper>
+                    <ActiveTitle>
+                        {track?.name}
+                        <ArtistNameWrapper>
+                            {track?.artists.map((artist, index) => (
+                                <span key={artist + index}>{(index > 0 ? ", " : "") + artist}</span>
+                            ))}
+                        </ArtistNameWrapper>
+                    </ActiveTitle>
                 </ActiveTitleWrapper>
                 <CoverWrapper>
                     <Cover src={track?.album.images[0]} />
