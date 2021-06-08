@@ -15,7 +15,7 @@ const SorryWrapper = styled.div`
 
 const Sorry: React.FC = () => {
     return (
-        <Template>
+        <Template title="Sorry - Live Music for Spotify">
             <SorryWrapper>
                 <Content>
                     Sorry for baring you! But, unfortunately we're not able to support your browser yet :(
