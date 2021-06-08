@@ -189,9 +189,7 @@ export const Volume: React.FC = () => {
             return;
         }
 
-        const drag = start.startX - event.clientX;
-        const val = Math.max(0, Math.min(100, start.startVolume - drag));
-        setVolume(val);
+        calcVolume(event.clientX);
     };
 
     const onTouchMove = (event: TouchEvent) => {
@@ -199,8 +197,12 @@ export const Volume: React.FC = () => {
             return;
         }
 
-        const drag = start.startX - event.touches[0].clientX;
-        const val = Math.max(0, Math.min(100, start.startVolume - drag));
+        calcVolume(event.touches[0].clientX);
+    };
+
+    const calcVolume = (x: number) => {
+        const drag = start.startX - x;
+        const val = Math.max(1, Math.min(100, start.startVolume - drag));
         setVolume(val);
     };
 
