@@ -1,10 +1,12 @@
 import { createContext, useContext } from "react";
+import { Server } from "../../types/server";
 
 interface SpotifyContextData {
     searchActive: boolean;
     activateSearch: () => void;
     deactivateSearch: () => void;
     toggleSearchActive: () => void;
+    playTrack: (track: Server.ResTrack) => Promise<unknown>;
     authToken: string;
     setAuthToken: (token: string) => void;
     deviceId: string;

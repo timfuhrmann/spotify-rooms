@@ -3,11 +3,10 @@ import styled from "styled-components";
 import { SkipForward } from "../../../icons/SkipForward";
 
 const Info = styled.div`
-    position: absolute;
+    position: fixed;
     z-index: 3;
-    bottom: 50%;
-    right: 0;
-    transform: translate(calc(100% + 2rem), 50%);
+    bottom: 3rem;
+    left: 2rem;
     display: none;
     padding: 2rem;
     width: 30rem;
@@ -27,9 +26,13 @@ const SkipButton = styled.button<{ active: boolean }>`
     position: relative;
     display: flex;
     color: ${p => p.active && p.theme.primary};
+    opacity: 0.6;
+    transition: opacity 0.2s;
 
     @media (hover: hover) {
         &:hover {
+            opacity: 1;
+
             ${Info} {
                 opacity: 1;
             }

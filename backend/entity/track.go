@@ -14,6 +14,7 @@ type Track struct {
 	Artists 	[]string	`json:"artists"`
 	Date 		time.Time	`json:"date"`
 	Url 		string		`json:"url"`
+	Uri 		string		`json:"uri"`
 }
 
 type Album struct {

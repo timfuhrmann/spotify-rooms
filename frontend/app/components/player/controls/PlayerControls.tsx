@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { setVolumeForCurrentTrack } from "../../../lib/api/frontend";
-import { useSpotify } from "../../../context/spotify/SpotifyContext";
+import styled from "styled-components";
 import { useData } from "../../../context/websocket/WebsocketContext";
 import { Skip } from "./Skip";
 import { Volume } from "./Volume";
 import { Server } from "../../../types/server";
-import styled from "styled-components";
-import { Open } from "./Open";
+import { Play } from "./Play";
 
 const ControlsWrapper = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 1rem;
+    margin-top: 0.5rem;
 `;
 
 const ControlsGroup = styled.div`
@@ -20,18 +18,12 @@ const ControlsGroup = styled.div`
     align-items: center;
 `;
 
-const VolumeWrapper = styled.div`
+const PlayWrapper = styled.div`
     margin-right: 1rem;
 `;
 
-interface PlayerControlsProps {
-    room: Server.Room;
-}
-
-export const PlayerControls: React.FC<PlayerControlsProps> = ({ room }) => {
-    const { authToken, setAuthToken, deviceId } = useSpotify();
-    const { votes, voteSkip } = useData();
-    const [muted, setMuted] = useState<boolean>(false);
+export const PlayerControls: React.FC = () => {
+    const { room, votes, voteSkip } = useData();
     const [voted, setVoted] = useState<string | null>(null);
 
     useEffect(() => {
@@ -39,16 +31,6 @@ export const PlayerControls: React.FC<PlayerControlsProps> = ({ room }) => {
             setVoted(null);
         }
     }, [room]);
-
-    const toggleMute = async () => {
-        if (muted) {
-            await setVolumeForCurrentTrack(authToken, deviceId, 100, setAuthToken);
-            setMuted(false);
-        } else {
-            await setVolumeForCurrentTrack(authToken, deviceId, 0, setAuthToken);
-            setMuted(true);
-        }
-    };
 
     const voteForSkip = () => {
         if (voted !== null) {
@@ -61,13 +43,13 @@ export const PlayerControls: React.FC<PlayerControlsProps> = ({ room }) => {
 
     return (
         <ControlsWrapper>
-            <Open track={room.active} />
             <ControlsGroup>
-                <VolumeWrapper>
-                    <Volume muted={muted} onClick={toggleMute} />
-                </VolumeWrapper>
+                <PlayWrapper>
+                    <Play />
+                </PlayWrapper>
                 <Skip active={!!voted} overlineValue={votes} onClick={voteForSkip} />
             </ControlsGroup>
+            <Volume />
         </ControlsWrapper>
     );
 };

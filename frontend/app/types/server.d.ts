@@ -19,9 +19,9 @@ export namespace Server {
         duration_ms: number;
         artists: string[];
         album: ResAlbum;
-        url?: string;
+        uri: string;
         date?: string;
-        rid?: string;
+        url?: string;
     }
 
     interface ResAlbum {

@@ -38,29 +38,13 @@ export const getTrackByString = async (
             duration_ms: track.duration_ms,
             artists: track.artists.map(artist => artist.name),
             url: track.external_urls.spotify,
+            uri: track.uri,
             album: {
                 name: track.album.name,
                 images: track.album.images.map(image => image.url),
             },
         };
     });
-};
-
-export const getTrackById = async (
-    authToken: string,
-    id: string,
-    setAuthToken: (token: string) => void
-): Promise<Spotify.Track> => {
-    return await db(
-        `https://api.spotify.com/v1/tracks/${id}`,
-        {
-            method: "GET",
-            headers: {
-                Authorization: `Bearer ${authToken}`,
-            },
-        },
-        setAuthToken
-    );
 };
 
 export const playTrackAtTime = async (

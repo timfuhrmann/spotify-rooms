@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { SpotifyContext } from "./SpotifyContext";
-import { useData } from "../websocket/WebsocketContext";
+import { playTrackAtTime } from "../../lib/api/frontend";
+import { Server } from "../../types/server";
 
 const Spotify = dynamic(() => import("./SpotifyInit").then(mod => mod.SpotifyInit), {
     ssr: false,
@@ -21,6 +22,10 @@ export const SpotifyProvider: React.FC<SpotifyProviderProps> = ({ children, toke
         setAuthToken(token);
     }, [token]);
 
+    const playTrack = (track: Server.ResTrack): Promise<unknown> => {
+        return playTrackAtTime(authToken, deviceId, track.uri, Date.now() - Date.parse(track.date), setAuthToken);
+    };
+
     return (
         <SpotifyContext.Provider
             value={{
@@ -28,6 +33,7 @@ export const SpotifyProvider: React.FC<SpotifyProviderProps> = ({ children, toke
                 activateSearch: () => setSearchActive(true),
                 deactivateSearch: () => setSearchActive(null),
                 toggleSearchActive: () => setSearchActive(prevState => !prevState),
+                playTrack,
                 authToken,
                 setAuthToken,
                 deviceId,

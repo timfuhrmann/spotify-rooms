@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { ActiveTitle } from "../../css/typography";
 import styled from "styled-components";
+import { ActiveTitle } from "../../css/typography";
 import { useSpotify } from "../../context/spotify/SpotifyContext";
-import { getTrackById, playTrackAtTime } from "../../lib/api/frontend";
 import { Server } from "../../types/server";
 import { PlayerControls } from "./controls/PlayerControls";
-import { Play } from "./controls/Play";
 import { aspectRatio } from "../../css/content";
+import { Open } from "./controls/Open";
 
 const PlayerFrame = styled.div`
     position: relative;
@@ -41,7 +40,7 @@ const ArtistNameWrapper = styled.div`
 `;
 
 const ArtistName = styled(ActiveTitle)`
-    opacity: 0.5;
+    opacity: 0.6;
     font-size: 2rem;
 `;
 
@@ -73,14 +72,29 @@ const PlayerInfo = styled.div<{ visible: boolean }>`
     pointer-events: none;
 `;
 
+const OpenWrapper = styled.div`
+    opacity: 0;
+    transition: opacity 0.2s;
+    will-change: opacity;
+
+    @media (hover: hover) {
+        &:hover {
+            opacity: 1;
+        }
+    }
+
+    @media (hover: none) {
+        pointer-events: none;
+    }
+`;
+
 interface PlayerProps {
     room: Server.Room;
 }
 
 export const Player: React.FC<PlayerProps> = ({ room }) => {
-    const { authToken, setAuthToken, deviceId, player } = useSpotify();
-    const [track, setTrack] = useState<Spotify.Track>(null);
-    const [paused, setPaused] = useState<boolean>(false);
+    const { authToken, deviceId, player, playTrack } = useSpotify();
+    const [track, setTrack] = useState<Server.ResTrack>(null);
     const [inactive, setInactive] = useState<boolean>(false);
 
     useEffect(() => {
@@ -94,7 +108,7 @@ export const Player: React.FC<PlayerProps> = ({ room }) => {
             return;
         }
 
-        initNewTrack();
+        setTrack(room.active);
     }, [authToken, deviceId, room]);
 
     useEffect(() => {
@@ -102,29 +116,9 @@ export const Player: React.FC<PlayerProps> = ({ room }) => {
             return;
         }
 
-        play();
+        playTrack(track);
 
-        let timeout: NodeJS.Timeout;
-        const onStateChanged = (res: Spotify.PlaybackState) => {
-            if (res) {
-                clearTimeout(timeout);
-
-                if (res.track_window?.current_track?.id && res.track_window.current_track.id !== track.id) {
-                    timeout = setTimeout(() => {
-                        setPaused(true);
-                    }, 1000);
-                } else {
-                    timeout = setTimeout(() => {
-                        setPaused(res.paused);
-                    }, 1000);
-                }
-            }
-        };
-
-        player.addListener("player_state_changed", onStateChanged);
         return () => {
-            clearTimeout(timeout);
-            player.removeListener("player_state_changed", onStateChanged);
             player.pause();
         };
     }, [track]);
@@ -146,16 +140,6 @@ export const Player: React.FC<PlayerProps> = ({ room }) => {
         };
     }, [track]);
 
-    const initNewTrack = async (): Promise<void> => {
-        const res = await getTrackById(authToken, room.active.id, setAuthToken);
-        setTrack(res);
-    };
-
-    const play = async (): Promise<void> => {
-        await playTrackAtTime(authToken, deviceId, track.uri, Date.now() - Date.parse(room.active.date), setAuthToken);
-        setPaused(false);
-    };
-
     return (
         <PlayerFrame>
             <PlayerInfo visible={inactive}>
@@ -166,19 +150,17 @@ export const Player: React.FC<PlayerProps> = ({ room }) => {
                     <ActiveTitle>{track?.name}</ActiveTitle>
                     <ArtistNameWrapper>
                         {track?.artists.map((artist, index) => (
-                            <ArtistName key={artist.name + index}>{(index > 0 ? ", " : "") + artist.name}</ArtistName>
+                            <ArtistName key={artist + index}>{(index > 0 ? ", " : "") + artist}</ArtistName>
                         ))}
                     </ArtistNameWrapper>
                 </ActiveTitleWrapper>
                 <CoverWrapper>
-                    <Cover
-                        src={track?.album.images[0].url}
-                        width={track?.album.images[0].width}
-                        height={track?.album.images[0].height}
-                    />
-                    {paused && <Play onClick={play} />}
+                    <Cover src={track?.album.images[0]} />
+                    <OpenWrapper>
+                        <Open url={track?.url} />
+                    </OpenWrapper>
                 </CoverWrapper>
-                <PlayerControls room={room} />
+                <PlayerControls />
             </PlayerInner>
         </PlayerFrame>
     );
