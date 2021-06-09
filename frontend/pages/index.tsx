@@ -69,10 +69,11 @@ const Home: React.FC = () => {
     );
 };
 
-export const getServerSideProps: GetServerSideProps = async context => {
-    const access_token = getAccessTokenFromCookies(context.req.cookies);
+export const getServerSideProps: GetServerSideProps = async ctx => {
+    const { auth } = ctx.query;
+    const access_token = getAccessTokenFromCookies(ctx.req.cookies);
 
-    if (access_token) {
+    if ("logout" !== auth && access_token) {
         return {
             redirect: {
                 destination: "/dashboard",
@@ -81,7 +82,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
         };
     }
 
-    return validateBrowser(context);
+    return validateBrowser(ctx);
 };
 
 export default Home;

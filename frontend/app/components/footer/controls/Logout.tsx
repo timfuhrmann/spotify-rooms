@@ -19,7 +19,7 @@ export const Logout: React.FC = () => {
 
     const logout = async () => {
         await fetch("/api/logout");
-        router.push("/");
+        router.push({ pathname: "/", query: { auth: "logout" } }, "/").catch(console.error);
     };
 
     if (!authToken) return null;
