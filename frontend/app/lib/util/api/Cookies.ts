@@ -4,6 +4,20 @@ import { validateBrowser } from "../Browser";
 
 export const APP_COOKIES = "SPOTIFY_ROOMS_AUTHENTICATION";
 
+export const COOKIES_SET_OPTIONS = {
+    httpOnly: true,
+    path: "/",
+    maxAge: 60 * 60 * 24 * 10,
+    secure: "development" !== process.env.NODE_ENV,
+};
+
+export const COOKIES_DEL_OPTIONS = {
+    httpOnly: true,
+    path: "/",
+    expires: new Date(0),
+    secure: "development" !== process.env.NODE_ENV,
+};
+
 export const getAccessTokenFromCookies = (cookies: NextApiRequestCookies): string => {
     const json = cookies[APP_COOKIES];
 
@@ -15,20 +29,12 @@ export const getAccessTokenFromCookies = (cookies: NextApiRequestCookies): strin
     return "";
 };
 
-export const getCookieDate = () => {
-    const result = new Date();
-    result.setDate(result.getDate() + 10);
-    return result;
-};
+export const checkAccessToken = (context: GetServerSidePropsContext, token?: string) => {
+    let access_token = getAccessTokenFromCookies(context.req.cookies);
 
-export const getExpiredCookieDate = () => {
-    const result = new Date();
-    result.setDate(result.getDate() - 10);
-    return result;
-};
-
-export const checkAccessToken = (context: GetServerSidePropsContext) => {
-    const access_token = getAccessTokenFromCookies(context.req.cookies);
+    if (token) {
+        access_token = token;
+    }
 
     if (access_token) {
         return validateBrowser(context, {

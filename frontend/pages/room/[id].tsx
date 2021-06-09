@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
-import { GetServerSideProps } from "next";
 import styled from "styled-components";
+import { GetServerSideProps } from "next";
 import { Template } from "../../app/template/Template";
 import { Player } from "../../app/components/player/Player";
 import { useRouter } from "next/router";
 import { checkAccessToken } from "../../app/lib/util/api/Cookies";
 import { Sidebar } from "../../app/components/sidebar/Sidebar";
 import { useData } from "../../app/context/websocket/WebsocketContext";
-import { getTitleFromActiveRoom } from "../../app/lib/util/TitleFromActiveRoom";
+import { getTitleFromActiveRoom } from "../../app/lib/util/RoomTitle";
 import { useSpotify } from "../../app/context/spotify/SpotifyContext";
 import { Content } from "../../app/css/content";
 import { Users } from "../../app/icons/Users";

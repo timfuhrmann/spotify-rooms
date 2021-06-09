@@ -1,16 +1,16 @@
 import React from "react";
-import { GetServerSideProps } from "next";
 import styled from "styled-components";
+import { GetServerSideProps } from "next";
 import { Template } from "../../app/template/Template";
 import { getSpotifyAccessToken } from "../../app/lib/api/auth";
-import { setCookie } from "nookies";
-import { APP_COOKIES, checkAccessToken, getCookieDate } from "../../app/lib/util/api/Cookies";
+import { APP_COOKIES, checkAccessToken, COOKIES_SET_OPTIONS } from "../../app/lib/util/api/Cookies";
 import { SecondaryHeadline } from "../../app/css/typography";
 import { Content } from "../../app/css/content";
 import { DashboardItem } from "../../app/components/dashboard/DashboardItem";
 import { useData } from "../../app/context/websocket/WebsocketContext";
 import { Loading } from "../../app/components/loading/Loading";
 import { Footer } from "../../app/components/footer/Footer";
+import { setCookie } from "nookies";
 
 const DashboardWrapper = styled.div`
     padding-top: 12.5rem;
@@ -42,18 +42,14 @@ const Dashboard: React.FC = () => {
     );
 };
 
-export const getServerSideProps: GetServerSideProps = async context => {
-    const { code } = context.query;
+export const getServerSideProps: GetServerSideProps = async ctx => {
+    const { code } = ctx.query;
 
-    if (code) {
-        const res = await getSpotifyAccessToken(code as string);
+    if (code && "string" === typeof code) {
+        const auth = await getSpotifyAccessToken(code);
 
-        if (res.access_token) {
-            setCookie(context, APP_COOKIES, JSON.stringify(res), {
-                httpOnly: true,
-                path: "/",
-                expires: getCookieDate(),
-            });
+        if (auth.access_token) {
+            setCookie(ctx, APP_COOKIES, JSON.stringify(auth), COOKIES_SET_OPTIONS);
 
             return {
                 redirect: {
@@ -63,14 +59,11 @@ export const getServerSideProps: GetServerSideProps = async context => {
             };
         }
     } else {
-        return checkAccessToken(context);
+        return checkAccessToken(ctx);
     }
 
     return {
-        redirect: {
-            destination: "/",
-            permanent: false,
-        },
+        props: {},
     };
 };
 
