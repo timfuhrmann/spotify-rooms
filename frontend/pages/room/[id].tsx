@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import { checkAccessToken } from "../../app/lib/util/api/Cookies";
 import { Sidebar } from "../../app/components/sidebar/Sidebar";
 import { useData } from "../../app/context/websocket/WebsocketContext";
-import { getTitleFromActiveRoom } from "../../app/lib/util/RoomTitle";
+import { titleFromRoom } from "../../app/lib/util/RoomTitle";
 import { useSpotify } from "../../app/context/spotify/SpotifyContext";
 import { Content } from "../../app/css/content";
 import { Users } from "../../app/icons/Users";
@@ -66,7 +66,7 @@ const Room: React.FC = () => {
     }, [id, connected]);
 
     return (
-        <Template title={getTitleFromActiveRoom(room?.active)}>
+        <Template title={titleFromRoom(room)}>
             <RoomWrapper>
                 <PlayerWrapper>{room && <Player room={room} />}</PlayerWrapper>
                 <Sidebar />
@@ -81,8 +81,8 @@ const Room: React.FC = () => {
     );
 };
 
-export const getServerSideProps: GetServerSideProps = async context => {
-    return checkAccessToken(context);
+export const getServerSideProps: GetServerSideProps = async ctx => {
+    return checkAccessToken(ctx);
 };
 
 export default Room;
