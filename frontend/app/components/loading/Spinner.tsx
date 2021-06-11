@@ -2,55 +2,82 @@ import React from "react";
 import styled from "styled-components";
 
 const SpinnerFrame = styled.div`
-    display: block;
     position: relative;
-    width: 6rem;
-    height: 6rem;
-    margin: 5rem auto;
-    opacity: 0.5;
-`;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 0.5rem;
+    margin: 2rem auto 0;
+    background-color: ${p => p.theme.primary};
+    color: ${p => p.theme.primary};
+    transform: scale(1.25, 1.25);
+    animation: dotStretching 1.5s infinite ease-in;
 
-const SpinnerItem = styled.div`
-    box-sizing: border-box;
-    display: block;
-    position: absolute;
-    width: 4.4rem;
-    height: 4.4rem;
-    margin: 0.8rem;
-    animation: ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-    border: 0.4rem solid ${p => p.theme.text};
-    border-color: ${p => p.theme.text} transparent transparent transparent;
-    border-radius: 50%;
-
-    &:nth-child(1) {
-        animation-delay: -0.45s;
+    &::before,
+    &::after {
+        content: "";
+        display: inline-block;
+        position: absolute;
+        top: 0;
     }
 
-    &:nth-child(2) {
-        animation-delay: -0.3s;
+    &::before {
+        width: 1rem;
+        height: 1rem;
+        border-radius: 0.5rem;
+        background-color: ${p => p.theme.primary};
+        color: ${p => p.theme.primary};
+        animation: dotStretchingBefore 1.5s infinite ease-in;
     }
 
-    &:nth-child(3) {
-        animation-delay: -0.15s;
+    &::after {
+        width: 1rem;
+        height: 1rem;
+        border-radius: 0.5rem;
+        background-color: ${p => p.theme.primary};
+        color: ${p => p.theme.primary};
+        animation: dotStretchingAfter 1.5s infinite ease-in;
     }
 
-    @keyframes ring {
+    @keyframes dotStretching {
         0% {
-            transform: rotate(0deg);
+            transform: scale(1.25, 1.25);
+        }
+        50%,
+        60% {
+            transform: scale(0.8, 0.8);
         }
         100% {
-            transform: rotate(360deg);
+            transform: scale(1.25, 1.25);
+        }
+    }
+
+    @keyframes dotStretchingBefore {
+        0% {
+            transform: translate(0) scale(0.7, 0.7);
+        }
+        50%,
+        60% {
+            transform: translate(-20px) scale(1, 1);
+        }
+        100% {
+            transform: translate(0) scale(0.7, 0.7);
+        }
+    }
+
+    @keyframes dotStretchingAfter {
+        0% {
+            transform: translate(0) scale(0.7, 0.7);
+        }
+        50%,
+        60% {
+            transform: translate(20px) scale(1, 1);
+        }
+        100% {
+            transform: translate(0) scale(0.7, 0.7);
         }
     }
 `;
 
 export const Spinner: React.FC = () => {
-    return (
-        <SpinnerFrame>
-            <SpinnerItem />
-            <SpinnerItem />
-            <SpinnerItem />
-            <SpinnerItem />
-        </SpinnerFrame>
-    );
+    return <SpinnerFrame />;
 };

@@ -20,6 +20,11 @@ const DashboardList = styled.div`
     margin-top: 1rem;
 `;
 
+const DashboardInfo = styled.div`
+    text-align: center;
+    opacity: 0.6;
+`;
+
 const Dashboard: React.FC = () => {
     const { rooms } = useData();
 
@@ -34,6 +39,7 @@ const Dashboard: React.FC = () => {
                                 <DashboardItem key={rid} {...rooms[rid]} />
                             ))}
                         </DashboardList>
+                        <DashboardInfo>More to come. Stay tuned!</DashboardInfo>
                     </Loading>
                 </Content>
             </DashboardWrapper>
