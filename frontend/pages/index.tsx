@@ -9,6 +9,7 @@ import { getAccessTokenFromCookies } from "../app/lib/util/api/Cookies";
 import { requestSpotifyLoginUrl } from "../app/lib/api/auth";
 import { Content, transition } from "../app/css/content";
 import { validateBrowser } from "../app/lib/util/Browser";
+import { Footer } from "../app/components/footer/Footer";
 
 const HomeWrapper = styled.div`
     ${transition};
@@ -64,6 +65,7 @@ const Home: React.FC = () => {
                         </ButtonSpotify>
                     </HomeButton>
                 </HomeContent>
+                <Footer />
             </HomeWrapper>
         </Template>
     );

@@ -1,6 +1,5 @@
 import React from "react";
 import Link from "next/link";
-import { Api } from "../../types/api";
 import styled from "styled-components";
 import { Server } from "../../types/server";
 
@@ -37,6 +36,10 @@ const ActiveTrack = styled.div`
     }
 `;
 
+const NoActiveTrack = styled.div`
+    opacity: 0.6;
+`;
+
 const Cover = styled.img`
     width: 5rem;
     height: 5rem;
@@ -50,13 +53,15 @@ export const DashboardItem: React.FC<Server.Room> = ({ id, name, active }) => {
         <Link href={`/room/${id}`}>
             <Item>
                 <ItemName>{name}</ItemName>
-                {active && (
+                {active ? (
                     <ActiveTrack>
                         <Cover src={albumCover} />
                         {active.artists.map((name, index) => (index > 0 ? ", " : "") + name)}
                         {" - "}
                         {active.name}
                     </ActiveTrack>
+                ) : (
+                    <NoActiveTrack>Seems quiet in here.</NoActiveTrack>
                 )}
             </Item>
         </Link>
