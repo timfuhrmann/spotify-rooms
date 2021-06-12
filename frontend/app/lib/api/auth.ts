@@ -48,7 +48,7 @@ export const refreshAccessToken = async (refresh_token: string): Promise<Api.Spo
     });
 };
 
-export const refreshToken = debounce(
+export const clientRequestRefresh = debounce(
     async () => {
         const res = await fetch("/api/refresh").then(res => res.json());
         return res.data.access_token;

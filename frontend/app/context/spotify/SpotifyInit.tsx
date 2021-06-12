@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import { useSpotify } from "./SpotifyContext";
-import { refreshToken } from "../../lib/api/auth";
+import { clientRequestRefresh } from "../../lib/api/auth";
 
 interface SpotifyInitProps {
     authToken: string;
@@ -35,7 +35,7 @@ export const SpotifyInit: React.FC<SpotifyInitProps> = ({ authToken }) => {
         });
 
         player.addListener("authentication_error", ({ message }) => {
-            refreshToken().then(setAuthToken);
+            clientRequestRefresh().then(setAuthToken);
             console.error(message);
         });
 

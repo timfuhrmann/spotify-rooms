@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { GetServerSideProps } from "next";
 import { Template } from "../../app/template/Template";
 import { getSpotifyAccessToken } from "../../app/lib/api/auth";
-import { APP_COOKIES, checkAccessToken, COOKIES_SET_OPTIONS } from "../../app/lib/util/api/Cookies";
+import { APP_COOKIES_ACCESS, APP_COOKIES_AUTH, checkAccessToken, COOKIES_SET_OPTIONS } from "../../app/lib/api/cookies";
 import { SecondaryHeadline } from "../../app/css/typography";
 import { Content } from "../../app/css/content";
 import { DashboardItem } from "../../app/components/dashboard/DashboardItem";
@@ -49,7 +49,8 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
         const auth = await getSpotifyAccessToken(code);
 
         if (auth.access_token) {
-            setCookie(ctx, APP_COOKIES, JSON.stringify(auth), COOKIES_SET_OPTIONS);
+            setCookie(ctx, APP_COOKIES_ACCESS, auth.access_token, COOKIES_SET_OPTIONS(auth.expires_in));
+            setCookie(ctx, APP_COOKIES_AUTH, JSON.stringify(auth), COOKIES_SET_OPTIONS());
 
             return {
                 redirect: {

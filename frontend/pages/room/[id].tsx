@@ -4,7 +4,7 @@ import { GetServerSideProps } from "next";
 import { Template } from "../../app/template/Template";
 import { Player } from "../../app/components/player/Player";
 import { useRouter } from "next/router";
-import { checkAccessToken } from "../../app/lib/util/api/Cookies";
+import { checkAccessToken } from "../../app/lib/api/cookies";
 import { Sidebar } from "../../app/components/sidebar/Sidebar";
 import { useData } from "../../app/context/websocket/WebsocketContext";
 import { titleFromRoom } from "../../app/lib/util/RoomTitle";

@@ -5,10 +5,9 @@ import { Headline, TertiaryHeadline } from "../app/css/typography";
 import { ButtonSpotify } from "../app/css/buttons";
 import { LogoIcon } from "../app/icons/LogoIcon";
 import { GetServerSideProps } from "next";
-import { getAccessTokenFromCookies } from "../app/lib/util/api/Cookies";
+import { checkAccessToken } from "../app/lib/api/cookies";
 import { requestSpotifyLoginUrl } from "../app/lib/api/auth";
 import { Content, transition } from "../app/css/content";
-import { validateBrowser } from "../app/lib/util/Browser";
 import { Footer } from "../app/components/footer/Footer";
 
 const HomeWrapper = styled.div`
@@ -73,18 +72,11 @@ const Home: React.FC = () => {
 
 export const getServerSideProps: GetServerSideProps = async ctx => {
     const { auth } = ctx.query;
-    const access_token = getAccessTokenFromCookies(ctx.req.cookies);
 
-    if ("logout" !== auth && access_token) {
-        return {
-            redirect: {
-                destination: "/dashboard",
-                permanent: false,
-            },
-        };
-    }
-
-    return validateBrowser(ctx);
+    return checkAccessToken(ctx, {
+        redirectDirection: "dashboard",
+        preventRedirect: "logout" === auth,
+    });
 };
 
 export default Home;

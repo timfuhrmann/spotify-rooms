@@ -1,27 +1,26 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { APP_COOKIES, COOKIES_SET_OPTIONS } from "../../app/lib/util/api/Cookies";
+import { APP_COOKIES_ACCESS, APP_COOKIES_AUTH, COOKIES_SET_OPTIONS } from "../../app/lib/api/cookies";
 import { refreshAccessToken } from "../../app/lib/api/auth";
 import { Api } from "../../app/types/api";
 import { setCookie } from "nookies";
 
 export default async (req: NextApiRequest, res: NextApiResponse<Api.RefreshType>) => {
-    const appCookie = req.cookies[APP_COOKIES];
+    const cookie = req.cookies[APP_COOKIES_AUTH];
 
-    if (!appCookie) {
+    if (!cookie) {
         return;
     }
 
     try {
-        const json = JSON.parse(appCookie);
-        const auth = await refreshAccessToken(json["refresh_token"]);
+        const json = JSON.parse(cookie);
+        const auth = await refreshAccessToken(json.refresh_token);
 
-        const obj = { ...json, ...auth };
-        setCookie({ res }, APP_COOKIES, JSON.stringify(auth), COOKIES_SET_OPTIONS);
+        setCookie({ res }, APP_COOKIES_ACCESS, auth.access_token, COOKIES_SET_OPTIONS(auth.expires_in));
 
         res.status(200).json({
             message: "Successfully fetched login url",
             status: 200,
-            data: { access_token: obj["access_token"] },
+            data: { access_token: auth.access_token },
         });
     } catch (error) {
         console.log(error);
