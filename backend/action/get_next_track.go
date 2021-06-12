@@ -1,13 +1,12 @@
 package action
 
 import (
-	"github.com/go-redis/redis/v8"
 	"github.com/timfuhrmann/spotify-rooms/backend/entity"
 	"time"
 )
 
-func GetNextTrack(rdb *redis.Client, rid string) (*entity.Track, error)  {
-	playlist, err := GetPlaylistByRoom(rdb, rid)
+func GetNextTrack(rid string) (*entity.Track, error)  {
+	playlist, err := GetPlaylistByRoom(rid)
 	if err != nil {
 		return nil, err
 	}

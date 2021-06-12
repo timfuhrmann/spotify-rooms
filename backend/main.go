@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
+	"github.com/timfuhrmann/spotify-rooms/backend/action"
 	"github.com/timfuhrmann/spotify-rooms/backend/conn"
 	"github.com/timfuhrmann/spotify-rooms/backend/db"
 	"log"
@@ -19,10 +20,14 @@ func init() {
     }
 
 	db.Init()
+
+	if err := action.InitRooms(); err != nil {
+		log.Fatalf("Error trying to populate database with rooms: %v", err)
+	}
 }
 
 func main() {
-	defer db.Rdb.Close()
+	defer db.RDB.Close()
 
 	h := conn.NewHub()
 	go h.RunRooms()

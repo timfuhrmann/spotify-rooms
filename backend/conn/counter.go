@@ -2,7 +2,6 @@ package conn
 
 import (
 	"github.com/timfuhrmann/spotify-rooms/backend/action"
-	"github.com/timfuhrmann/spotify-rooms/backend/db"
 	"github.com/timfuhrmann/spotify-rooms/backend/entity"
 	"log"
 	"math"
@@ -24,7 +23,7 @@ func (h *HubRoom) runCounter() {
 		case <- h.Counter.Quit:
 			h.Counter.Active = false
 		case <- Ticker.C:
-			room, err := action.GetRoomById(db.Rdb, h.Rid)
+			room, err := action.GetRoomById(h.Rid)
 			if err != nil {
 				log.Printf("Error trying to get room within counter: %v", err)
 				break
@@ -38,7 +37,7 @@ func (h *HubRoom) runCounter() {
 
 			if len(h.Conns) > 0 {
 				n := float64(len(h.Conns)) / 2
-				length := action.GetVotesLength(db.Rdb, h.Rid)
+				length := action.GetVotesLength(h.Rid)
 				if float64(length) >= math.Round(n) {
 					if err = h.nextTrack(room); err != nil {
 						log.Printf("Error trying to change track after vote, %v", err)
@@ -72,7 +71,7 @@ func (h *HubRoom) runCounter() {
 }
 
 func (h *HubRoom) nextTrack(room *entity.Room) error {
-	result, err := action.InitNextTrack(db.Rdb, room, h.Rid)
+	result, err := action.InitNextTrack(room, h.Rid)
 	if err != nil {
 		return err
 	} else if result == 1 {
@@ -85,7 +84,7 @@ func (h *HubRoom) nextTrack(room *entity.Room) error {
 }
 
 func (h *Hub) updateRoom(rid string) error {
-	playlist, err := action.GetPlaylistByRoom(db.Rdb, rid)
+	playlist, err := action.GetPlaylistByRoom(rid)
 	if err != nil {
 		return err
 	}
@@ -95,7 +94,7 @@ func (h *Hub) updateRoom(rid string) error {
 		Rid: rid,
 	})
 
-	rooms, err := action.GetAllRooms(db.Rdb)
+	rooms, err := action.GetAllRooms()
 	if err != nil {
 		return err
 	}
@@ -105,7 +104,7 @@ func (h *Hub) updateRoom(rid string) error {
 	})
 
 
-	if err = action.ClearVotes(db.Rdb, rid); err != nil {
+	if err = action.ClearVotes(rid); err != nil {
 		return err
 	}
 	h.RoomBroadcast(&entity.Event{

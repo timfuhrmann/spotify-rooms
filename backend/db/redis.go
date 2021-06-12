@@ -3,16 +3,15 @@ package db
 import (
 	"context"
 	"github.com/go-redis/redis/v8"
-	"github.com/timfuhrmann/spotify-rooms/backend/action"
 	"log"
 	"os"
 	"time"
 )
 
-var Rdb *redis.Client
+var RDB *redis.Client
 
 func Init() {
-	Rdb = newRedisClient()
+	RDB = newRedisClient()
 }
 
 func newRedisClient() *redis.Client {
@@ -28,10 +27,6 @@ func newRedisClient() *redis.Client {
 	_, err = client.Ping(ctx).Result()
 	if err != nil {
 		log.Fatalf("Error trying to ping redis: %v", err)
-	}
-
-	if err = action.InitRooms(client); err != nil {
-		log.Fatalf("Error trying to populate database with rooms: %v", err)
 	}
 
 	return client

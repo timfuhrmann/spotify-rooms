@@ -3,22 +3,22 @@ package action
 import (
 	"context"
 	"fmt"
-	"github.com/go-redis/redis/v8"
+	"github.com/timfuhrmann/spotify-rooms/backend/db"
 	"github.com/timfuhrmann/spotify-rooms/backend/entity"
 	"strconv"
 	"time"
 )
 
 const (
-	ToActive = "active"
+	ToActive 	= "active"
 	ToPlaylist 	= "playlist"
 )
 
-func AddTrackToPlaylist(rdb *redis.Client, p interface{}, rid string) (string, error)  {
+func AddTrackToPlaylist(p interface{}, rid string) (string, error)  {
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	playlistKey := fmt.Sprintf(entity.RoomPlaylist, rid)
 
-	room, err := GetRoomById(rdb, rid)
+	room, err := GetRoomById(rid)
 	if err != nil {
 		return "", err
 	}
@@ -32,7 +32,7 @@ func AddTrackToPlaylist(rdb *redis.Client, p interface{}, rid string) (string, e
 	track.Date = time.Now()
 
 	if room.Active == nil {
-		if err = SetActiveTrack(rdb, track, room); err != nil {
+		if err = SetActiveTrack(track, room); err != nil {
 			return "", err
 		}
 		return ToActive, nil
@@ -43,7 +43,7 @@ func AddTrackToPlaylist(rdb *redis.Client, p interface{}, rid string) (string, e
 		return "", err
 	}
 
-	if err = rdb.HSet(ctx, playlistKey, track.Uid, t).Err(); err != nil {
+	if err = db.RDB.HSet(ctx, playlistKey, track.Uid, t).Err(); err != nil {
 		return "", err
 	}
 

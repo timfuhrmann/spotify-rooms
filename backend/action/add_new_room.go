@@ -2,16 +2,16 @@ package action
 
 import (
 	"context"
-	"github.com/go-redis/redis/v8"
+	"github.com/timfuhrmann/spotify-rooms/backend/db"
 	"github.com/timfuhrmann/spotify-rooms/backend/entity"
 	"strconv"
 	"time"
 )
 
-func AddNewRoom(rdb *redis.Client, room entity.Room) error {
+func AddNewRoom(room entity.Room) error {
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 
-	size := rdb.HLen(ctx, entity.RoomsKey)
+	size := db.RDB.HLen(ctx, entity.RoomsKey)
 	id := strconv.FormatInt(size.Val() + 1, 10)
 	room.Id = id
 
@@ -20,7 +20,7 @@ func AddNewRoom(rdb *redis.Client, room entity.Room) error {
 		return err
 	}
 
-	if err = rdb.HSet(ctx, entity.RoomsKey, id, r).Err(); err != nil {
+	if err = db.RDB.HSet(ctx, entity.RoomsKey, id, r).Err(); err != nil {
 		return err
 	}
 

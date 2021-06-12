@@ -2,7 +2,6 @@ package conn
 
 import (
 	"github.com/timfuhrmann/spotify-rooms/backend/action"
-	"github.com/timfuhrmann/spotify-rooms/backend/db"
 	"github.com/timfuhrmann/spotify-rooms/backend/entity"
 )
 
@@ -111,7 +110,7 @@ func (h *Hub) ClientLeaveRoom(client *WebSocket) {
 }
 
 func (h *Hub) checkVote(client *WebSocket) {
-	length, _ := action.DelVote(db.Rdb, client.Rid, client.Uuid)
+	length, _ := action.DelVote(client.Rid, client.Uuid)
 	if length != nil {
 		h.RoomBroadcast(&entity.Event{
 			Type: "UPDATE_VOTES",

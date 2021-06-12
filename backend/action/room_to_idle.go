@@ -2,12 +2,12 @@ package action
 
 import (
 	"context"
-	"github.com/go-redis/redis/v8"
+	"github.com/timfuhrmann/spotify-rooms/backend/db"
 	"github.com/timfuhrmann/spotify-rooms/backend/entity"
 	"time"
 )
 
-func RoomToIdle(rdb *redis.Client, room *entity.Room) error {
+func RoomToIdle(room *entity.Room) error {
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 
 	room.Live = false
@@ -17,7 +17,7 @@ func RoomToIdle(rdb *redis.Client, room *entity.Room) error {
 		return err
 	}
 
-	if err = rdb.HSet(ctx, entity.RoomsKey, room.Id, r).Err(); err != nil {
+	if err = db.RDB.HSet(ctx, entity.RoomsKey, room.Id, r).Err(); err != nil {
 		return err
 	}
 

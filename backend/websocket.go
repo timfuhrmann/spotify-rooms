@@ -20,11 +20,11 @@ func RoomsWebSocketHandler(w http.ResponseWriter, r *http.Request, h *conn.Hub) 
 		return
 	}
 
-	ws.On(controller.EventOnWelcome, controller.CR(ws, controller.OnWelcome))
-	ws.On(controller.EventJoinRoom, controller.CRE(ws, controller.JoinRoom))
-	ws.On(controller.EventVoteSkip, controller.CR(ws, controller.VoteSkip))
+	ws.On(controller.EventOnWelcome, controller.C(ws, controller.OnWelcome))
+	ws.On(controller.EventVoteSkip, controller.C(ws, controller.VoteSkip))
 	ws.On(controller.EventLeaveRoom, controller.C(ws, controller.LeaveRoom))
-	ws.On(controller.EventAddTrack, controller.CRE(ws, controller.AddTrack))
+	ws.On(controller.EventJoinRoom, controller.CE(ws, controller.JoinRoom))
+	ws.On(controller.EventAddTrack, controller.CE(ws, controller.AddTrack))
 	ws.On(controller.EventUpdateRooms, controller.CE(ws, controller.UpdateRooms))
 	ws.On(controller.EventUpdateVotes, controller.CE(ws, controller.UpdateVotes))
 	ws.On(controller.EventUpdateViewers, controller.CE(ws, controller.UpdateViewers))

@@ -3,15 +3,15 @@ package controller
 import (
 	"context"
 	"fmt"
-	"github.com/go-redis/redis/v8"
 	"github.com/timfuhrmann/spotify-rooms/backend/action"
 	"github.com/timfuhrmann/spotify-rooms/backend/conn"
+	"github.com/timfuhrmann/spotify-rooms/backend/db"
 	"github.com/timfuhrmann/spotify-rooms/backend/entity"
 	"log"
 	"time"
 )
 
-func JoinRoom(rdb *redis.Client, ws *conn.WebSocket, event *entity.Event) {
+func JoinRoom(ws *conn.WebSocket, event *entity.Event) {
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 
 	rid, err := entity.PayloadToRid(event.Payload)
@@ -25,7 +25,7 @@ func JoinRoom(rdb *redis.Client, ws *conn.WebSocket, event *entity.Event) {
 
 	ws.Hub.ClientJoinRoom(ws, rid)
 
-	tracks, err := action.GetPlaylistByRoom(rdb, rid)
+	tracks, err := action.GetPlaylistByRoom(rid)
 	if err != nil {
 		log.Printf("Error trying to retrieve playlist: %v", err)
 		return
@@ -38,7 +38,7 @@ func JoinRoom(rdb *redis.Client, ws *conn.WebSocket, event *entity.Event) {
 	}).Raw()
 
 	playlistKey := fmt.Sprintf(entity.RoomSkip, rid)
-	length := rdb.HLen(ctx, playlistKey).Val()
+	length := db.RDB.HLen(ctx, playlistKey).Val()
 
 	if length > 0 {
 		ws.Out <- (&entity.Event{

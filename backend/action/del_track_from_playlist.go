@@ -3,16 +3,16 @@ package action
 import (
 	"context"
 	"fmt"
-	"github.com/go-redis/redis/v8"
+	"github.com/timfuhrmann/spotify-rooms/backend/db"
 	"github.com/timfuhrmann/spotify-rooms/backend/entity"
 	"time"
 )
 
-func DelTrackFromPlaylist(rdb *redis.Client, rid string, trackUid string) error {
+func DelTrackFromPlaylist(rid string, trackUid string) error {
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	playlistKey := fmt.Sprintf(entity.RoomPlaylist, rid)
 
-	if err := rdb.HDel(ctx, playlistKey, trackUid).Err(); err != nil {
+	if err := db.RDB.HDel(ctx, playlistKey, trackUid).Err(); err != nil {
 		return err
 	}
 

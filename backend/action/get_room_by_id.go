@@ -2,15 +2,15 @@ package action
 
 import (
 	"context"
-	"github.com/go-redis/redis/v8"
+	"github.com/timfuhrmann/spotify-rooms/backend/db"
 	"github.com/timfuhrmann/spotify-rooms/backend/entity"
 	"time"
 )
 
-func GetRoomById(rdb *redis.Client, rid string) (*entity.Room, error)  {
+func GetRoomById(rid string) (*entity.Room, error)  {
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 
-	res, err := rdb.HGet(ctx, entity.RoomsKey, rid).Result()
+	res, err := db.RDB.HGet(ctx, entity.RoomsKey, rid).Result()
 	if err != nil {
 		return nil, err
 	}
