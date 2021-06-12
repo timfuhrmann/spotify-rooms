@@ -1,6 +1,5 @@
 ## Getting Started
-
-Make sure you filled in all the required dotenv variables you can find under `.env.public`.
+Copy `.env.public` to `.env` and fill in the missing details (Spotify Web API keys).
 
 Install all dependencies:
 ```bash

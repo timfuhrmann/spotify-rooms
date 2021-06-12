@@ -1,0 +1,31 @@
+version: "3.9"
+services:
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "3000:3000"
+    container_name: spotify-rooms-frontend
+    env_file:
+      - ./frontend/.env
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_WEBSOCKET_URL=ws://backend:8080/ws
+
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "8080:8080"
+    container_name: spotify-rooms-backend
+    env_file:
+      - ./backend/.env
+    environment:
+      - NODE_ENV=production
+      - REDIS_URL=redis://redis:6379
+
+  redis:
+    image: "redis"
+    ports:
+      - "6379:6379"
+    container_name: spotify-rooms-redis

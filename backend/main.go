@@ -12,7 +12,7 @@ import (
 )
 
 func init() {
-    if os.Getenv("APP_ENV") != "production" {
+    if os.Getenv("NODE_ENV") != "production" {
         err := godotenv.Load()
         if err != nil {
             log.Fatalf("Error trying to load .env: %v", err)
