@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import { checkAccessToken } from "../../app/lib/api/cookies";
 import { Sidebar } from "../../app/components/sidebar/Sidebar";
 import { useData } from "../../app/context/websocket/WebsocketContext";
-import { titleFromRoom } from "../../app/lib/util/RoomTitle";
+import { titleFromRoom } from "../../app/lib/util/room-title";
 import { useSpotify } from "../../app/context/spotify/SpotifyContext";
 import { Content } from "../../app/css/content";
 import { Users } from "../../app/icons/Users";

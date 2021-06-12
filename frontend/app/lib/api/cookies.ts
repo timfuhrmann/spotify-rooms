@@ -1,6 +1,6 @@
 import { NextApiRequestCookies } from "next/dist/next-server/server/api-utils";
 import { GetServerSidePropsContext } from "next";
-import { validateBrowser } from "../util/Browser";
+import { validateBrowser } from "../util/browser";
 import { refreshAccessToken } from "./auth";
 import { setCookie } from "nookies";
 

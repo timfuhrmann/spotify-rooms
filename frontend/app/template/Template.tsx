@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Head from "next/head";
-import { Meta } from "../lib/util/Meta";
+import { Meta } from "./Meta";
 
 const Site = styled.div`
     position: absolute;

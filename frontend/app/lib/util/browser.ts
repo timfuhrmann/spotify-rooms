@@ -1,5 +1,5 @@
 import Bowser from "bowser";
-import { GetServerSideProps, GetServerSidePropsContext } from "next";
+import { GetServerSidePropsContext } from "next";
 
 export const isIE = (userAgent: string) => {
     const browser = Bowser.getParser(userAgent);

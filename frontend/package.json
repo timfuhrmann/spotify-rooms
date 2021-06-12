@@ -10,7 +10,6 @@
   "dependencies": {
     "bowser": "^2.11.0",
     "lodash": "^4.17.21",
-    "lottie-web": "^5.7.8",
     "next": "10.2.0",
     "nookies": "^2.5.2",
     "react": "17.0.2",
@@ -19,7 +18,6 @@
   },
   "devDependencies": {
     "@types/react": "^17.0.5",
-    "@types/sockjs-client": "^1.5.0",
     "@types/spotify-web-playback-sdk": "^0.1.9",
     "@types/styled-components": "^5.1.9",
     "babel-plugin-lodash": "^3.3.4",

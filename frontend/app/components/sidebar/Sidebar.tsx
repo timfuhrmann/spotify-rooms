@@ -4,7 +4,7 @@ import { SidebarSearch } from "./SidebarSearch";
 import { SearchItem } from "./SearchItem";
 import { SecondaryHeadline } from "../../css/typography";
 import { useData } from "../../context/websocket/WebsocketContext";
-import { getSortedPlaylist } from "../../lib/util/SortedPlaylist";
+import { getSortedPlaylist } from "../../lib/util/sorted-playlist";
 import { useSpotify } from "../../context/spotify/SpotifyContext";
 
 const SidebarWrapper = styled.div<{ active: boolean }>`
