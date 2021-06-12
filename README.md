@@ -1,6 +1,8 @@
 "Music Rooms for Spotify" is a hobby project realizing an in rooms organized application for strangers or friends to meet and listen to some music. 
 It utilizes a next.js frontend and golang backend to broadcast music to active rooms. 
 
+Check it out: https://spotify-rooms.vercel.app/
+
 ## Frontend
 - Typescript
 - React.js / Next.js
