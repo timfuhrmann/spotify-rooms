@@ -105,8 +105,8 @@ export const Player: React.FC<PlayerProps> = ({ room }) => {
         }
 
         if (!room.active) {
-            player.pause();
             setTrack(null);
+            player.pause().catch(console.error);
             return;
         }
 
@@ -118,10 +118,10 @@ export const Player: React.FC<PlayerProps> = ({ room }) => {
             return;
         }
 
-        playTrack(track);
+        playTrack(track).catch(console.error);
 
         return () => {
-            player.pause();
+            player.pause().catch(console.error);
         };
     }, [track]);
 

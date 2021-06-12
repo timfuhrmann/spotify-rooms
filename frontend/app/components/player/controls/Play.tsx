@@ -55,11 +55,11 @@ export const Play: React.FC = () => {
             if (res.track_window?.current_track?.id && res.track_window.current_track.id !== room.active?.id) {
                 timeout = setTimeout(() => {
                     setPaused(true);
-                }, 1000);
+                }, 2000);
             } else {
                 timeout = setTimeout(() => {
                     setPaused(res.paused);
-                }, 1000);
+                }, 2000);
             }
         };
 
