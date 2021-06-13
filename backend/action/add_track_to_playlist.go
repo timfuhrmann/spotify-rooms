@@ -29,7 +29,7 @@ func AddTrackToPlaylist(p interface{}, rid string) (string, error)  {
 	}
 
 	track.Uid = track.Id + strconv.FormatInt(time.Now().UnixNano() / int64(time.Millisecond), 10)
-	track.Date = time.Now()
+	track.Date = time.Now().UTC()
 
 	if room.Active == nil {
 		if err = SetActiveTrack(track, room); err != nil {

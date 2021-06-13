@@ -10,7 +10,7 @@ import (
 func SetActiveTrack(track *entity.Track, room *entity.Room) error  {
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 
-	track.Date = time.Now()
+	track.Date = time.Now().UTC()
 	room.Active = track
 	room.Live = true
 
