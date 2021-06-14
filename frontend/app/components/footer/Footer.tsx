@@ -43,7 +43,7 @@ export const Footer: React.FC = () => {
                     <Link href="/legal">Legal</Link>
                 </FooterLink>
             )}
-            <FooterInfo>&copy;2021 Tim Fuhrmann. More to come - Stay tuned!</FooterInfo>
+            <FooterInfo>More to come - Stay tuned!</FooterInfo>
             <Logout />
         </FooterWrapper>
     );
