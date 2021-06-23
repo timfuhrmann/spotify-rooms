@@ -19,6 +19,13 @@ export const Meta: React.FC<MetaProps> = ({ title }) => {
             <meta property="og:title" content={title} />
             <meta property="og:description" content={process.env.NEXT_PUBLIC_META_TAGS_DESC} />
             <meta property="og:url" content={process.env.NEXT_PUBLIC_BASE_URL + router.asPath} />
+            <meta property="og:image" content={process.env.NEXT_PUBLIC_BASE_URL + "/meta-preview.jpg"} />
+
+            <meta property="twitter:card" content="summary_large_image" />
+            <meta property="twitter:title" content={title} />
+            <meta property="twitter:description" content={process.env.NEXT_PUBLIC_META_TAGS_DESC} />
+            <meta property="twitter:url" content={process.env.NEXT_PUBLIC_BASE_URL + router.asPath} />
+            <meta property="twitter:image" content={process.env.NEXT_PUBLIC_BASE_URL + "/meta-preview.jpg"} />
 
             <meta name="msapplication-TileColor" content="#ffffff" />
             <meta name="msapplication-TileImage" content="/ms-icon-144x144.png" />

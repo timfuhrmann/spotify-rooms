@@ -8,7 +8,7 @@ interface SpotifyInitProps {
 }
 
 export const SpotifyInit: React.FC<SpotifyInitProps> = ({ authToken }) => {
-    const { setDeviceId, player, setPlayer, setAuthToken } = useSpotify();
+    const { player, setPlayer, setDeviceId, setAuthToken } = useSpotify();
 
     useEffect(() => {
         if (!authToken) {
