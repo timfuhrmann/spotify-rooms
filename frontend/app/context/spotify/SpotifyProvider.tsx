@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from "react";
-import dynamic from "next/dynamic";
 import { SpotifyContext } from "./SpotifyContext";
 import { playTrackAtTime } from "../../lib/api/frontend";
 import { Server } from "../../types/server";
-
-const Spotify = dynamic(() => import("./SpotifyInit").then(mod => mod.SpotifyInit), {
-    ssr: false,
-});
+import { SpotifyInit } from "./SpotifyInit";
 
 interface SpotifyProviderProps {
     token?: string;
@@ -42,7 +38,7 @@ export const SpotifyProvider: React.FC<SpotifyProviderProps> = ({ children, toke
                 setPlayer,
             }}>
             {children}
-            {authToken && <Spotify authToken={authToken} />}
+            {authToken && <SpotifyInit authToken={authToken} />}
         </SpotifyContext.Provider>
     );
 };
