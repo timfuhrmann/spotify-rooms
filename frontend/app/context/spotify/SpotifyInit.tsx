@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import Head from "next/head";
+import React, { useEffect } from "react";
+import Script from "next/script";
 import { useSpotify } from "./SpotifyContext";
 import { clientRequestRefresh } from "../../lib/api/auth";
 
@@ -9,7 +9,6 @@ interface SpotifyInitProps {
 
 export const SpotifyInit: React.FC<SpotifyInitProps> = ({ authToken }) => {
     const { setDeviceId, player, setPlayer, setAuthToken } = useSpotify();
-    const [currentTrackName, setCurrentTrackName] = useState<string>("");
 
     useEffect(() => {
         if (!authToken) {
@@ -70,13 +69,9 @@ export const SpotifyInit: React.FC<SpotifyInitProps> = ({ authToken }) => {
                 cb(authToken);
             },
         });
+
         setPlayer(playerRef);
     };
 
-    return (
-        <Head>
-            {currentTrackName && <title>{currentTrackName}</title>}
-            <script src="https://sdk.scdn.co/spotify-player.js" />
-        </Head>
-    );
+    return <Script src="https://sdk.scdn.co/spotify-player.js" strategy="afterInteractive" />;
 };
