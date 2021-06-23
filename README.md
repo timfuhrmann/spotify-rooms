@@ -1,5 +1,5 @@
-"Live Music for Spotify" is a hobby project realizing an in rooms organized application for strangers or friends to meet and listen to some music. 
-It utilizes a next.js frontend and golang backend to broadcast music to active rooms. 
+"Live Music for Spotify" is a full stack hobby project realizing an in rooms organized application for strangers or friends to meet and listen to music. 
+It utilizes a Next.js frontend, Golang backend and Redis in-memory database to "broadcast" music to active rooms. 
 
 Check it out: https://spotify-rooms.vercel.app/
 
@@ -9,6 +9,14 @@ Check it out: https://spotify-rooms.vercel.app/
 - A room contains a playlist and an active song
 - User can add songs to playlist which will be played consecutively
 - **Result:** everybody within a room is listening to the same song at the same time
+
+## Basic idea
+1. Websocket connection 
+2. User joins room and adds track to playlist
+3. Backend updates room for everybody
+4. Calculate correct play time from several timestamps
+5. When track has finished, next track is being initialized and rooms updated
+6. ...
 
 ## Frontend
 - Typescript
