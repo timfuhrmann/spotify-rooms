@@ -1,5 +1,7 @@
 import { clientRequestRefresh } from "./auth";
 
+// 'SetAuthToken' comes from SpotifyContext and is used to update the auth token
+// in case of reauthorization (401).
 export const db = <T>(url: string, options: RequestInit = {}, setAuthToken?: (token: string) => void): Promise<T> => {
     return fetch(url, options)
         .then(res => {

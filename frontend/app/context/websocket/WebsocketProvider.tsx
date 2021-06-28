@@ -61,10 +61,10 @@ export const WebsocketProvider: React.FC = ({ children }) => {
             return;
         }
 
-        const r = rooms[roomId];
+        const newRoom = rooms[roomId];
 
-        if (!room || r.active?.uid !== room.active?.uid) {
-            setRoom(r);
+        if (!room || newRoom.active?.uid !== room.active?.uid) {
+            setRoom(newRoom);
         }
     }, [rooms, roomId]);
 

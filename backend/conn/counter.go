@@ -29,12 +29,14 @@ func (h *HubRoom) runCounter() {
 				break
 			}
 
+			// Check if room is still active and cancel goroutine if necessary
 			if room.Active == nil && h.Counter.Active == false {
 				h.Counter = nil
 				delete(h.Hub.Rooms, h.Rid)
 				return
 			}
 
+			// Check votes to skip track and init change if necessary
 			if len(h.Conns) > 0 {
 				n := float64(len(h.Conns)) / 2
 				length := action.GetVotesLength(h.Rid)
@@ -46,6 +48,7 @@ func (h *HubRoom) runCounter() {
 				}
 			}
 
+			// Check viewers and update if necessary
 			if len(h.Conns) != viewers {
 				viewers = len(h.Conns)
 				h.Hub.RoomBroadcast(&entity.Event{
@@ -55,6 +58,7 @@ func (h *HubRoom) runCounter() {
 				})
 			}
 
+			// Check playing time of current track and init change if necessary
 			if room.Active != nil && room.Live == true {
 				ms := (room.Active.Date.UnixNano() / int64(time.Millisecond)) + room.Active.Duration
 				date := time.Now().UnixNano() / int64(time.Millisecond)

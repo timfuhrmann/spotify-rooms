@@ -10,6 +10,8 @@ interface SpotifyInitProps {
 export const SpotifyInit: React.FC<SpotifyInitProps> = ({ authToken }) => {
     const { player, setPlayer, setDeviceId, setAuthToken } = useSpotify();
 
+    // Listen for changes to the auth token.
+    // Init spotify player immediately if auth token changed and SDK is ready.
     useEffect(() => {
         if (!authToken) {
             return;

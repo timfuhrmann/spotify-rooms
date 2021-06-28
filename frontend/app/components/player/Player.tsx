@@ -18,9 +18,15 @@ const PlayerFrame = styled.div`
     }
 `;
 
-const PlayerInner = styled.div<{ active: boolean }>`
-    opacity: ${p => (p.active ? 1 : 0)};
-    transition: opacity 0.3s;
+const PlayerInner = styled.div`
+    opacity: 0;
+    animation: fade-in 0.5s ease forwards;
+
+    @keyframes fade-in {
+        100% {
+            opacity: 1;
+        }
+    }
 `;
 
 const ActiveTitleWrapper = styled.div`
@@ -147,25 +153,27 @@ export const Player: React.FC<PlayerProps> = ({ room }) => {
             <PlayerInfo visible={inactive}>
                 It seems there is no music to play. Go a ahead and choose you favourite song!
             </PlayerInfo>
-            <PlayerInner active={!!track}>
-                <ActiveTitleWrapper>
-                    <ActiveTitle>
-                        {track?.name}
-                        <ArtistNameWrapper>
-                            {track?.artists.map((artist, index) => (
-                                <span key={artist + index}>{(index > 0 ? ", " : "") + artist}</span>
-                            ))}
-                        </ArtistNameWrapper>
-                    </ActiveTitle>
-                </ActiveTitleWrapper>
-                <CoverWrapper>
-                    <Cover src={track?.album.images[0]} />
-                    <OpenWrapper>
-                        <Open url={track?.url} />
-                    </OpenWrapper>
-                </CoverWrapper>
-                <PlayerControls />
-            </PlayerInner>
+            {track && (
+                <PlayerInner>
+                    <ActiveTitleWrapper>
+                        <ActiveTitle>
+                            {track.name}
+                            <ArtistNameWrapper>
+                                {track.artists.map((artist, index) => (
+                                    <span key={artist + index}>{(index > 0 ? ", " : "") + artist}</span>
+                                ))}
+                            </ArtistNameWrapper>
+                        </ActiveTitle>
+                    </ActiveTitleWrapper>
+                    <CoverWrapper>
+                        <Cover src={track.album.images[0]} />
+                        <OpenWrapper>
+                            <Open url={track.url} />
+                        </OpenWrapper>
+                    </CoverWrapper>
+                    <PlayerControls />
+                </PlayerInner>
+            )}
         </PlayerFrame>
     );
 };

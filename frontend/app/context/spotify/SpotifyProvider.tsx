@@ -22,13 +22,19 @@ export const SpotifyProvider: React.FC<SpotifyProviderProps> = ({ children, toke
         return playTrackAtTime(authToken, deviceId, track.uri, Date.now() - Date.parse(track.date), setAuthToken);
     };
 
+    const activateSearch = () => setSearchActive(true);
+
+    const deactivateSearch = () => setSearchActive(null);
+
+    const toggleSearchActive = () => setSearchActive(prevState => !prevState);
+
     return (
         <SpotifyContext.Provider
             value={{
                 searchActive,
-                activateSearch: () => setSearchActive(true),
-                deactivateSearch: () => setSearchActive(null),
-                toggleSearchActive: () => setSearchActive(prevState => !prevState),
+                activateSearch,
+                deactivateSearch,
+                toggleSearchActive,
                 playTrack,
                 authToken,
                 setAuthToken,
