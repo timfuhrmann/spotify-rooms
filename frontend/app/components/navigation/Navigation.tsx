@@ -25,7 +25,7 @@ const NavigationInner = styled.div`
     justify-content: space-between;
 `;
 
-const LogoWrapper = styled.button``;
+const LogoWrapper = styled.a``;
 
 const HamburgerWrapper = styled.div`
     margin-left: 2rem;
@@ -47,7 +47,7 @@ export const Navigation: React.FC = () => {
     return (
         <NavigationWrapper>
             <NavigationInner>
-                <Link href="/dashboard">
+                <Link href="/dashboard" passHref>
                     <LogoWrapper>
                         <LogoIcon />
                     </LogoWrapper>

@@ -3,7 +3,7 @@ import Link from "next/link";
 import styled from "styled-components";
 import { Server } from "../../types/server";
 
-const Item = styled.button`
+const Item = styled.a`
     width: 100%;
     padding: 1.5rem 0;
     border-top: 0.1rem solid rgba(255, 255, 255, 0.5);
@@ -50,7 +50,7 @@ export const DashboardItem: React.FC<Server.Room> = ({ id, name, active }) => {
     const albumCover = active && active.album.images[Math.max(0, active.album.images.length - 2)];
 
     return (
-        <Link href={`/room/${id}`}>
+        <Link href={`/room/${id}`} passHref>
             <Item>
                 <ItemName>{name}</ItemName>
                 {active ? (
