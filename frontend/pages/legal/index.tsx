@@ -48,7 +48,7 @@ const Legal: React.FC = () => {
                         <div> Accountability for content</div>
                         <p>
                             The contents of our pages have been created with the utmost care. However, we cannot
-                            guarantee the contents' accuracy, completeness or topicality. According to statutory
+                            guarantee the contents&apos; accuracy, completeness or topicality. According to statutory
                             provisions, we are furthermore responsible for our own content on these web pages. In this
                             matter, please note that we are not obliged to monitor the transmitted or saved information
                             of third parties, or investigate circumstances pointing to illegal activity. Our obligations

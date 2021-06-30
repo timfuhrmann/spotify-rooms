@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ThemeSwitch } from "./controls/ThemeSwitch";
 import { Hamburger } from "./controls/Hamburger";
 import { useSpotify } from "../../context/spotify/SpotifyContext";
+import { useData } from "../../context/websocket/WebsocketContext";
 
 const NavigationWrapper = styled.div`
     position: fixed;
@@ -42,7 +43,7 @@ const LogoIcon = styled(Logo)`
 `;
 
 export const Navigation: React.FC = () => {
-    const { searchActive, toggleSearchActive } = useSpotify();
+    const { search } = useData();
 
     return (
         <NavigationWrapper>
@@ -54,9 +55,9 @@ export const Navigation: React.FC = () => {
                 </Link>
                 <ControlsWrapper>
                     <ThemeSwitch />
-                    {searchActive !== null && (
+                    {search.active !== null && (
                         <HamburgerWrapper>
-                            <Hamburger active={searchActive} onClick={toggleSearchActive} />
+                            <Hamburger active={search.active} onClick={search.toggle} />
                         </HamburgerWrapper>
                     )}
                 </ControlsWrapper>

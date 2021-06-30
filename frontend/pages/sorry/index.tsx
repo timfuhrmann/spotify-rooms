@@ -18,9 +18,9 @@ const Sorry: React.FC = () => {
         <Template title="Sorry - Live Music for Spotify">
             <SorryWrapper>
                 <Content>
-                    Sorry for baring you! But, unfortunately we're not able to support your browser yet :(
+                    Sorry for baring you! But, unfortunately we&apos;re not able to support your browser yet :(
                     <br />
-                    We're working on it!
+                    We&apos;re working on it!
                 </Content>
             </SorryWrapper>
         </Template>

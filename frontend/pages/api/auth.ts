@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { Api } from "../../app/types/api";
 import { getSpotifyLoginUrl } from "../../app/lib/api/auth";
 
-export default async (req: NextApiRequest, res: NextApiResponse<Api.AuthType>) => {
+export default async function handler(req: NextApiRequest, res: NextApiResponse<Api.AuthType>) {
     try {
         const { status, url } = await getSpotifyLoginUrl();
 
@@ -26,4 +26,4 @@ export default async (req: NextApiRequest, res: NextApiResponse<Api.AuthType>) =
             data: null,
         });
     }
-};
+}

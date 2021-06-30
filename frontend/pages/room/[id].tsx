@@ -48,28 +48,22 @@ const ViewersIcon = styled(Users)`
 const Room: React.FC = () => {
     const router = useRouter();
     const { id } = router.query;
-    const { activateSearch, deactivateSearch } = useSpotify();
-    const { connected, room, viewers, joinRoom, leaveRoom } = useData();
+    const { connected, room, viewers, joinRoom, leaveRoom, search } = useData();
 
     useEffect(() => {
-        if (!id || !connected) {
+        if (!id || "string" !== typeof id || !connected) {
             return;
         }
 
-        activateSearch();
-        joinRoom(id as string);
-
-        return () => {
-            deactivateSearch();
-            leaveRoom();
-        };
+        joinRoom(id);
+        return () => leaveRoom();
     }, [id, connected]);
 
     return (
         <Template title={titleFromRoom(room)}>
             <RoomWrapper>
                 <PlayerWrapper>{room && <Player room={room} />}</PlayerWrapper>
-                <Sidebar />
+                <Sidebar searchActive={search.active} />
                 {viewers > 1 && (
                     <ViewersCount>
                         <ViewersIcon />

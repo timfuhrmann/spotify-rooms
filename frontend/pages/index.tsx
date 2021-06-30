@@ -60,7 +60,7 @@ const Home: React.FC = () => {
                     <HomeButton>
                         <ButtonSpotify onClick={initAuth}>
                             <ButtonIcon />
-                            Let's gooo
+                            Let&apos;s gooo
                         </ButtonSpotify>
                     </HomeButton>
                 </HomeContent>

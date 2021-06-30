@@ -11,6 +11,7 @@ export const WebsocketProvider: React.FC = ({ children }) => {
     const [playlist, setPlaylist] = useState<Record<string, Server.ResTrack>>({});
     const [votes, setVotes] = useState<number>(0);
     const [viewers, setViewers] = useState<number>(0);
+    const [searchActive, setSearchActive] = useState<boolean | null>(null);
 
     useEffect(() => {
         if (ws.connected) {
@@ -65,6 +66,7 @@ export const WebsocketProvider: React.FC = ({ children }) => {
 
         if (!room || newRoom.active?.uid !== room.active?.uid) {
             setRoom(newRoom);
+            setSearchActive(true);
         }
     }, [rooms, roomId]);
 
@@ -103,21 +105,26 @@ export const WebsocketProvider: React.FC = ({ children }) => {
         setViewers(0);
         setVotes(0);
         setPlaylist({});
+        setSearchActive(null);
     };
 
     return (
         <WebsocketContext.Provider
             value={{
                 connected: ws.connected,
-                rooms,
                 room,
+                rooms,
                 playlist,
-                addTrackToRoom,
                 votes,
                 viewers,
-                voteSkip,
                 joinRoom,
                 leaveRoom,
+                addTrackToRoom,
+                voteSkip,
+                search: {
+                    active: searchActive,
+                    toggle: () => setSearchActive(prevState => !prevState),
+                },
             }}>
             {children}
         </WebsocketContext.Provider>

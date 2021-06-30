@@ -13,6 +13,6 @@ export const GlobalStyle = createGlobalStyle`
     }
 
     ::selection {
-      background: ${p => p.theme.primary};
+        background: ${p => p.theme.primary};
     }
 `;

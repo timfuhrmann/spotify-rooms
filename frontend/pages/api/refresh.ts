@@ -4,7 +4,7 @@ import { refreshAccessToken } from "../../app/lib/api/auth";
 import { Api } from "../../app/types/api";
 import { setCookie } from "nookies";
 
-export default async (req: NextApiRequest, res: NextApiResponse<Api.RefreshType>) => {
+export default async function handler(req: NextApiRequest, res: NextApiResponse<Api.RefreshType>) {
     const cookie = req.cookies[APP_COOKIES_AUTH];
 
     if (!cookie) {
@@ -30,4 +30,4 @@ export default async (req: NextApiRequest, res: NextApiResponse<Api.RefreshType>
             data: null,
         });
     }
-};
+}

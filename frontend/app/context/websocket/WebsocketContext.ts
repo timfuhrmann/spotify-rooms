@@ -1,17 +1,23 @@
 import { createContext, useContext } from "react";
 import { Server } from "../../types/server";
 
+interface Search {
+    active: boolean | null;
+    toggle: () => void;
+}
+
 interface WebsocketContextData {
     connected: boolean;
-    playlist: Record<string, Server.ResTrack>;
-    rooms: Record<string, Server.Room>;
     room: Server.Room;
-    addTrackToRoom: (track: Server.ResTrack) => void;
-    joinRoom: (rid: string) => void;
+    rooms: Record<string, Server.Room>;
+    playlist: Record<string, Server.ResTrack>;
     votes: number;
     viewers: number;
-    voteSkip: (rid: string) => void;
+    joinRoom: (rid: string) => void;
     leaveRoom: () => void;
+    voteSkip: (rid: string) => void;
+    addTrackToRoom: (track: Server.ResTrack) => void;
+    search: Search;
 }
 
 export const WebsocketContext = createContext<WebsocketContextData>({} as WebsocketContextData);

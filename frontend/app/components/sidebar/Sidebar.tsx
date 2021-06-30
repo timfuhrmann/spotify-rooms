@@ -54,8 +54,11 @@ const SidebarList = styled.div`
     overflow-y: auto;
 `;
 
-export const Sidebar: React.FC = () => {
-    const { searchActive } = useSpotify();
+interface SidebarProps {
+    searchActive: boolean;
+}
+
+export const Sidebar: React.FC<SidebarProps> = ({ searchActive }) => {
     const { playlist } = useData();
 
     return (
