@@ -3,10 +3,22 @@ import Link from "next/link";
 import styled from "styled-components";
 import { Server } from "../../types/server";
 
+const ItemName = styled.div`
+    width: 100%;
+    transition: transform 0.3s;
+    will-change: transform;
+
+    @media ${p => p.theme.bp.m} {
+        width: 50%;
+    }
+`;
+
 const Item = styled.a`
     width: 100%;
     padding: 1.5rem 0;
-    border-top: 0.1rem solid rgba(255, 255, 255, 0.5);
+    border-top: 0.1rem solid ${p => p.theme.borderColor};
+    transition: background-color 0.3s;
+    will-change: background-color;
 
     @media ${p => p.theme.bp.m} {
         display: flex;
@@ -14,13 +26,17 @@ const Item = styled.a`
         height: 7rem;
         padding: 0;
     }
-`;
 
-const ItemName = styled.div`
-    width: 100%;
+    @media ${p => p.theme.bp.l} {
+        @media (hover: hover) {
+            &:hover {
+                background-color: ${p => p.theme.primary};
 
-    @media ${p => p.theme.bp.m} {
-        width: 50%;
+                ${ItemName} {
+                    transform: translate3d(2rem, 0, 0);
+                }
+            }
+        }
     }
 `;
 
