@@ -33,6 +33,8 @@ Check it out: https://spotify-rooms.vercel.app/
 - Redis in-memory database
 - Heroku
 
+![Preview](https://github.com/timfuhrmann/spotify-rooms/tree/develop/frontend/public/preview.png)
+
 ## To Do
 - Since it's a hobby project for now, tests haven't been implemented yet
 
