@@ -43,29 +43,7 @@ const Dashboard: React.FC = () => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ctx => {
-    const { code } = ctx.query;
-
-    if (code && "string" === typeof code) {
-        const auth = await getSpotifyAccessToken(code);
-
-        if (auth.access_token) {
-            setCookie(ctx, APP_COOKIES_ACCESS, auth.access_token, COOKIES_SET_OPTIONS(auth.expires_in));
-            setCookie(ctx, APP_COOKIES_AUTH, JSON.stringify(auth), COOKIES_SET_OPTIONS());
-
-            return {
-                redirect: {
-                    destination: "/dashboard",
-                    permanent: false,
-                },
-            };
-        }
-    } else {
-        return checkAccessToken(ctx);
-    }
-
-    return {
-        props: {},
-    };
+    return checkAccessToken(ctx);
 };
 
 export default Dashboard;
