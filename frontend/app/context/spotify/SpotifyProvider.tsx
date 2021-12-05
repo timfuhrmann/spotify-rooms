@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { SpotifyContext } from "./SpotifyContext";
 import { playTrackAtTime } from "../../lib/api/client";
 import { Server } from "../../types/server";
-import { SpotifyInit } from "./SpotifyInit";
+import { SpotifyWebPlayer } from "./SpotifyWebPlayer";
 
 interface SpotifyProviderProps {
     token?: string;
@@ -33,7 +33,7 @@ export const SpotifyProvider: React.FC<SpotifyProviderProps> = ({ children, toke
                 setPlayer,
             }}>
             {children}
-            {authToken && <SpotifyInit authToken={authToken} />}
+            {authToken && <SpotifyWebPlayer />}
         </SpotifyContext.Provider>
     );
 };

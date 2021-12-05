@@ -3,15 +3,9 @@ import Script from "next/script";
 import { useSpotify } from "./SpotifyContext";
 import { clientRequestRefresh } from "../../lib/api/auth";
 
-interface SpotifyInitProps {
-    authToken: string;
-}
+export const SpotifyWebPlayer: React.FC = () => {
+    const { authToken, player, setPlayer, setDeviceId, setAuthToken } = useSpotify();
 
-export const SpotifyInit: React.FC<SpotifyInitProps> = ({ authToken }) => {
-    const { player, setPlayer, setDeviceId, setAuthToken } = useSpotify();
-
-    // Listen for changes to the auth token.
-    // Init spotify player immediately if auth token changed and SDK is ready.
     useEffect(() => {
         if (!authToken) {
             return;
