@@ -1,14 +1,18 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { APP_COOKIES_ACCESS, APP_COOKIES_AUTH, COOKIES_SET_OPTIONS } from "../../app/lib/api/cookies";
+import { accessTokenFromCookies, APP_COOKIES_ACCESS, COOKIES_SET_OPTIONS } from "../../app/lib/api/cookies";
 import { refreshAccessToken } from "../../app/lib/api/auth";
 import { Api } from "../../app/types/api";
 import { setCookie } from "nookies";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Api.RefreshType>) {
-    const cookie = req.cookies[APP_COOKIES_AUTH];
+    const cookie = accessTokenFromCookies(req.cookies);
 
     if (!cookie) {
-        return;
+        return res.status(400).json({
+            message: "Missing access token",
+            status: 400,
+            data: null,
+        });
     }
 
     try {

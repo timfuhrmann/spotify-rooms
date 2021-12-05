@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { WebsocketContext } from "./WebsocketContext";
 import { Server } from "../../types/server";
-import { useWebsocket } from "./UseWebsocket";
+import { useWebsocket } from "./websocket";
 
 export const WebsocketProvider: React.FC = ({ children }) => {
     const ws = useWebsocket();

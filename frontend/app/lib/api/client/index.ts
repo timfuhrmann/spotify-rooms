@@ -1,6 +1,6 @@
-import { db } from "./index";
-import { Api } from "../../types/api";
-import { Server } from "../../types/server";
+import { db } from "../index";
+import { Api } from "../../../types/api";
+import { Server } from "../../../types/server";
 
 const setJsonHeaders = (authToken: string) => {
     return {

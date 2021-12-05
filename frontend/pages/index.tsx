@@ -5,10 +5,10 @@ import { Headline, TertiaryHeadline } from "../app/css/typography";
 import { ButtonSpotify } from "../app/css/buttons";
 import { LogoIcon } from "../app/icons/LogoIcon";
 import { GetServerSideProps } from "next";
-import { checkAccessToken } from "../app/lib/api/cookies";
 import { requestSpotifyLoginUrl } from "../app/lib/api/auth";
 import { Content, transition } from "../app/css/content";
 import { Footer } from "../app/components/footer/Footer";
+import { validateAuthentication, validateBrowser } from "../app/lib/api/server";
 
 const HomeWrapper = styled.div`
     ${transition};
@@ -71,12 +71,31 @@ const Home: React.FC = () => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ctx => {
-    const { auth } = ctx.query;
+    const browser = validateBrowser(ctx);
 
-    return checkAccessToken(ctx, {
-        redirectDirection: "dashboard",
-        preventRedirect: "logout" === auth,
-    });
+    if (!browser) {
+        return {
+            redirect: {
+                destination: "/sorry",
+                permanent: false,
+            },
+        };
+    }
+
+    const auth = await validateAuthentication(ctx);
+
+    if (auth) {
+        return {
+            redirect: {
+                destination: "/dashboard",
+                permanent: false,
+            },
+        };
+    }
+
+    return {
+        props: {},
+    };
 };
 
 export default Home;

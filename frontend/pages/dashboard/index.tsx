@@ -2,15 +2,14 @@ import React from "react";
 import styled from "styled-components";
 import { GetServerSideProps } from "next";
 import { Template } from "../../app/template/Template";
-import { getSpotifyAccessToken } from "../../app/lib/api/auth";
-import { APP_COOKIES_ACCESS, APP_COOKIES_AUTH, checkAccessToken, COOKIES_SET_OPTIONS } from "../../app/lib/api/cookies";
 import { SecondaryHeadline } from "../../app/css/typography";
 import { Content } from "../../app/css/content";
 import { DashboardItem } from "../../app/components/dashboard/DashboardItem";
 import { useData } from "../../app/context/websocket/WebsocketContext";
 import { Loading } from "../../app/components/loading/Loading";
 import { Footer } from "../../app/components/footer/Footer";
-import { setCookie } from "nookies";
+import { validateAuthentication, validateBrowser } from "../../app/lib/api/server";
+import { useSpotify } from "../../app/context/spotify/SpotifyContext";
 
 const DashboardWrapper = styled.div`
     padding-top: 12.5rem;
@@ -21,6 +20,7 @@ const DashboardList = styled.div`
 `;
 
 const Dashboard: React.FC = () => {
+    const { authToken } = useSpotify();
     const { rooms } = useData();
 
     return (
@@ -28,7 +28,7 @@ const Dashboard: React.FC = () => {
             <DashboardWrapper>
                 <Content>
                     <SecondaryHeadline>Rooms</SecondaryHeadline>
-                    <Loading condition={rooms && Object.keys(rooms).length > 0}>
+                    <Loading condition={authToken && rooms && Object.keys(rooms).length > 0}>
                         <DashboardList>
                             {Object.keys(rooms).map(rid => (
                                 <DashboardItem key={rid} {...rooms[rid]} />
@@ -43,7 +43,31 @@ const Dashboard: React.FC = () => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ctx => {
-    return checkAccessToken(ctx);
+    const browser = validateBrowser(ctx);
+
+    if (!browser) {
+        return {
+            redirect: {
+                destination: "/sorry",
+                permanent: false,
+            },
+        };
+    }
+
+    const authToken = await validateAuthentication(ctx);
+
+    if (!authToken) {
+        return {
+            redirect: {
+                destination: "/",
+                permanent: false,
+            },
+        };
+    }
+
+    return {
+        props: { authToken },
+    };
 };
 
 export default Dashboard;

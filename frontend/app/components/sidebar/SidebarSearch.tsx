@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 import { debounce } from "lodash";
-import { getTrackByString } from "../../lib/api/frontend";
+import { getTrackByString } from "../../lib/api/client";
 import { useSpotify } from "../../context/spotify/SpotifyContext";
 import { SearchItem } from "./SearchItem";
 

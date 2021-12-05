@@ -5,5 +5,5 @@ import { setCookie } from "nookies";
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     setCookie({ res }, APP_COOKIES_AUTH, "", COOKIES_DEL_OPTIONS);
     setCookie({ res }, APP_COOKIES_ACCESS, "", COOKIES_DEL_OPTIONS);
-    res.send("Successfully logged out.");
+    res.redirect("/");
 }

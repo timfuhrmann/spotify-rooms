@@ -1,10 +1,10 @@
 import React from "react";
 import styled from "styled-components";
+import Link from "next/link";
 import { LogOut } from "../../../icons/LogOut";
-import { useRouter } from "next/router";
 import { useSpotify } from "../../../context/spotify/SpotifyContext";
 
-const LogoutButton = styled.button`
+const LogoutLink = styled.a`
     display: flex;
 `;
 
@@ -14,19 +14,15 @@ const LogoutIcon = styled(LogOut)`
 `;
 
 export const Logout: React.FC = () => {
-    const router = useRouter();
     const { authToken } = useSpotify();
-
-    const logout = async () => {
-        await fetch("/api/logout");
-        router.push({ pathname: "/", query: { auth: "logout" } }, "/").catch(console.error);
-    };
 
     if (!authToken) return null;
 
     return (
-        <LogoutButton onClick={logout}>
-            <LogoutIcon />
-        </LogoutButton>
+        <Link href="/api/logout" passHref>
+            <LogoutLink>
+                <LogoutIcon />
+            </LogoutLink>
+        </Link>
     );
 };

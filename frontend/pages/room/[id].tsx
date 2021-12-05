@@ -4,13 +4,12 @@ import { GetServerSideProps } from "next";
 import { Template } from "../../app/template/Template";
 import { Player } from "../../app/components/player/Player";
 import { useRouter } from "next/router";
-import { checkAccessToken } from "../../app/lib/api/cookies";
 import { Sidebar } from "../../app/components/sidebar/Sidebar";
 import { useData } from "../../app/context/websocket/WebsocketContext";
 import { titleFromRoom } from "../../app/lib/util/room-title";
-import { useSpotify } from "../../app/context/spotify/SpotifyContext";
 import { Content } from "../../app/css/content";
 import { Users } from "../../app/icons/Users";
+import { validateAuthentication, validateBrowser } from "../../app/lib/api/server";
 
 const RoomWrapper = styled.div`
     display: flex;
@@ -76,7 +75,31 @@ const Room: React.FC = () => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ctx => {
-    return checkAccessToken(ctx);
+    const browser = validateBrowser(ctx);
+
+    if (!browser) {
+        return {
+            redirect: {
+                destination: "/sorry",
+                permanent: false,
+            },
+        };
+    }
+
+    const authToken = await validateAuthentication(ctx);
+
+    if (!authToken) {
+        return {
+            redirect: {
+                destination: "/",
+                permanent: false,
+            },
+        };
+    }
+
+    return {
+        props: { authToken },
+    };
 };
 
 export default Room;

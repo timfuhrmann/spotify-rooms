@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { SpotifyContext } from "./SpotifyContext";
-import { playTrackAtTime } from "../../lib/api/frontend";
+import { playTrackAtTime } from "../../lib/api/client";
 import { Server } from "../../types/server";
 import { SpotifyInit } from "./SpotifyInit";
 

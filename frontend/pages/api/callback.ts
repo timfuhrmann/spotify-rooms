@@ -7,7 +7,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { code } = req.query;
 
     if (!code || "string" !== typeof code) {
-        return res.status(500).send("Error trying to authenticate.");
+        return res.status(400).send("Invalid request.");
     }
 
     try {

@@ -3,7 +3,7 @@ import styled, { css } from "styled-components";
 import { Mute } from "../../../icons/Mute";
 import { Sound } from "../../../icons/Sound";
 import { useSpotify } from "../../../context/spotify/SpotifyContext";
-import { setVolumeForCurrentTrack } from "../../../lib/api/frontend";
+import { setVolumeForCurrentTrack } from "../../../lib/api/client";
 
 const VolumeButton = styled.div`
     display: flex;
