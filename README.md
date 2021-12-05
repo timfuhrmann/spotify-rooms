@@ -1,9 +1,7 @@
-"Live Music for Spotify" is a full stack hobby project realizing an in rooms organized application for strangers or friends to meet and listen to music. 
-It utilizes a **Next.js** frontend, **Golang** backend, **Redis** in-memory database and **WebSocket** to "broadcast" music to active rooms. 
+"Live Music for Spotify" is a full stack hobby project realizing an in rooms organized application for strangers or friends to meet and listen to music, using **Next.js**, **Golang**, a **Redis** in-memory database connected via **WebSocket** to "broadcast" music to active rooms. 
 
 Check it out: https://spotify-rooms.vercel.app/
 
-## What?
 
 ![Preview](frontend/public/preview-room.png)
 
@@ -13,36 +11,18 @@ Check it out: https://spotify-rooms.vercel.app/
 - User can add songs to playlist which will be played consecutively
 - **Result:** everybody within a room is listening to the same song at the same time
 
-## Basic idea
-1. Websocket connection 
-2. User joins room and adds track to playlist
-3. Backend updates room for everybody
-4. Calculate correct play time from several timestamps
-5. When track has finished, next track is being initialized and rooms updated
-6. ...
-
 ## Frontend
 - Typescript
-- React.js / Next.js
+- React.js
+- Next.js
 - Styled Components
-- Next.js Api
 - Spotify Web Api
 - Spotify Wep Playback SDK
-- Vercel
 
 ## Backend
 - Golang
 - Websocket
 - Redis in-memory database
-- Heroku
-
-## To Do
-- Since it's a hobby project for now, tests haven't been implemented yet
-
-## Ideas
-- User Accounts
-- Chat
-- Individual rooms
 
 ## Getting Started with Docker
 To run the application locally you can either follow the instructions within the respective directories or use docker compose to initialize backend, frontend and redis at once:
