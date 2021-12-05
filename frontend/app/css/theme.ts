@@ -1,8 +1,8 @@
 const theme = {
     //region Color
-    black: "#191414",
-    white: "#fff",
-    grey: "#b6b6b6",
+    black: "#080808",
+    white: "#EFEFEF",
+    grey: "#7C7C7C",
     //endregion Color
 
     //region Border
@@ -22,19 +22,21 @@ const theme = {
 
 export const light = {
     ...theme,
-    body: "#d5e7e1",
+    body: "#D5E7E1",
     text: "#26745c",
-    logo: "#26745c",
-    primary: "#a1c3d1",
+    logo: "#26745C",
+    primary: "#A1C3D1",
+    loading: "#EFEFEF",
     type: "light",
 };
 
 export const dark = {
     ...theme,
-    body: "#191414",
-    text: "#fff",
-    logo: "#fff",
-    primary: "#1db954",
+    body: "#080808",
+    text: "#EFEFEF",
+    logo: "#EFEFEF",
+    primary: "#1DB954",
+    loading: "#2C2C2C",
     type: "dark",
 };
 

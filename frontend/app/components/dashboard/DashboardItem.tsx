@@ -13,6 +13,12 @@ const ItemName = styled.div`
     }
 `;
 
+const ItemTextSkeleton = styled.div`
+    display: inline-block;
+    width: 30%;
+    background-color: ${p => p.theme.loading};
+`;
+
 const Item = styled.a`
     width: 100%;
     padding: 1.5rem 0;
@@ -40,6 +46,11 @@ const Item = styled.a`
     }
 `;
 
+const ItemSkeleton = styled(Item)`
+    color: transparent;
+    pointer-events: none;
+`;
+
 const ActiveTrack = styled.div`
     display: flex;
     align-items: center;
@@ -60,6 +71,7 @@ const Cover = styled.img`
     width: 5rem;
     height: 5rem;
     margin-right: 2rem;
+    background-color: ${p => p.theme.loading};
 `;
 
 export const DashboardItem: React.FC<Server.Room> = ({ id, name, active }) => {
@@ -81,5 +93,19 @@ export const DashboardItem: React.FC<Server.Room> = ({ id, name, active }) => {
                 )}
             </Item>
         </Link>
+    );
+};
+
+export const DashboardItemSkeleton: React.FC = () => {
+    return (
+        <ItemSkeleton as="div">
+            <ItemName>
+                <ItemTextSkeleton>Loading...</ItemTextSkeleton>
+            </ItemName>
+            <ActiveTrack>
+                <Cover as="div" />
+                <ItemTextSkeleton>Loading...</ItemTextSkeleton>
+            </ActiveTrack>
+        </ItemSkeleton>
     );
 };

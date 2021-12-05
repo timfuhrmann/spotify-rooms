@@ -4,9 +4,8 @@ import { GetServerSideProps } from "next";
 import { Template } from "../../app/template/Template";
 import { SecondaryHeadline } from "../../app/css/typography";
 import { Content } from "../../app/css/content";
-import { DashboardItem } from "../../app/components/dashboard/DashboardItem";
+import { DashboardItem, DashboardItemSkeleton } from "../../app/components/dashboard/DashboardItem";
 import { useData } from "../../app/context/websocket/WebsocketContext";
-import { Loading } from "../../app/components/loading/Loading";
 import { Footer } from "../../app/components/footer/Footer";
 import { validateAuthentication, validateBrowser } from "../../app/lib/api/server";
 import { useSpotify } from "../../app/context/spotify/SpotifyContext";
@@ -28,13 +27,19 @@ const Dashboard: React.FC = () => {
             <DashboardWrapper>
                 <Content>
                     <SecondaryHeadline>Rooms</SecondaryHeadline>
-                    <Loading condition={authToken && rooms && Object.keys(rooms).length > 0}>
+                    {authToken && rooms && Object.keys(rooms).length > 0 ? (
                         <DashboardList>
                             {Object.keys(rooms).map(rid => (
                                 <DashboardItem key={rid} {...rooms[rid]} />
                             ))}
                         </DashboardList>
-                    </Loading>
+                    ) : (
+                        <DashboardList>
+                            {[...Array(5)].map((item, index) => (
+                                <DashboardItemSkeleton key={index} />
+                            ))}
+                        </DashboardList>
+                    )}
                 </Content>
             </DashboardWrapper>
             <Footer />
