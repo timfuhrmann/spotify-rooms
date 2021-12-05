@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import styled from "styled-components";
+import Image from "next/image";
 import { Server } from "../../types/server";
 
 const ItemName = styled.div`
@@ -67,7 +68,9 @@ const NoActiveTrack = styled.div`
     opacity: 0.6;
 `;
 
-const Cover = styled.img`
+const Cover = styled.div`
+    position: relative;
+    min-width: 5rem;
     width: 5rem;
     height: 5rem;
     margin-right: 2rem;
@@ -83,7 +86,9 @@ export const DashboardItem: React.FC<Server.Room> = ({ id, name, active }) => {
                 <ItemName>{name}</ItemName>
                 {active ? (
                     <ActiveTrack>
-                        <Cover src={albumCover} />
+                        <Cover>
+                            <Image src={albumCover} alt={active.name} layout="fill" objectFit="cover" unoptimized />
+                        </Cover>
                         {active.artists.map((name, index) => (index > 0 ? ", " : "") + name)}
                         {" - "}
                         {active.name}

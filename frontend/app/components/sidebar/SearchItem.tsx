@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import Image from "next/image";
 import { Server } from "../../types/server";
 
 const ItemWrapper = styled.button`
@@ -25,10 +26,13 @@ const ItemWrapper = styled.button`
     }
 `;
 
-const Cover = styled.img`
+const Cover = styled.div`
+    position: relative;
+    min-width: 5rem;
     width: 5rem;
     height: 5rem;
     margin-right: 2rem;
+    background-color: ${p => p.theme.loading};
 `;
 
 interface SearchItemProps extends Server.ResTrack {
@@ -40,7 +44,9 @@ export const SearchItem: React.FC<SearchItemProps> = ({ onClick, name, album, ar
 
     return (
         <ItemWrapper onClick={onClick} disabled={!onClick}>
-            <Cover src={albumCover} />
+            <Cover>
+                <Image src={albumCover} alt={name} layout="fill" objectFit="cover" unoptimized />
+            </Cover>
             {artists.map((artistName, index) => (index > 0 ? ", " : "") + artistName)}
             {" - "}
             {name}

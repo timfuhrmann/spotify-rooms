@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import Image from "next/image";
 import { ActiveTitle } from "../../css/typography";
 import { useSpotify } from "../../context/spotify/SpotifyContext";
 import { Server } from "../../types/server";
@@ -55,17 +56,6 @@ const ArtistNameWrapper = styled.div`
 const CoverWrapper = styled.div`
     position: relative;
     ${aspectRatio(1)};
-`;
-
-const Cover = styled.img`
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: block;
-    pointer-events: none;
-    user-select: none;
 `;
 
 const PlayerInfo = styled.div<{ visible: boolean }>`
@@ -166,7 +156,13 @@ export const Player: React.FC<PlayerProps> = ({ room }) => {
                         </ActiveTitle>
                     </ActiveTitleWrapper>
                     <CoverWrapper>
-                        <Cover src={track.album.images[0]} />
+                        <Image
+                            src={track.album.images[0]}
+                            about={track.name}
+                            layout="fill"
+                            objectFit="cover"
+                            unoptimized
+                        />
                         <OpenWrapper>
                             <Open url={track.url} />
                         </OpenWrapper>
