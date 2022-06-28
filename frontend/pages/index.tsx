@@ -1,19 +1,25 @@
 import React from "react";
 import styled from "styled-components";
-import { Template } from "../app/template/Template";
-import { Headline, TertiaryHeadline } from "../app/css/typography";
-import { ButtonSpotify } from "../app/css/buttons";
-import { LogoIcon } from "../app/icons/LogoIcon";
-import { GetServerSideProps } from "next";
-import { requestSpotifyLoginUrl } from "../app/lib/api/auth";
-import { Content, transition } from "../app/css/content";
+import { Headline, TertiaryHeadline } from "@css/typography";
+import { LogoIcon } from "@icons/LogoIcon";
+import { Content, fillParent } from "@css/content";
 import { Footer } from "../app/components/footer/Footer";
-import { validateAuthentication, validateBrowser } from "../app/lib/api/server";
+import { Meta } from "@lib/meta";
+import { Button } from "../app/components/button/Button";
 
 const HomeWrapper = styled.div`
-    ${transition};
+    ${fillParent};
     width: 100%;
     height: 100%;
+    opacity: 0;
+    animation: opener 2s ease 0.3s forwards;
+    will-change: opacity;
+
+    @keyframes opener {
+        100% {
+            opacity: 1;
+        }
+    }
 `;
 
 const HomeContent = styled(Content)`
@@ -39,63 +45,26 @@ const TextWrapper = styled.div`
 `;
 
 const Home: React.FC = () => {
-    const initAuth = async () => {
-        const { status, data } = await requestSpotifyLoginUrl();
-
-        if (200 === status && data) {
-            window.location.href = data.url;
-        }
-    };
-
     return (
-        <Template title="Live Music for Spotify">
-            <HomeWrapper>
-                <HomeContent>
-                    <Headline>Spotify, but in rooms.</Headline>
-                    <TextWrapper>
-                        <TertiaryHeadline>
-                            Share your favourite music in realtime with strangers from all around the world.
-                        </TertiaryHeadline>
-                    </TextWrapper>
-                    <HomeButton>
-                        <ButtonSpotify onClick={initAuth}>
-                            <ButtonIcon />
-                            Let&apos;s gooo
-                        </ButtonSpotify>
-                    </HomeButton>
-                </HomeContent>
-                <Footer />
-            </HomeWrapper>
-        </Template>
+        <HomeWrapper>
+            <Meta title="Live Music for Spotify" />
+            <HomeContent>
+                <Headline>Spotify, but in rooms.</Headline>
+                <TextWrapper>
+                    <TertiaryHeadline>
+                        Share your favourite music in realtime with strangers from all around the world.
+                    </TertiaryHeadline>
+                </TextWrapper>
+                <HomeButton>
+                    <Button action="/api/auth/login">
+                        <ButtonIcon />
+                        Let&apos;s gooo
+                    </Button>
+                </HomeButton>
+            </HomeContent>
+            <Footer />
+        </HomeWrapper>
     );
-};
-
-export const getServerSideProps: GetServerSideProps = async ctx => {
-    const browser = validateBrowser(ctx);
-
-    if (!browser) {
-        return {
-            redirect: {
-                destination: "/sorry",
-                permanent: false,
-            },
-        };
-    }
-
-    const auth = await validateAuthentication(ctx);
-
-    if (auth) {
-        return {
-            redirect: {
-                destination: "/dashboard",
-                permanent: false,
-            },
-        };
-    }
-
-    return {
-        props: {},
-    };
 };
 
 export default Home;

@@ -1,11 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import { Logo } from "../../icons/Logo";
 import Link from "next/link";
-import { ThemeSwitch } from "./controls/ThemeSwitch";
-import { Hamburger } from "./controls/Hamburger";
-import { useSpotify } from "../../context/spotify/SpotifyContext";
-import { useData } from "../../context/websocket/WebsocketContext";
+import { Logo } from "@icons/Logo";
+import { NavigationTheme } from "./NavigationTheme";
+import { NavigationHamburger } from "./NavigationHamburger";
+import { useData } from "@lib/context/websocket";
 
 const NavigationWrapper = styled.div`
     position: fixed;
@@ -54,10 +53,10 @@ export const Navigation: React.FC = () => {
                     </LogoWrapper>
                 </Link>
                 <ControlsWrapper>
-                    <ThemeSwitch />
+                    <NavigationTheme />
                     {search.active !== null && (
                         <HamburgerWrapper>
-                            <Hamburger active={search.active} onClick={search.toggle} />
+                            <NavigationHamburger active={search.active} onClick={search.toggle} />
                         </HamburgerWrapper>
                     )}
                 </ControlsWrapper>

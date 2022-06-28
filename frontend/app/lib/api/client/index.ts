@@ -1,8 +1,8 @@
 import { db } from "../index";
-import { Api } from "../../../types/api";
-import { Server } from "../../../types/server";
+import { Api } from "@type/api";
+import { Server } from "@type/server";
 
-const setJsonHeaders = (authToken: string) => {
+const getJsonHeaders = (authToken: string) => {
     return {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -13,7 +13,7 @@ const setJsonHeaders = (authToken: string) => {
 export const getTrackByString = async (
     authToken: string,
     str: string,
-    setAuthToken: (token: string) => void
+    onAuthError: () => void
 ): Promise<Server.ResTrack[]> => {
     const res = await db<Api.SpotifySearchResponse>(
         `https://api.spotify.com/v1/search?q=${str}&type=track&limit=10`,
@@ -23,14 +23,18 @@ export const getTrackByString = async (
                 Authorization: `Bearer ${authToken}`,
             },
         },
-        setAuthToken
+        onAuthError
     );
 
     if (!res.tracks) {
         return [];
     }
 
-    return res.tracks.items.map(track => {
+    return res.tracks.items.flatMap(track => {
+        if (!track.id) {
+            return [];
+        }
+
         return {
             uid: track.id, // fallback, will be overwritten by backend
             id: track.id,
@@ -52,9 +56,9 @@ export const playTrackAtTime = async (
     deviceId: string,
     track: string,
     time: number,
-    setAuthToken: (token: string) => void
+    onAuthError: () => void
 ) => {
-    return await db(
+    return db(
         `https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`,
         {
             method: "PUT",
@@ -62,9 +66,9 @@ export const playTrackAtTime = async (
                 uris: [track],
                 position_ms: time,
             }),
-            headers: setJsonHeaders(authToken),
+            headers: getJsonHeaders(authToken),
         },
-        setAuthToken
+        onAuthError
     );
 };
 
@@ -72,14 +76,14 @@ export const setVolumeForCurrentTrack = async (
     authToken: string,
     deviceId: string,
     volume: number,
-    setAuthToken: (token: string) => void
+    onAuthError: () => void
 ) => {
-    return await db(
+    return db(
         `https://api.spotify.com/v1/me/player/volume?volume_percent=${volume}&device_id=${deviceId}`,
         {
             method: "PUT",
-            headers: setJsonHeaders(authToken),
+            headers: getJsonHeaders(authToken),
         },
-        setAuthToken
+        onAuthError
     );
 };

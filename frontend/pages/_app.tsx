@@ -1,15 +1,15 @@
 import React from "react";
 import "/public/fonts/fonts.css";
 import { AppProps } from "next/app";
-import { SpotifyProvider } from "../app/context/spotify/SpotifyProvider";
 import { Navigation } from "../app/components/navigation/Navigation";
-import { WebsocketProvider } from "../app/context/websocket/WebsocketProvider";
-import { CustomThemeProvider } from "../app/context/theme/CustomThemeProvider";
+import { SpotifyProvider } from "@lib/context/spotify/SpotifyProvider";
+import { WebsocketProvider } from "@lib/context/websocket/WebsocketProvider";
+import { CustomThemeProvider } from "@lib/context/theme/CustomThemeProvider";
 
 const App: React.FC<AppProps> = ({ Component, pageProps }) => {
     return (
         <WebsocketProvider>
-            <SpotifyProvider token={pageProps.authToken}>
+            <SpotifyProvider>
                 <CustomThemeProvider>
                     {!pageProps.hideNav && <Navigation />}
                     <Component {...pageProps} />

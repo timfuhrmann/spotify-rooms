@@ -1,8 +1,26 @@
-const theme = {
+export const theme = {
     //region Color
     black: "#080808",
     white: "#EFEFEF",
     grey: "#7C7C7C",
+
+    body: "var(--color-body)",
+    text: "var(--color-text)",
+    logo: "var(--color-logo)",
+    primary: "var(--color-primary)",
+    loading: "var(--color-loading)",
+
+    gray50: "var(--color-gray50)",
+    gray75: "var(--color-gray75)",
+    gray100: "var(--color-gray100)",
+    gray200: "var(--color-gray200)",
+    gray300: "var(--color-gray300)",
+    gray400: "var(--color-gray400)",
+    gray500: "var(--color-gray500)",
+    gray600: "var(--color-gray600)",
+    gray700: "var(--color-gray700)",
+    gray800: "var(--color-gray800)",
+    gray900: "var(--color-gray900)",
     //endregion Color
 
     //region Border
@@ -20,27 +38,7 @@ const theme = {
     //endregion
 };
 
-export const light = {
-    ...theme,
-    body: "#D5E7E1",
-    text: "#26745c",
-    logo: "#26745C",
-    primary: "#A1C3D1",
-    loading: "#EFEFEF",
-    type: "light",
-};
-
-export const dark = {
-    ...theme,
-    body: "#080808",
-    text: "#EFEFEF",
-    logo: "#EFEFEF",
-    primary: "#1DB954",
-    loading: "#2C2C2C",
-    type: "dark",
-};
-
-type Theme = typeof light & typeof dark;
+type Theme = typeof theme;
 
 declare module "styled-components" {
     export interface DefaultTheme extends Theme {}

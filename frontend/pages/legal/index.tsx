@@ -1,7 +1,8 @@
 import React from "react";
-import { Content } from "../../app/css/content";
-import { SecondaryHeadline } from "../../app/css/typography";
 import styled from "styled-components";
+import { Content } from "@css/content";
+import { SecondaryHeadline } from "@css/typography";
+import { Meta } from "@lib/meta";
 
 const LegalWrapper = styled.div`
     padding: 12rem 0;
@@ -31,6 +32,7 @@ const LegalGroup = styled.div`
 const Legal: React.FC = () => {
     return (
         <LegalWrapper>
+            <Meta title="Legal - Live Music for Spotify" />
             <Content>
                 <LegalInner>
                     <LegalGroup>
@@ -45,7 +47,7 @@ const Legal: React.FC = () => {
                     </LegalGroup>
                     <LegalGroup>
                         <LegalHeadline>Disclaimer</LegalHeadline>
-                        <div> Accountability for content</div>
+                        <div>Accountability for content</div>
                         <p>
                             The contents of our pages have been created with the utmost care. However, we cannot
                             guarantee the contents&apos; accuracy, completeness or topicality. According to statutory
@@ -56,7 +58,7 @@ const Legal: React.FC = () => {
                             by this as per §§ 8 to 10 of the Telemedia Act (TMG).
                         </p>
                         <br />
-                        <div> Accountability for links</div>
+                        <div>Accountability for links</div>
                         <p>
                             Responsibility for the content of external links (to web pages of third parties) lies solely
                             with the operators of the linked pages. No violations were evident to us at the time of
@@ -64,7 +66,7 @@ const Legal: React.FC = () => {
                             link immediately.
                         </p>
                         <br />
-                        <div> Copyright</div>
+                        <div>Copyright</div>
                         <p>
                             Our web pages and their contents are subject to German copyright law. Unless expressly
                             permitted by law, every form of utilizing, reproducing or processing works subject to

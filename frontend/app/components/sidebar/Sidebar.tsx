@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { SidebarSearch } from "./SidebarSearch";
-import { SearchItem } from "./SearchItem";
-import { SecondaryHeadline } from "../../css/typography";
-import { useData } from "../../context/websocket/WebsocketContext";
-import { getSortedPlaylist } from "../../lib/util/sorted-playlist";
-import { useSpotify } from "../../context/spotify/SpotifyContext";
+import { SidebarSearchItem } from "./SidebarSearchItem";
+import { SecondaryHeadline } from "@css/typography";
+import { useData } from "@lib/context/websocket";
+import { getSortedPlaylist } from "@lib/util";
 
 const SidebarWrapper = styled.div<{ active: boolean }>`
     position: fixed;
@@ -69,7 +68,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ searchActive }) => {
                 </SidebarHead>
                 <SidebarList>
                     {getSortedPlaylist(Object.keys(playlist), playlist).map(trackId => (
-                        <SearchItem key={trackId} {...playlist[trackId]} />
+                        <SidebarSearchItem key={trackId} {...playlist[trackId]} />
                     ))}
                 </SidebarList>
                 <SidebarSearch />

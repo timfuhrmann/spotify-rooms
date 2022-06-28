@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import Link from "next/link";
-import { Logout } from "./controls/Logout";
-import { useSpotify } from "../../context/spotify/SpotifyContext";
+import { useSpotify } from "@lib/context/spotify";
+import { LogOut } from "@icons/LogOut";
 
 const FooterWrapper = styled.div`
     position: fixed;
@@ -30,7 +30,12 @@ const FooterLink = styled(FooterInfo)`
 
     @media ${p => p.theme.bp.l} {
         order: 2;
+        margin-bottom: 0;
     }
+`;
+
+const LogoutLink = styled.a`
+    display: flex;
 `;
 
 export const Footer: React.FC = () => {
@@ -44,7 +49,11 @@ export const Footer: React.FC = () => {
                 </FooterLink>
             )}
             <FooterInfo>More to come - Stay tuned!</FooterInfo>
-            <Logout />
+            {authToken && (
+                <LogoutLink href="/api/auth/logout">
+                    <LogOut width={24} />
+                </LogoutLink>
+            )}
         </FooterWrapper>
     );
 };

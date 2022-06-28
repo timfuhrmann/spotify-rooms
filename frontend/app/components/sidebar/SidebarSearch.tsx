@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
 import styled from "styled-components";
+import { useRouter } from "next/router";
 import { debounce } from "lodash";
-import { getTrackByString } from "../../lib/api/client";
-import { useSpotify } from "../../context/spotify/SpotifyContext";
-import { SearchItem } from "./SearchItem";
-
-import { Input } from "../../css/input";
-import { useData } from "../../context/websocket/WebsocketContext";
-import { Server } from "../../types/server";
-import { Close } from "../../icons/Close";
+import { getTrackByString } from "@lib/api/client";
+import { useSpotify } from "@lib/context/spotify";
+import { SidebarSearchItem } from "./SidebarSearchItem";
+import { useData } from "@lib/context/websocket";
+import { Server } from "@type/server";
+import { Close } from "@icons/Close";
+import { Input } from "../input/Input";
 
 const SidebarSearchOverlay = styled.div<{ hasResults: boolean }>`
     position: absolute;
@@ -74,7 +73,7 @@ const SearchCloseIcon = styled(Close)`
 export const SidebarSearch: React.FC = () => {
     const router = useRouter();
     const { id } = router.query;
-    const { authToken, setAuthToken } = useSpotify();
+    const { authToken, refreshAccessToken } = useSpotify();
     const { addTrackToRoom } = useData();
     const [search, setSearch] = useState<string>("");
     const [searchResults, setSearchResults] = useState<Server.ResTrack[]>([]);
@@ -85,12 +84,12 @@ export const SidebarSearch: React.FC = () => {
 
     const searchByString = debounce(
         (str: string) => {
-            if (!str) {
+            if (!str || !authToken) {
                 setSearchResults([]);
                 return;
             }
 
-            getTrackByString(authToken, str, setAuthToken).then(setSearchResults);
+            getTrackByString(authToken, str, refreshAccessToken).then(setSearchResults);
         },
         100,
         { leading: true }
@@ -106,17 +105,12 @@ export const SidebarSearch: React.FC = () => {
     };
 
     return (
-        <>
+        <React.Fragment>
             <SidebarSearchOverlay hasResults={searchResults.length > 0} />
             <SidebarSearchWrapper>
                 <SidebarInputWrapper hasResults={searchResults.length > 0}>
-                    <Input
-                        type="text"
-                        placeholder="Your favourite song..."
-                        value={search}
-                        onInput={e => setSearch((e.target as HTMLInputElement).value)}
-                    />
-                    {"" !== search && (
+                    <Input type="text" placeholder="Your favourite song..." value={search} onInput={setSearch} />
+                    {search !== "" && (
                         <SearchCloseButton onClick={() => setSearch("")}>
                             <SearchCloseIcon />
                         </SearchCloseButton>
@@ -124,10 +118,10 @@ export const SidebarSearch: React.FC = () => {
                 </SidebarInputWrapper>
                 <SearchResultList hasResults={searchResults.length > 0}>
                     {searchResults.map(track => (
-                        <SearchItem key={track.id} onClick={() => addToPlaylist(track)} {...track} />
+                        <SidebarSearchItem key={track.id} onClick={() => addToPlaylist(track)} {...track} />
                     ))}
                 </SearchResultList>
             </SidebarSearchWrapper>
-        </>
+        </React.Fragment>
     );
 };

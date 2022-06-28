@@ -1,33 +1,29 @@
 import React from "react";
-import { GetServerSideProps } from "next";
 import styled from "styled-components";
-import { Template } from "../../app/template/Template";
-import { Content } from "../../app/css/content";
+import { GetStaticProps } from "next";
+import { Content, fillParent } from "@css/content";
+import { Meta } from "@lib/meta";
 
 const SorryWrapper = styled.div`
+    ${fillParent};
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100%;
-    height: 100%;
     text-align: center;
 `;
 
 const Sorry: React.FC = () => {
     return (
-        <Template title="Sorry - Live Music for Spotify">
-            <SorryWrapper>
-                <Content>
-                    Sorry for baring you! But, unfortunately we&apos;re not able to support your browser yet :(
-                    <br />
-                    We&apos;re working on it!
-                </Content>
-            </SorryWrapper>
-        </Template>
+        <SorryWrapper>
+            <Meta title="Sorry - Live Music for Spotify" />
+            <Content>
+                Sorry for baring you! But, unfortunately we&apos;re not able to support your browser yet :(
+            </Content>
+        </SorryWrapper>
     );
 };
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
     return {
         props: {
             hideNav: true,

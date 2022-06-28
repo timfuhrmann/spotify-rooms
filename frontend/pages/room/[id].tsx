@@ -1,20 +1,18 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
-import { GetServerSideProps } from "next";
-import { Template } from "../../app/template/Template";
 import { Player } from "../../app/components/player/Player";
 import { useRouter } from "next/router";
 import { Sidebar } from "../../app/components/sidebar/Sidebar";
-import { useData } from "../../app/context/websocket/WebsocketContext";
-import { titleFromRoom } from "../../app/lib/util/room-title";
-import { Content } from "../../app/css/content";
-import { Users } from "../../app/icons/Users";
-import { validateAuthentication, validateBrowser } from "../../app/lib/api/server";
+import { useData } from "@lib/context/websocket";
+import { titleFromRoom } from "@lib/room";
+import { Content, fillParent } from "@css/content";
+import { Users } from "@icons/Users";
+import { Meta } from "@lib/meta";
 
 const RoomWrapper = styled.div`
+    ${fillParent};
     display: flex;
-    width: 100%;
-    height: 100%;
+    min-height: 60rem;
 `;
 
 const PlayerWrapper = styled(Content)`
@@ -55,51 +53,23 @@ const Room: React.FC = () => {
         }
 
         joinRoom(id);
+
         return () => leaveRoom();
     }, [id, connected]);
 
     return (
-        <Template title={titleFromRoom(room)}>
-            <RoomWrapper>
-                <PlayerWrapper>{room && <Player room={room} />}</PlayerWrapper>
-                <Sidebar searchActive={search.active} />
-                {viewers > 1 && (
-                    <ViewersCount>
-                        <ViewersIcon />
-                        {viewers}
-                    </ViewersCount>
-                )}
-            </RoomWrapper>
-        </Template>
+        <RoomWrapper>
+            <Meta title={room ? titleFromRoom(room) : "Live Music for Spotify"} />
+            <PlayerWrapper>{room && <Player />}</PlayerWrapper>
+            <Sidebar searchActive={!!search.active} />
+            {viewers > 1 && (
+                <ViewersCount>
+                    <ViewersIcon />
+                    {viewers}
+                </ViewersCount>
+            )}
+        </RoomWrapper>
     );
-};
-
-export const getServerSideProps: GetServerSideProps = async ctx => {
-    const browser = validateBrowser(ctx);
-
-    if (!browser) {
-        return {
-            redirect: {
-                destination: "/sorry",
-                permanent: false,
-            },
-        };
-    }
-
-    const authToken = await validateAuthentication(ctx);
-
-    if (!authToken) {
-        return {
-            redirect: {
-                destination: "/",
-                permanent: false,
-            },
-        };
-    }
-
-    return {
-        props: { authToken },
-    };
 };
 
 export default Room;

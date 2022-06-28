@@ -1,21 +1,19 @@
 import React from "react";
 import styled from "styled-components";
-import { GetServerSideProps } from "next";
-import { Template } from "../../app/template/Template";
-import { SecondaryHeadline } from "../../app/css/typography";
-import { Content } from "../../app/css/content";
+import { SecondaryHeadline } from "@css/typography";
+import { Content } from "@css/content";
 import { DashboardItem, DashboardItemSkeleton } from "../../app/components/dashboard/DashboardItem";
-import { useData } from "../../app/context/websocket/WebsocketContext";
+import { useData } from "@lib/context/websocket";
 import { Footer } from "../../app/components/footer/Footer";
-import { validateAuthentication, validateBrowser } from "../../app/lib/api/server";
-import { useSpotify } from "../../app/context/spotify/SpotifyContext";
+import { useSpotify } from "@lib/context/spotify";
+import { Meta } from "@lib/meta";
 
 const DashboardWrapper = styled.div`
-    padding-top: 12.5rem;
+    padding: 12.5rem 0;
 `;
 
-const DashboardList = styled.div`
-    margin-top: 1rem;
+const DashboardHeadline = styled.div`
+    margin-bottom: 1rem;
 `;
 
 const Dashboard: React.FC = () => {
@@ -23,56 +21,31 @@ const Dashboard: React.FC = () => {
     const { rooms } = useData();
 
     return (
-        <Template title="Dashboard - Live Music for Spotify">
+        <React.Fragment>
             <DashboardWrapper>
+                <Meta title="Dashboard - Live Music for Spotify" />
                 <Content>
-                    <SecondaryHeadline>Rooms</SecondaryHeadline>
+                    <DashboardHeadline>
+                        <SecondaryHeadline>Rooms</SecondaryHeadline>
+                    </DashboardHeadline>
                     {authToken && rooms && Object.keys(rooms).length > 0 ? (
-                        <DashboardList>
+                        <React.Fragment>
                             {Object.keys(rooms).map(rid => (
                                 <DashboardItem key={rid} {...rooms[rid]} />
                             ))}
-                        </DashboardList>
+                        </React.Fragment>
                     ) : (
-                        <DashboardList>
-                            {[...Array(5)].map((item, index) => (
+                        <React.Fragment>
+                            {[...Array(5)].map((_, index) => (
                                 <DashboardItemSkeleton key={index} />
                             ))}
-                        </DashboardList>
+                        </React.Fragment>
                     )}
                 </Content>
             </DashboardWrapper>
             <Footer />
-        </Template>
+        </React.Fragment>
     );
-};
-
-export const getServerSideProps: GetServerSideProps = async ctx => {
-    const browser = validateBrowser(ctx);
-
-    if (!browser) {
-        return {
-            redirect: {
-                destination: "/sorry",
-                permanent: false,
-            },
-        };
-    }
-
-    const authToken = await validateAuthentication(ctx);
-
-    if (!authToken) {
-        return {
-            redirect: {
-                destination: "/",
-                permanent: false,
-            },
-        };
-    }
-
-    return {
-        props: { authToken },
-    };
 };
 
 export default Dashboard;
