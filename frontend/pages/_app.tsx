@@ -1,5 +1,5 @@
 import React from "react";
-import "/public/fonts/fonts.css";
+import "@css/fonts/stylesheet.css";
 import { AppProps } from "next/app";
 import { Navigation } from "../app/components/navigation/Navigation";
 import { SpotifyProvider } from "@lib/context/spotify/SpotifyProvider";
