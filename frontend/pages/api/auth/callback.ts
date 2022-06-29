@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { setCookie } from "nookies";
 import { APP_COOKIES_ACCESS, APP_COOKIES_REFRESH, getCookieSetOptions } from "@lib/cookie";
-import { getSpotifyAccessToken } from "@lib/api/auth";
+import { getSpotifyAccessToken } from "@lib/api/server/auth";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { code } = req.query;

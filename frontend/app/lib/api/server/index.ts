@@ -1,4 +1,4 @@
-import { refreshAuthToken } from "../auth";
+import { refreshAuthToken } from "./auth";
 import { APP_COOKIES_ACCESS, APP_COOKIES_REFRESH, getCookieSetOptions } from "@lib/cookie";
 import { NextRequest, NextResponse } from "next/server";
 

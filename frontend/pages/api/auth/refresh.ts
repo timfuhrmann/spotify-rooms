@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { APP_COOKIES_ACCESS, APP_COOKIES_REFRESH, getCookieSetOptions } from "@lib/cookie";
-import { refreshAuthToken } from "@lib/api/auth";
+import { refreshAuthToken } from "@lib/api/server/auth";
 import { Api } from "@type/api";
 import { setCookie } from "nookies";
 
