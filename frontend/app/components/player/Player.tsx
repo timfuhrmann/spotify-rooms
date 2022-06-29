@@ -3,9 +3,10 @@ import styled from "styled-components";
 import Image from "next/image";
 import { ActiveTitle } from "@css/typography";
 import { PlayerControls } from "./PlayerControls";
-import { aspectRatio, centerAbsolute, hover, transition } from "@css/content";
+import { aspectRatio, centerAbsolute, hover, transition } from "@css/helper";
 import { PlayerControlsOpen } from "./PlayerControlsOpen";
 import { usePlayer, withPlayer } from "./PlayerProvider";
+import { breakpoints } from "@css/helper/breakpoints";
 
 const PlayerFrame = styled.div`
     position: relative;
@@ -28,7 +29,7 @@ const PlayerInner = styled.div`
 const ActiveTitleWrapper = styled.div`
     margin-bottom: 0.5rem;
 
-    @media ${p => p.theme.bp.l} {
+    ${breakpoints().min("l")} {
         position: absolute;
         top: 0;
         left: 0;

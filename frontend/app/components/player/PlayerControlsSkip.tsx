@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import { SkipForward } from "@icons/SkipForward";
+import { breakpoints } from "@css/helper/breakpoints";
 
 const Info = styled.div<{ visible: boolean }>`
     position: fixed;
@@ -17,7 +18,7 @@ const Info = styled.div<{ visible: boolean }>`
     transition: opacity 0.1s;
     will-change: opacity;
 
-    @media ${p => p.theme.bp.l} {
+    ${breakpoints().min("l")} {
         display: block;
     }
 `;

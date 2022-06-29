@@ -30,10 +30,23 @@ export const theme = {
 
     //region Breakpoints
     bp: {
-        m: "screen and (min-width: 768px)",
-        l: "screen and (min-width: 1024px)",
-        xl: "screen and (min-width: 1340px)",
-        xxl: "screen and (min-width: 2000px)",
+        intrinsic: 0,
+        s: 524, // phone
+        m: 768, // tablet
+        l: 1024, // small laptop
+        xl: 1250, // laptop
+        xxl: 1440, // desktop
+    },
+    //endregion
+
+    //region Content Width
+    contentWidth: {
+        intrinsic: "calc(100vw - 4rem)",
+        s: "calc(100vw - 4rem)",
+        m: "calc(100vw - 12rem)",
+        l: "calc(100vw - 12rem)",
+        xl: "calc(100vw - 20rem)",
+        xxl: "120rem",
     },
     //endregion
 };

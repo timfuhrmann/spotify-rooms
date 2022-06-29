@@ -5,6 +5,7 @@ import { Logo } from "@icons/Logo";
 import { NavigationTheme } from "./NavigationTheme";
 import { NavigationHamburger } from "./NavigationHamburger";
 import { useData } from "@lib/context/websocket";
+import { breakpoints } from "@css/helper/breakpoints";
 
 const NavigationWrapper = styled.div`
     position: fixed;
@@ -14,7 +15,7 @@ const NavigationWrapper = styled.div`
     width: 100%;
     padding: 2rem;
 
-    @media ${p => p.theme.bp.l} {
+    ${breakpoints().min("l")} {
         padding: 3rem 2rem;
     }
 `;

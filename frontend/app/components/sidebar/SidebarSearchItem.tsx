@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Image from "next/image";
 import { Server } from "@type/server";
+import { breakpoints } from "@css/helper/breakpoints";
 
 const ItemWrapper = styled.button`
     display: flex;
@@ -21,7 +22,7 @@ const ItemWrapper = styled.button`
         pointer-events: none;
     }
 
-    @media ${p => p.theme.bp.l} {
+    ${breakpoints().min("l")} {
         padding: 2rem;
     }
 `;

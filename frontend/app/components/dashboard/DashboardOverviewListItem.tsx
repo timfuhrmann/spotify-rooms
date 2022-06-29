@@ -3,14 +3,15 @@ import Link from "next/link";
 import styled from "styled-components";
 import Image from "next/image";
 import { Server } from "@type/server";
-import { hover, transition } from "@css/content";
+import { hover, transition } from "@css/helper";
+import { breakpoints } from "@css/helper/breakpoints";
 
 const ItemName = styled.div`
     width: 100%;
     transition: transform 0.3s;
     will-change: transform;
 
-    @media ${p => p.theme.bp.m} {
+    ${breakpoints().min("m")} {
         width: 50%;
     }
 `;
@@ -21,20 +22,21 @@ const ItemTextSkeleton = styled.div`
     background-color: ${p => p.theme.loading};
 `;
 
-const Item = styled.a`
+const ItemWrapper = styled.a`
+    display: inline-block;
     width: 100%;
     padding: 1.5rem 0;
     border-top: 0.1rem solid ${p => p.theme.borderColor};
     ${transition("background-color", "0.3s")};
 
-    @media ${p => p.theme.bp.m} {
+    ${breakpoints().min("m")} {
         display: flex;
         align-items: center;
         height: 7rem;
         padding: 0;
     }
 
-    @media ${p => p.theme.bp.l} {
+    ${breakpoints().min("l")} {
         ${p => hover`
             background-color: ${p.theme.primary};
             
@@ -45,28 +47,28 @@ const Item = styled.a`
     }
 `;
 
-const ItemSkeleton = styled(Item)`
+const ItemSkeleton = styled(ItemWrapper)`
     color: transparent;
     pointer-events: none;
 `;
 
-const ActiveTrack = styled.div`
+const ItemActiveTrack = styled.div`
     display: flex;
     align-items: center;
     width: 100%;
     margin-top: 0.5rem;
 
-    @media ${p => p.theme.bp.m} {
+    ${breakpoints().min("m")} {
         width: 50%;
         margin-top: 0;
     }
 `;
 
-const NoActiveTrack = styled.div`
+const ItemNoActiveTrack = styled.div`
     opacity: 0.6;
 `;
 
-const Cover = styled.div`
+const ItemCover = styled.div`
     position: relative;
     min-width: 5rem;
     width: 5rem;
@@ -80,23 +82,23 @@ export const DashboardOverviewListItem: React.FC<Server.Room> = ({ id, name, act
 
     return (
         <Link href={`/room/${id}`} passHref>
-            <Item>
+            <ItemWrapper>
                 <ItemName>{name}</ItemName>
                 {active ? (
-                    <ActiveTrack>
-                        <Cover>
+                    <ItemActiveTrack>
+                        <ItemCover>
                             {albumCover && (
                                 <Image src={albumCover} alt={active.name} layout="fill" objectFit="cover" unoptimized />
                             )}
-                        </Cover>
+                        </ItemCover>
                         {active.artists.join(", ")}
                         {" - "}
                         {active.name}
-                    </ActiveTrack>
+                    </ItemActiveTrack>
                 ) : (
-                    <NoActiveTrack>Seems quiet in here.</NoActiveTrack>
+                    <ItemNoActiveTrack>Seems quiet in here.</ItemNoActiveTrack>
                 )}
-            </Item>
+            </ItemWrapper>
         </Link>
     );
 };
@@ -107,10 +109,10 @@ export const DashboardItemSkeleton: React.FC = () => {
             <ItemName>
                 <ItemTextSkeleton>Loading...</ItemTextSkeleton>
             </ItemName>
-            <ActiveTrack>
-                <Cover as="div" />
+            <ItemActiveTrack>
+                <ItemCover as="div" />
                 <ItemTextSkeleton>Loading...</ItemTextSkeleton>
-            </ActiveTrack>
+            </ItemActiveTrack>
         </ItemSkeleton>
     );
 };

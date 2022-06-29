@@ -2,7 +2,7 @@ import React from "react";
 import { useSpotify } from "@lib/context/spotify";
 import styled from "styled-components";
 import { Link } from "@icons/Link";
-import { fillParent, square } from "@css/content";
+import { fillParent, square } from "@css/helper";
 
 const OpenButton = styled.button`
     ${fillParent};

@@ -3,7 +3,7 @@ import styled, { css } from "styled-components";
 import { Mute } from "@icons/Mute";
 import { Sound } from "@icons/Sound";
 import { useSpotify } from "@lib/context/spotify";
-import { hover, square, transition } from "@css/content";
+import { hover, square, transition } from "@css/helper";
 
 const VolumeButton = styled.div`
     display: flex;

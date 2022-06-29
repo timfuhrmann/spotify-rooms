@@ -1,7 +1,7 @@
 import React, { PropsWithChildren } from "react";
 import styled from "styled-components";
 import Link, { LinkProps } from "next/link";
-import { hover, transition } from "@css/content";
+import { hover, transition } from "@css/helper";
 
 const ButtonWrapper = styled.button`
     display: flex;

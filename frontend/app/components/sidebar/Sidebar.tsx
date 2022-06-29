@@ -5,6 +5,7 @@ import { SidebarSearchItem } from "./SidebarSearchItem";
 import { SecondaryHeadline } from "@css/typography";
 import { useData } from "@lib/context/websocket";
 import { getSortedPlaylist } from "@lib/util";
+import { breakpoints } from "@css/helper/breakpoints";
 
 const SidebarWrapper = styled.div<{ active: boolean }>`
     position: fixed;
@@ -20,7 +21,7 @@ const SidebarWrapper = styled.div<{ active: boolean }>`
     transition: max-width 0.4s, transform 0.4s;
     will-change: max-width, transform;
 
-    @media ${p => p.theme.bp.l} {
+    ${breakpoints().min("l")} {
         position: relative;
         left: auto;
         transform: translate3d(0, 0, 0);
@@ -42,7 +43,7 @@ const SidebarHead = styled.div`
     padding: 1rem 2rem;
     opacity: 0;
 
-    @media ${p => p.theme.bp.m} {
+    ${breakpoints().min("m")} {
         opacity: 1;
     }
 `;

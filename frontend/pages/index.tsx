@@ -2,10 +2,11 @@ import React from "react";
 import styled from "styled-components";
 import { Headline, TertiaryHeadline } from "@css/typography";
 import { LogoIcon } from "@icons/LogoIcon";
-import { Content, fillParent } from "@css/content";
+import { fillParent } from "@css/helper";
 import { Footer } from "../app/components/footer/Footer";
 import { Meta } from "@lib/meta";
 import { Button } from "../app/components/button/Button";
+import { content } from "@css/helper/content";
 
 const HomeWrapper = styled.div`
     ${fillParent};
@@ -20,12 +21,13 @@ const HomeWrapper = styled.div`
     }
 `;
 
-const HomeContent = styled(Content)`
+const HomeContent = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100%;
+    ${content()};
     text-align: center;
 `;
 

@@ -9,6 +9,8 @@ import { Server } from "@type/server";
 import { Close } from "@icons/Close";
 import { Input } from "../input/Input";
 import { useSession } from "@lib/context/session";
+import { breakpoints } from "@css/helper/breakpoints";
+import { square, transition } from "@css/helper";
 
 const SidebarSearchOverlay = styled.div<{ hasResults: boolean }>`
     position: absolute;
@@ -46,13 +48,13 @@ const SearchResultList = styled.div<{ hasResults: boolean }>`
     padding: 0 2rem;
     max-height: ${p => (p.hasResults ? "50vh" : "0")};
     overflow-y: scroll;
-    transition: max-height 0.3s;
+    ${transition("max-height", "0.3s")};
 
     ::-webkit-scrollbar {
         display: none;
     }
 
-    @media ${p => p.theme.bp.l} {
+    ${breakpoints().min("l")} {
         padding: 0;
     }
 `;
@@ -66,8 +68,7 @@ const SearchCloseButton = styled.button`
 `;
 
 const SearchCloseIcon = styled(Close)`
-    width: 2rem;
-    height: 2rem;
+    ${square("2rem")};
 `;
 
 export const SidebarSearch: React.FC = () => {

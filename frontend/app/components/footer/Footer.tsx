@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Link from "next/link";
 import { LogOut } from "@icons/LogOut";
 import { useSession } from "@lib/context/session";
+import { breakpoints } from "@css/helper/breakpoints";
 
 const FooterWrapper = styled.div`
     position: fixed;
@@ -16,7 +17,7 @@ const FooterWrapper = styled.div`
     font-weight: 300;
     text-align: center;
 
-    @media ${p => p.theme.bp.l} {
+    ${breakpoints().min("l")} {
         display: flex;
     }
 `;
@@ -28,7 +29,7 @@ const FooterInfo = styled.div`
 const FooterLink = styled(FooterInfo)`
     margin-bottom: 1rem;
 
-    @media ${p => p.theme.bp.l} {
+    ${breakpoints().min("l")} {
         order: 2;
         margin-bottom: 0;
     }
