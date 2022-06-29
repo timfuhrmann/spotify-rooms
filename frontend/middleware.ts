@@ -37,5 +37,5 @@ export default async function handler(req: NextRequest) {
         }
     }
 
-    return undefined;
+    return res;
 }

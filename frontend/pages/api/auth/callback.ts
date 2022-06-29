@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { setCookie } from "nookies";
-import { APP_COOKIES_ACCESS, APP_COOKIES_AUTH, getCookieSetOptions } from "@lib/cookie";
+import { APP_COOKIES_ACCESS, APP_COOKIES_REFRESH, getCookieSetOptions } from "@lib/cookie";
 import { getSpotifyAccessToken } from "@lib/api/auth";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -15,7 +15,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         if (auth.access_token) {
             setCookie({ res }, APP_COOKIES_ACCESS, auth.access_token, getCookieSetOptions(auth.expires_in));
-            setCookie({ res }, APP_COOKIES_AUTH, JSON.stringify(auth), getCookieSetOptions());
+            setCookie({ res }, APP_COOKIES_REFRESH, auth.refresh_token, getCookieSetOptions());
 
             return res.redirect("/dashboard");
         } else {

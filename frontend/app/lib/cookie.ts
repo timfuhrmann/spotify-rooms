@@ -1,8 +1,8 @@
 import { NextCookies } from "next/dist/server/web/spec-extension/cookies";
 
-export const APP_COOKIES_AUTH = "SPOTIFY_ROOMS_AUTHENTICATION";
+export const APP_COOKIES_REFRESH = "sr_rf";
 
-export const APP_COOKIES_ACCESS = "SPOTIFY_ROOMS_ACCESS";
+export const APP_COOKIES_ACCESS = "sr_at";
 
 export const getCookieSetOptions = (maxAge = 60 * 60 * 24 * 10) => {
     return {
@@ -25,7 +25,7 @@ export const accessTokenFromCookies = (cookies: Partial<{ [p: string]: string }>
 };
 
 export const refreshTokenFromCookies = (cookies: NextCookies): string | null => {
-    const auth = cookies.get(APP_COOKIES_AUTH);
+    const auth = cookies.get(APP_COOKIES_REFRESH);
 
     if (auth) {
         const { refresh_token } = JSON.parse(auth);

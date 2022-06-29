@@ -1,7 +1,6 @@
 import React, { PropsWithChildren } from "react";
 import styled from "styled-components";
 import Link, { LinkProps } from "next/link";
-import { UrlObject } from "url";
 import { hover, transition } from "@css/content";
 
 const ButtonWrapper = styled.button`
@@ -22,7 +21,8 @@ const ButtonWrapper = styled.button`
 `;
 
 interface NextLinkProps extends Omit<LinkProps, "href" | "passHref"> {
-    action: string | UrlObject;
+    action: string;
+    useAnchorElement?: boolean;
 }
 
 interface HTMLButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "onClick"> {
@@ -47,7 +47,11 @@ export const Button: React.FC<PropsWithChildren<ButtonProps>> = ({ children, ...
             </ButtonWrapper>
         );
     } else if (isLink(props)) {
-        return (
+        return props.useAnchorElement ? (
+            <ButtonWrapper as="a" href={props.action}>
+                {children}
+            </ButtonWrapper>
+        ) : (
             <Link {...props} href={props.action} passHref>
                 <ButtonWrapper as="a">{children}</ButtonWrapper>
             </Link>

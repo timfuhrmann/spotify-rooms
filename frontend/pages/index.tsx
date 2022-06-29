@@ -9,10 +9,8 @@ import { Button } from "../app/components/button/Button";
 
 const HomeWrapper = styled.div`
     ${fillParent};
-    width: 100%;
-    height: 100%;
     opacity: 0;
-    animation: opener 2s ease 0.3s forwards;
+    animation: opener 2s ease forwards;
     will-change: opacity;
 
     @keyframes opener {
@@ -56,7 +54,7 @@ const Home: React.FC = () => {
                     </TertiaryHeadline>
                 </TextWrapper>
                 <HomeButton>
-                    <Button action="/api/auth/login">
+                    <Button action="/api/auth/login" useAnchorElement>
                         <ButtonIcon />
                         Let&apos;s gooo
                     </Button>
