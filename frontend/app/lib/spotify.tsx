@@ -1,9 +1,11 @@
 import React, { useEffect } from "react";
 import Script from "next/script";
 import { useSpotify } from "./context/spotify";
+import { useSession } from "@lib/context/session";
 
 export const SpotifyWebPlayer: React.FC = () => {
-    const { authToken, player, setPlayer, setDeviceId, refreshAccessToken } = useSpotify();
+    const { authToken, refreshAuthToken } = useSession();
+    const { player, setPlayer, setDeviceId } = useSpotify();
 
     useEffect(() => {
         if (!authToken) {
@@ -24,7 +26,7 @@ export const SpotifyWebPlayer: React.FC = () => {
             return;
         }
 
-        player.addListener("authentication_error", refreshAccessToken);
+        player.addListener("authentication_error", refreshAuthToken);
         player.addListener("ready", ({ device_id }) => {
             setDeviceId(device_id);
         });

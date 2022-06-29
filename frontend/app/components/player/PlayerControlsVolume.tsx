@@ -5,6 +5,7 @@ import { Sound } from "@icons/Sound";
 import { useSpotify } from "@lib/context/spotify";
 import { setVolumeForCurrentTrack } from "@lib/api/client";
 import { hover, transition } from "@css/content";
+import { useSession } from "@lib/context/session";
 
 const VolumeButton = styled.div`
     display: flex;
@@ -98,7 +99,8 @@ interface VolumeStart {
 }
 
 export const PlayerControlsVolume: React.FC = () => {
-    const { authToken, refreshAccessToken, player, deviceId } = useSpotify();
+    const { authToken, refreshAuthToken } = useSession();
+    const { player, deviceId } = useSpotify();
     const [muted, setMuted] = useState<boolean>(false);
     const [start, setStart] = useState<VolumeStart | null>(null);
     const [dragging, setDragging] = useState<boolean>(false);
@@ -144,10 +146,10 @@ export const PlayerControlsVolume: React.FC = () => {
         }
 
         if (muted) {
-            await setVolumeForCurrentTrack(authToken, deviceId, volume, refreshAccessToken);
+            await setVolumeForCurrentTrack(authToken, deviceId, volume, refreshAuthToken);
             setMuted(false);
         } else {
-            await setVolumeForCurrentTrack(authToken, deviceId, 0, refreshAccessToken);
+            await setVolumeForCurrentTrack(authToken, deviceId, 0, refreshAuthToken);
             setMuted(true);
         }
     };
@@ -158,7 +160,7 @@ export const PlayerControlsVolume: React.FC = () => {
         }
 
         if (muted) {
-            await setVolumeForCurrentTrack(authToken, deviceId, volume, refreshAccessToken);
+            await setVolumeForCurrentTrack(authToken, deviceId, volume, refreshAuthToken);
             setMuted(false);
         }
 
@@ -175,7 +177,7 @@ export const PlayerControlsVolume: React.FC = () => {
         }
 
         if (muted) {
-            await setVolumeForCurrentTrack(authToken, deviceId, volume, refreshAccessToken);
+            await setVolumeForCurrentTrack(authToken, deviceId, volume, refreshAuthToken);
             setMuted(false);
         }
 

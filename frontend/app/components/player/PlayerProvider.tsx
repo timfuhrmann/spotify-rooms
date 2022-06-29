@@ -2,6 +2,7 @@ import React, { createContext, PropsWithChildren, useContext, useEffect, useStat
 import { Server } from "@type/server";
 import { useSpotify } from "@lib/context/spotify";
 import { useData } from "@lib/context/websocket";
+import { useSession } from "@lib/context/session";
 
 interface PlayerContextData {
     track: Server.ResTrack | null;
@@ -12,7 +13,8 @@ const PlayerContext = createContext<PlayerContextData>({} as PlayerContextData);
 
 export const PlayerProvider: React.FC<PropsWithChildren> = ({ children }) => {
     const { room } = useData();
-    const { authToken, deviceId, player, playTrack } = useSpotify();
+    const { authToken } = useSession();
+    const { deviceId, player, playTrack } = useSpotify();
     const [track, setTrack] = useState<Server.ResTrack | null>(null);
     const [inactive, setInactive] = useState<boolean>(false);
 

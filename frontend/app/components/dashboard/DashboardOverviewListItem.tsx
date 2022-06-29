@@ -75,7 +75,7 @@ const Cover = styled.div`
     background-color: ${p => p.theme.loading};
 `;
 
-export const DashboardItem: React.FC<Server.Room> = ({ id, name, active }) => {
+export const DashboardOverviewListItem: React.FC<Server.Room> = ({ id, name, active }) => {
     const albumCover = active ? active.album.images[Math.max(0, active.album.images.length - 2)] : null;
 
     return (

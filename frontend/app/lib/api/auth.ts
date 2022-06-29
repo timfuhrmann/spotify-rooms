@@ -29,7 +29,7 @@ export const getSpotifyAccessToken = async (code: string): Promise<Api.SpotifyTo
     });
 };
 
-export const refreshAccessToken = async (refresh_token: string): Promise<Api.SpotifyTokenResponse> => {
+export const refreshAuthToken = async (refresh_token: string): Promise<Api.SpotifyTokenResponse> => {
     return db("https://accounts.spotify.com/api/token", {
         method: "POST",
         headers: {

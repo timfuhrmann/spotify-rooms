@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import Link from "next/link";
-import { useSpotify } from "@lib/context/spotify";
 import { LogOut } from "@icons/LogOut";
+import { useSession } from "@lib/context/session";
 
 const FooterWrapper = styled.div`
     position: fixed;
@@ -39,7 +39,7 @@ const LogoutLink = styled.a`
 `;
 
 export const Footer: React.FC = () => {
-    const { authToken } = useSpotify();
+    const { authToken } = useSession();
 
     return (
         <FooterWrapper>

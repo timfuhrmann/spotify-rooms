@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { APP_COOKIES_ACCESS, APP_COOKIES_REFRESH, getCookieSetOptions } from "@lib/cookie";
-import { refreshAccessToken } from "@lib/api/auth";
+import { refreshAuthToken } from "@lib/api/auth";
 import { Api } from "@type/api";
 import { setCookie } from "nookies";
 
@@ -16,7 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     }
 
     try {
-        const auth = await refreshAccessToken(refresh_token);
+        const auth = await refreshAuthToken(refresh_token);
 
         setCookie({ res }, APP_COOKIES_ACCESS, auth.access_token, getCookieSetOptions(auth.expires_in));
 

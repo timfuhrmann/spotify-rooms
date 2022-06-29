@@ -3,12 +3,12 @@ import styled from "styled-components";
 import { useRouter } from "next/router";
 import { debounce } from "lodash";
 import { getTrackByString } from "@lib/api/client";
-import { useSpotify } from "@lib/context/spotify";
 import { SidebarSearchItem } from "./SidebarSearchItem";
 import { useData } from "@lib/context/websocket";
 import { Server } from "@type/server";
 import { Close } from "@icons/Close";
 import { Input } from "../input/Input";
+import { useSession } from "@lib/context/session";
 
 const SidebarSearchOverlay = styled.div<{ hasResults: boolean }>`
     position: absolute;
@@ -73,7 +73,7 @@ const SearchCloseIcon = styled(Close)`
 export const SidebarSearch: React.FC = () => {
     const router = useRouter();
     const { id } = router.query;
-    const { authToken, refreshAccessToken } = useSpotify();
+    const { authToken, refreshAuthToken } = useSession();
     const { addTrackToRoom } = useData();
     const [search, setSearch] = useState<string>("");
     const [searchResults, setSearchResults] = useState<Server.ResTrack[]>([]);
@@ -89,7 +89,7 @@ export const SidebarSearch: React.FC = () => {
                 return;
             }
 
-            getTrackByString(authToken, str, refreshAccessToken).then(setSearchResults);
+            getTrackByString(authToken, str, refreshAuthToken).then(setSearchResults);
         },
         100,
         { leading: true }
