@@ -24,6 +24,8 @@ export default async function handler(req: NextRequest) {
         if (url.pathname !== "/sorry" && !isValid) {
             url.pathname = "/sorry";
             return NextResponse.redirect(url);
+        } else if (!isValid) {
+            return res;
         }
 
         const access_token = await validateAuthentication(req, res);

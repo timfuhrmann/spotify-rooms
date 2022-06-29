@@ -1,11 +1,9 @@
 import { NextRequest, userAgent } from "next/server";
 
-export const isIE = (browserName?: string) => {
-    return browserName && browserName.toLowerCase() === "Internet Explorer";
-};
+const SUPPORTED_BROWSERS = ["chrome", "firefox", "edge"];
 
-export const isSafari = (browserName?: string) => {
-    return browserName && browserName.toLowerCase() === "safari";
+export const isSupportedBrowser = (browserName?: string) => {
+    return !!browserName && SUPPORTED_BROWSERS.includes(browserName.toLowerCase());
 };
 
 export const isMobile = ({ type }: { type?: string }) => {
@@ -14,5 +12,5 @@ export const isMobile = ({ type }: { type?: string }) => {
 
 export const isBrowserCompatible = (req: NextRequest): boolean => {
     const ua = userAgent(req);
-    return !!ua && !isMobile(ua.device) && !isSafari(ua.browser.name) && !isIE(ua.browser.name);
+    return !!ua && !isMobile(ua.device) && isSupportedBrowser(ua.browser.name);
 };
