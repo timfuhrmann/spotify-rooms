@@ -71,19 +71,3 @@ export const playTrackAtTime = async (
         onAuthError
     );
 };
-
-export const setVolumeForCurrentTrack = async (
-    authToken: string,
-    deviceId: string,
-    volume: number,
-    onAuthError: () => void
-) => {
-    return db(
-        `https://api.spotify.com/v1/me/player/volume?volume_percent=${volume}&device_id=${deviceId}`,
-        {
-            method: "PUT",
-            headers: getJsonHeaders(authToken),
-        },
-        onAuthError
-    );
-};

@@ -10,24 +10,24 @@ export const SpotifyProvider: React.FC<PropsWithChildren> = ({ children }) => {
     const [player, setPlayer] = useState<Spotify.Player | null>(null);
     const [deviceId, setDeviceId] = useState<string | null>(null);
 
-    const playTrack = (track: Server.ResTrack) => {
-        if (!authToken || !deviceId) {
+    const playTrack = async (track: Server.ResTrack) => {
+        if (!player || !authToken || !deviceId) {
             return;
         }
 
         const trackDate = track.date ? Date.parse(track.date) : 0;
 
-        playTrackAtTime(authToken, deviceId, track.uri, Date.now() - trackDate, refreshAuthToken);
+        return playTrackAtTime(authToken, deviceId, track.uri, Date.now() - trackDate, refreshAuthToken);
     };
 
     return (
         <SpotifyContext.Provider
             value={{
                 deviceId,
-                player,
-                playTrack,
                 setDeviceId,
+                player,
                 setPlayer,
+                playTrack,
             }}>
             {children}
             {authToken && <SpotifyWebPlayer />}

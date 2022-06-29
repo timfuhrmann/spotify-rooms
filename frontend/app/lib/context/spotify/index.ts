@@ -3,10 +3,10 @@ import { Server } from "@type/server";
 
 interface SpotifyContextData {
     deviceId: string | null;
-    player: Spotify.Player | null;
-    playTrack: (track: Server.ResTrack) => void;
     setDeviceId: (deviceId: string) => void;
+    player: Spotify.Player | null;
     setPlayer: (player: Spotify.Player) => void;
+    playTrack: (track: Server.ResTrack) => Promise<unknown | undefined>;
 }
 
 export const SpotifyContext = createContext<SpotifyContextData>({} as SpotifyContextData);

@@ -3,9 +3,7 @@ import styled, { css } from "styled-components";
 import { Mute } from "@icons/Mute";
 import { Sound } from "@icons/Sound";
 import { useSpotify } from "@lib/context/spotify";
-import { setVolumeForCurrentTrack } from "@lib/api/client";
-import { hover, transition } from "@css/content";
-import { useSession } from "@lib/context/session";
+import { hover, square, transition } from "@css/content";
 
 const VolumeButton = styled.div`
     display: flex;
@@ -40,8 +38,7 @@ const ProgressBarKnob = styled.div.attrs<{ pos: number }>(p => ({
     position: absolute;
     top: 50%;
     left: 0;
-    height: 1.25rem;
-    width: 1.25rem;
+    ${square("1.25rem")};
     border-radius: 50%;
     background-color: ${p => p.theme.white};
     will-change: transform, opacity;
@@ -63,13 +60,11 @@ const IconWrapper = styled.button`
 `;
 
 const MuteIcon = styled(Mute)`
-    width: 2.4rem;
-    height: 2.4rem;
+    ${square("2.4rem")};
 `;
 
 const SoundIcon = styled(Sound)`
-    width: 2.4rem;
-    height: 2.4rem;
+    ${square("2.4rem")};
 `;
 
 const progressActive = css`
@@ -99,8 +94,7 @@ interface VolumeStart {
 }
 
 export const PlayerControlsVolume: React.FC = () => {
-    const { authToken, refreshAuthToken } = useSession();
-    const { player, deviceId } = useSpotify();
+    const { player } = useSpotify();
     const [muted, setMuted] = useState<boolean>(false);
     const [start, setStart] = useState<VolumeStart | null>(null);
     const [dragging, setDragging] = useState<boolean>(false);
@@ -123,44 +117,44 @@ export const PlayerControlsVolume: React.FC = () => {
     }, [dragging, start]);
 
     useEffect(() => {
-        if (!player || !deviceId) {
+        if (!player) {
             return;
         }
 
         player.getVolume().then(vol => {
             setVolume(vol * 100);
         });
-    }, [player, deviceId]);
+    }, [player]);
 
     useEffect(() => {
-        if (!player || !deviceId) {
+        if (!player) {
             return;
         }
 
-        player.setVolume(volume / 100).catch(console.error);
-    }, [player, deviceId, volume]);
+        player.setVolume(volume / 100);
+    }, [player, volume]);
 
     const toggleMute = async () => {
-        if (!authToken || !deviceId) {
+        if (!player) {
             return;
         }
 
         if (muted) {
-            await setVolumeForCurrentTrack(authToken, deviceId, volume, refreshAuthToken);
+            await player.setVolume(volume / 100);
             setMuted(false);
         } else {
-            await setVolumeForCurrentTrack(authToken, deviceId, 0, refreshAuthToken);
+            await player.setVolume(0);
             setMuted(true);
         }
     };
 
     const onMouseDown = async (event: React.MouseEvent) => {
-        if (!authToken || !deviceId) {
+        if (!player) {
             return;
         }
 
         if (muted) {
-            await setVolumeForCurrentTrack(authToken, deviceId, volume, refreshAuthToken);
+            await player.setVolume(volume / 100);
             setMuted(false);
         }
 
@@ -172,12 +166,12 @@ export const PlayerControlsVolume: React.FC = () => {
     };
 
     const onTouchStart = async (event: React.TouchEvent) => {
-        if (!authToken || !deviceId) {
+        if (!player) {
             return;
         }
 
         if (muted) {
-            await setVolumeForCurrentTrack(authToken, deviceId, volume, refreshAuthToken);
+            await player.setVolume(volume / 100);
             setMuted(false);
         }
 
