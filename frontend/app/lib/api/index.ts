@@ -13,5 +13,8 @@ export const db = <T>(url: string, options: RequestInit = {}, onAuthError?: () =
                 return res;
             }
         })
+        .then(res => {
+            return res;
+        })
         .catch(console.error);
 };

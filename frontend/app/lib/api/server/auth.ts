@@ -1,7 +1,7 @@
 import { db } from "../index";
 import { Api } from "@type/api";
 import { configSpotify } from "../spotfiy";
-import { getBaseUrl } from "../../util";
+import { getBaseUrl } from "@lib/util";
 import { Buffer } from "buffer";
 
 const { clientId, clientSecret } = configSpotify;
