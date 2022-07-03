@@ -7,11 +7,6 @@ export namespace Api {
         };
     }
 
-    export interface SpotifyAuthorizeResponse {
-        url?: string;
-        status: number;
-    }
-
     export interface SpotifyTokenResponse {
         access_token: string;
         refresh_token: string;
