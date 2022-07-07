@@ -1,9 +1,9 @@
 import React, { PropsWithChildren } from "react";
-import styled from "styled-components";
-import Link, { LinkProps } from "next/link";
+import styled, { css } from "styled-components";
+import Link, { LinkProps as NextLinkProps } from "next/link";
 import { hover, transition } from "@css/helper";
 
-const ButtonWrapper = styled.button`
+const ButtonStyles = css`
     display: flex;
     align-items: center;
     padding: 1.25rem 2rem;
@@ -20,43 +20,46 @@ const ButtonWrapper = styled.button`
     `};
 `;
 
-interface NextLinkProps extends Omit<LinkProps, "href" | "passHref"> {
-    action: string;
-    useAnchorElement?: boolean;
+const ButtonWrapper = styled.button`
+    ${ButtonStyles};
+`;
+
+const LinkWrapper = styled.a`
+    ${ButtonStyles};
+`;
+
+interface HTMLLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+    as: "a";
+    action: URL | string;
+    nextLinkProps?: Omit<NextLinkProps, "href" | "passHref">;
 }
 
 interface HTMLButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "onClick"> {
-    action: () => void;
+    as: "button";
+    action: (e: React.MouseEvent) => void;
 }
 
-type ButtonProps = HTMLButtonProps | NextLinkProps;
-
-const isButton = (props: ButtonProps): props is HTMLButtonProps => {
-    return typeof props.action === "function";
-};
-
-const isLink = (props: ButtonProps): props is NextLinkProps => {
-    return typeof props.action !== "function";
-};
+type ButtonProps = HTMLLinkProps | HTMLButtonProps;
 
 export const Button: React.FC<PropsWithChildren<ButtonProps>> = ({ children, ...props }) => {
-    if (isButton(props)) {
-        return (
-            <ButtonWrapper {...props} onClick={props.action}>
-                {children}
-            </ButtonWrapper>
-        );
-    } else if (isLink(props)) {
-        return props.useAnchorElement ? (
-            <ButtonWrapper as="a" href={props.action}>
-                {children}
-            </ButtonWrapper>
-        ) : (
-            <Link {...props} href={props.action} passHref>
-                <ButtonWrapper as="a">{children}</ButtonWrapper>
-            </Link>
-        );
-    }
+    switch (props.as) {
+        case "button": {
+            const { as, action, ...rest } = props;
 
-    return null;
+            return (
+                <ButtonWrapper onClick={action} {...rest}>
+                    {children}
+                </ButtonWrapper>
+            );
+        }
+        default: {
+            const { as, action, nextLinkProps, ...rest } = props;
+
+            return (
+                <Link href={action} {...nextLinkProps} passHref>
+                    <LinkWrapper {...rest}>{children}</LinkWrapper>
+                </Link>
+            );
+        }
+    }
 };
