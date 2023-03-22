@@ -1,8 +1,5 @@
 "Live Music for Spotify" is a full stack fun project (originally to play with Golang for the first time) about an in rooms organized application for strangers or friends to meet and listen to music, using **Next.js**, **Golang**, a **Redis** in-memory database connected via **WebSocket** to "broadcast" music to active rooms. 
 
-Check it out: https://spotify-rooms.vercel.app/
-
-
 ![Preview](frontend/public/preview-room.png)
 
 ## Frontend
